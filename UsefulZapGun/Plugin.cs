@@ -2,6 +2,7 @@
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
+using System.Collections;
 using System.IO;
 using System.Reflection;
 using UnityEngine;
@@ -18,7 +19,7 @@ namespace CruiserTerminal
         private const string modVersion = "1.0.0";
 
         private readonly Harmony harmony = new Harmony(modGUID);
-        public static ManualLogSource mls;
+        private static ManualLogSource mls;
         private static CTPlugin Instance;
 
         void Awake()
@@ -35,6 +36,38 @@ namespace CruiserTerminal
 
             mls.LogInfo("UsefulZapGun loaded. Patching.");
             harmony.PatchAll();
+        }
+
+        internal void SpamLog(string message, spamType type)
+        {
+            //logging config
+
+            switch (type)
+            {
+                case spamType.info:
+                    mls.LogInfo(message); break;
+                case spamType.message:
+                    mls.LogInfo(message); break;
+                case spamType.warning:
+                    mls.LogWarning(message); break;
+                case spamType.debug:
+                    mls.LogDebug(message); break;
+                case spamType.error:
+                    mls.LogError(message); break;
+                case spamType.fatal:
+                    mls.LogFatal(message); break;
+                default: return;
+            }
+        }
+
+        internal enum spamType
+        {
+            info,
+            message,
+            warning,
+            debug,
+            error,
+            fatal
         }
     }
 }
