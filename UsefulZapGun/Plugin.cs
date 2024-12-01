@@ -26,7 +26,7 @@ namespace UsefulZapGun
             mls = BepInEx.Logging.Logger.CreateLogSource(modName);
             mls = Logger;
 
-            var cfg = new ConfigFile(Path.Combine(Paths.ConfigPath, "mborsh.CruiserTerminal.cfg"), true);
+            var cfg = new ConfigFile(Path.Combine(Paths.ConfigPath, $"{modGUID}.cfg"), true);
             UZGConfig.ConfigSetup(cfg);
 
             mls.LogInfo($"{modName} {modVersion} loaded. Patching.");
