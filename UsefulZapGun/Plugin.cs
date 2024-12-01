@@ -1,6 +1,7 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
+using UsefulZapGun.Patches;
 
 namespace UsefulZapGun
 {
@@ -30,7 +31,7 @@ namespace UsefulZapGun
             //    LethalConfigCompat.LethalConfigSetup();
 
             mls.LogInfo($"{modName} {modVersion} loaded. Patching.");
-            harmony.PatchAll();
+            harmony.PatchAll(typeof(UZGPatches));
         }
 
         internal static void SpamLog(string message, spamType type)
