@@ -11,7 +11,7 @@ namespace UsefulZapGun.Patches
         [HarmonyPostfix, HarmonyPatch(typeof(MenuManager), "Start")]
         static void MenuManagerStartPatch()
         {
-            var enemyArray = Resources.FindObjectsOfTypeAll<EnemyType>();
+            var enemyArray = Resources.FindObjectsOfTypeAll<EnemyType>(); //thanks, Zaggy1024
             foreach (EnemyType enemy in enemyArray)
             {
                 Plugin.SpamLog($"{enemy.enemyName} has been found!", Plugin.spamType.message);
