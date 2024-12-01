@@ -7,7 +7,6 @@ using UsefulZapGun.Patches;
 
 namespace UsefulZapGun
 {
-    [BepInDependency("ainavt.lc.lethalconfig", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInPlugin(modGUID, modName, modVersion)]
     public class Plugin : BaseUnityPlugin
     {
