@@ -43,7 +43,7 @@ namespace UsefulZapGun
                 case spamType.info:
                     mls.LogInfo(message); break;
                 case spamType.message:
-                    mls.LogInfo(message); break;
+                    mls.LogMessage(message); break;
                 case spamType.warning:
                     mls.LogWarning(message); break;
                 case spamType.debug:
