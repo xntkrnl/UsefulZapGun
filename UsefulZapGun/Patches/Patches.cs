@@ -2,7 +2,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using Unity.Netcode;
 using UnityEngine;
@@ -12,6 +14,36 @@ namespace UsefulZapGun.Patches
     internal class UZGPatches
     {
         static bool alreadyPatched = false;
+        static GameObject netHandler;
+        static NetStuff hostNetHandler;
+
+        [HarmonyPostfix, HarmonyPatch(typeof(GameNetworkManager), "Start")]
+        static void AddPrefabsToNetwork()
+        {
+            string sAssemblyLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var mainAssetBundle = AssetBundle.LoadFromFile(Path.Combine(sAssemblyLocation, "zapgunnetworkobject"));
+
+            netHandler = mainAssetBundle.LoadAsset<GameObject>("zapgunnetworkobject.prefab");
+
+            netHandler.AddComponent<NetStuff>();
+            NetworkManager.Singleton.AddNetworkPrefab(netHandler);
+        }
+
+        [HarmonyPrefix, HarmonyPatch(typeof(StartOfRound), "Start")]
+        public static void SpawnNetworkHandler()
+        {
+            if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer)
+            {
+                var goNetHandler = StartOfRound.Instantiate(netHandler);
+                goNetHandler.GetComponent<NetworkObject>().Spawn();
+            }
+        }
+
+        [HarmonyPostfix, HarmonyPatch(typeof(StartOfRound), "Start")]
+        public static void FindNetworkHandler()
+        {
+            hostNetHandler = GameObject.FindAnyObjectByType<NetStuff>();
+        }
 
         [HarmonyPostfix, HarmonyPatch(typeof(MenuManager), "Start")]
         static void MenuManagerStartPatch()
@@ -52,24 +84,15 @@ namespace UsefulZapGun.Patches
                 var allZapGuns = GameObject.FindObjectsOfType<PatcherTool>(); //uuh i don't feel comfortable to do it at runtime
                 foreach (PatcherTool zapgun in allZapGuns)
                 {
-                    if (zapgun.isBeingUsed && zapgun.shockedTargetScript == instance)
+                    if (zapgun.isBeingUsed && zapgun.shockedTargetScript == instance && GameNetworkManager.Instance.localPlayerController == zapgun.playerHeldBy)
                     {
                         zapgun.StopShockingAnomalyOnClient(true);
+                        NetworkObjectReference enemyNOR = new NetworkObjectReference(beeScript.gameObject.GetComponent<NetworkObject>());
+                        hostNetHandler.DestroyEnemyServerRpc(enemyNOR); //i need a sanity check
                         break;
                     }
                 }
-                NetworkObject enemyNO = beeScript.gameObject.GetComponent<NetworkObject>();
-
-                Landmine.SpawnExplosion(beeScript.gameObject.transform.position, true, 0, 3, 20, 3);
-                DestroyEnemyServerRpc(enemyNO);
-                //StartOfRound.Destroy(beeScript.gameObject);
             }
-        }
-
-        [ServerRpc]
-        internal static void DestroyEnemyServerRpc(NetworkObject enemy)
-        {
-            enemy.Despawn();
         }
     }
 }
