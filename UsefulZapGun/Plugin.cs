@@ -35,7 +35,8 @@ namespace UsefulZapGun
 
         internal static void SpamLog(string message, spamType type)
         {
-            //logging config
+            if (!UZGConfig.enableLogging.Value)
+                return;
 
             switch (type)
             {
