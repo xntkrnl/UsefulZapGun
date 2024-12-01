@@ -13,7 +13,7 @@ namespace UsefulZapGun
         // Mod Details
         private const string modGUID = "mborsh.UsefulZapGun";
         private const string modName = "UsefulZapGun";
-        private const string modVersion = "0.0.0";
+        private const string modVersion = "0.0.1";
 
         private readonly Harmony harmony = new Harmony(modGUID);
         private static ManualLogSource mls;

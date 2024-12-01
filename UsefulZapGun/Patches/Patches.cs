@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace UsefulZapGun.Patches
@@ -57,9 +58,18 @@ namespace UsefulZapGun.Patches
                         break;
                     }
                 }
+                NetworkObject enemyNO = beeScript.gameObject.GetComponent<NetworkObject>();
+
                 Landmine.SpawnExplosion(beeScript.gameObject.transform.position, true, 0, 3, 20, 3);
-                StartOfRound.Destroy(beeScript.gameObject);
+                DestroyEnemyServerRpc(enemyNO);
+                //StartOfRound.Destroy(beeScript.gameObject);
             }
+        }
+
+        [ServerRpc]
+        internal static void DestroyEnemyServerRpc(NetworkObject enemy)
+        {
+            enemy.Despawn();
         }
     }
 }
