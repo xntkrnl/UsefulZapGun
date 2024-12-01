@@ -1,31 +1,26 @@
 ﻿using BepInEx;
-using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
-using System.Collections;
-using System.IO;
-using System.Reflection;
-using UnityEngine;
 
-namespace CruiserTerminal
+namespace UsefulZapGun
 {
     [BepInDependency("ainavt.lc.lethalconfig", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInPlugin(modGUID, modName, modVersion)]
-    public class CTPlugin : BaseUnityPlugin
+    public class Plugin : BaseUnityPlugin
     {
         // Mod Details
-        private const string modGUID = "UsefulZapGun";
+        private const string modGUID = "mborsh.UsefulZapGun";
         private const string modName = "UsefulZapGun";
         private const string modVersion = "1.0.0";
 
         private readonly Harmony harmony = new Harmony(modGUID);
         private static ManualLogSource mls;
-        private static CTPlugin Instance;
+        private static Plugin Instance;
 
         void Awake()
         {
             Instance = this;
-            mls = BepInEx.Logging.Logger.CreateLogSource("UsefulZapGun");
+            mls = BepInEx.Logging.Logger.CreateLogSource(modName);
             mls = Logger;
 
             //var cfg = new ConfigFile(Path.Combine(Paths.ConfigPath, "mborsh.CruiserTerminal.cfg"), true);
@@ -34,11 +29,11 @@ namespace CruiserTerminal
             //if (BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("ainavt.lc.lethalconfig"))
             //    LethalConfigCompat.LethalConfigSetup();
 
-            mls.LogInfo("UsefulZapGun loaded. Patching.");
+            mls.LogInfo($"{modName} {modVersion} loaded. Patching.");
             harmony.PatchAll();
         }
 
-        internal void SpamLog(string message, spamType type)
+        internal static void SpamLog(string message, spamType type)
         {
             //logging config
 

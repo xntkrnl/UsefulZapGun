@@ -11,7 +11,14 @@ namespace UsefulZapGun.Scripts
     {
         private void Start()
         {
-            base.gameObject.GetComponent<EnemyAI>().enemyType.canBeStunned = true;
+            var enemyGO = base.gameObject;
+            var enemyComponent = enemyGO.GetComponent<EnemyAI>();
+
+            if (enemyComponent.enemyType.canBeStunned)
+                return;
+
+            enemyComponent.enemyType.canBeStunned = true;
+            Plugin.SpamLog($"{enemyGO.name} can now be stunned!", Plugin.spamType.info);
         }
     }
 }
