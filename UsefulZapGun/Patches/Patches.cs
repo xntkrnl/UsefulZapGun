@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 
@@ -22,9 +23,7 @@ namespace UsefulZapGun.Patches
             {
                 Plugin.SpamLog($"{enemy.enemyName} has been found!", Plugin.spamType.message);
 
-                if (enemy.enemyName != "Red Locust Bees")
-                    continue;
-                else
+                if (UZGConfig.enemyListArray.Contains(enemy.enemyName))
                 {
                     enemy.canBeStunned = true;
                     Plugin.SpamLog($"{enemy.enemyName} can be stunned now!", Plugin.spamType.info);
@@ -37,7 +36,7 @@ namespace UsefulZapGun.Patches
         [HarmonyPostfix, HarmonyPatch(typeof(EnemyAICollisionDetect), "IShockableWithGun.ShockWithGun")]
         static void ShockWithGunPatch(ref EnemyAI ___mainScript, ref EnemyAICollisionDetect __instance)
         {
-            if (___mainScript.gameObject.name == "RedLocustBees(Clone)")
+            if (UZGConfig.enemyListArray.Contains(___mainScript.enemyType.enemyName))
             {
                 StartOfRound.Instance.StartCoroutine(WaitAndDoSmth(___mainScript, __instance));
             }

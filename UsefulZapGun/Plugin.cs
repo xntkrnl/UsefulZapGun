@@ -1,6 +1,8 @@
 ﻿using BepInEx;
+using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
+using System.IO;
 using UsefulZapGun.Patches;
 
 namespace UsefulZapGun
@@ -24,11 +26,8 @@ namespace UsefulZapGun
             mls = BepInEx.Logging.Logger.CreateLogSource(modName);
             mls = Logger;
 
-            //var cfg = new ConfigFile(Path.Combine(Paths.ConfigPath, "mborsh.CruiserTerminal.cfg"), true);
-            //CTConfig.Config(cfg);
-
-            //if (BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("ainavt.lc.lethalconfig"))
-            //    LethalConfigCompat.LethalConfigSetup();
+            var cfg = new ConfigFile(Path.Combine(Paths.ConfigPath, "mborsh.CruiserTerminal.cfg"), true);
+            UZGConfig.ConfigSetup(cfg);
 
             mls.LogInfo($"{modName} {modVersion} loaded. Patching.");
             harmony.PatchAll(typeof(UZGPatches));
