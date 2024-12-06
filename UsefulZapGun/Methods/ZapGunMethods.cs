@@ -15,18 +15,7 @@ namespace UsefulZapGun.Methods
             yield return new WaitForSeconds(3f);
 
             if (enemyScript.stunNormalizedTimer > 0f)
-            {
-                var allZapGuns = GameObject.FindObjectsOfType<PatcherTool>(); //uuh i don't feel comfortable to do it at runtime
-                foreach (PatcherTool zapgun in allZapGuns)
-                {
-                    if (zapgun.isBeingUsed && zapgun.shockedTargetScript == instance && GameNetworkManager.Instance.localPlayerController == zapgun.playerHeldBy)
-                    {
-                        zapgun.StopShockingAnomalyOnClient(true);
-                        NetworkObjectReference enemyNOR = new NetworkObjectReference(enemyScript.gameObject.GetComponent<NetworkObject>());
-                        GameNetworkManagerPatch.hostNetHandler.DestroyEnemyServerRpc(enemyNOR); //i need a sanity check
-                        break;
-                    }
-                }
+
             }
         }
     }

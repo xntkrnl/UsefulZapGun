@@ -7,14 +7,14 @@ using UnityEngine;
 
 namespace UsefulZapGun.Patches
 {
-    internal class MenuManager
+    internal class MenuManagerPatch
     {
-        static bool alreadyPatched = false;
+        static bool enemiesFound = false;
 
-        [HarmonyPostfix, HarmonyPatch(typeof(MenuManager), "Start")]
-        static void MenuManagerStartPatch()
+        [HarmonyPostfix, HarmonyPatch(typeof(MenuManagerPatch), "Start")]
+        static void FindAllEnemies()
         {
-            if (alreadyPatched)
+            if (enemiesFound)
                 return;
 
             var enemyArray = Resources.FindObjectsOfTypeAll<EnemyType>(); //thanks, Zaggy1024
@@ -29,7 +29,7 @@ namespace UsefulZapGun.Patches
                 }
             }
 
-            alreadyPatched = true; //exiting to the menu launches this too, so we prevent the search just in case
+            enemiesFound = true; //exiting to the menu launches this too, so we prevent the search just in case
         }
     }
 }
