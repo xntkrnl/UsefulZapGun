@@ -4,7 +4,7 @@ using System.Text;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace UsefulZapGun
+namespace UsefulZapGun.Network
 {
     internal class NetStuff : NetworkBehaviour
     {
@@ -21,8 +21,9 @@ namespace UsefulZapGun
                     var networkObjectID = networkObject.NetworkObjectId;
                     if (enemyID == networkObjectID)
                     {
+                        Vector3 enemyPos = networkObject.gameObject.transform.position;
                         networkObject.Despawn();
-                        DestroyEnemyClientRpc(networkObject.gameObject.transform.position);
+                        DestroyEnemyClientRpc(enemyPos);
                         return;
                     }
                 }
