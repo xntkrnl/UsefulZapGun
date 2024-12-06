@@ -15,6 +15,7 @@ namespace UsefulZapGun.Methods
             yield return new WaitForSeconds(3f);
 
             if (enemyScript.stunNormalizedTimer > 0f)
+            {
 
             }
         }

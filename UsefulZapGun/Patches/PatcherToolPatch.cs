@@ -10,7 +10,7 @@ using UsefulZapGun.Methods;
 
 namespace UsefulZapGun.Patches
 {
-    internal class ZapGun
+    internal class PatcherToolPatch
     {
 
     }

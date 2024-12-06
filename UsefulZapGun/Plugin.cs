@@ -50,9 +50,10 @@ namespace UsefulZapGun
             UZGConfig.ConfigSetup(cfg);
 
             mls.LogInfo($"{modName} {modVersion} loaded. Patching.");
+            harmony.PatchAll(typeof(EnemyAICollisionDetectPatch));
             harmony.PatchAll(typeof(GameNetworkManagerPatch));
-            harmony.PatchAll(typeof(MenuManager));
-            harmony.PatchAll(typeof(ZapGun));
+            harmony.PatchAll(typeof(MenuManagerPatch));
+            harmony.PatchAll(typeof(PatcherToolPatch));
         }
 
         internal static void SpamLog(string message, spamType type)
