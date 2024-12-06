@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using Unity.Netcode;
 using UnityEngine;
+using UsefulZapGun.Methods;
 
 namespace UsefulZapGun.Patches
 {
@@ -16,27 +17,7 @@ namespace UsefulZapGun.Patches
         {
             if (UZGConfig.enemyListArray.Contains(___mainScript.enemyType.enemyName))
             {
-                StartOfRound.Instance.StartCoroutine(WaitAndDoSmth(___mainScript, __instance));
-            }
-        }
-
-        private static IEnumerator WaitAndDoSmth(EnemyAI beeScript, EnemyAICollisionDetect instance)
-        {
-            yield return new WaitForSeconds(3f);
-
-            if (beeScript.stunNormalizedTimer > 0f)
-            {
-                var allZapGuns = GameObject.FindObjectsOfType<PatcherTool>(); //uuh i don't feel comfortable to do it at runtime
-                foreach (PatcherTool zapgun in allZapGuns)
-                {
-                    if (zapgun.isBeingUsed && zapgun.shockedTargetScript == instance && GameNetworkManager.Instance.localPlayerController == zapgun.playerHeldBy)
-                    {
-                        zapgun.StopShockingAnomalyOnClient(true);
-                        NetworkObjectReference enemyNOR = new NetworkObjectReference(beeScript.gameObject.GetComponent<NetworkObject>());
-                        GameNetworkManagerPatch.hostNetHandler.DestroyEnemyServerRpc(enemyNOR); //i need a sanity check
-                        break;
-                    }
-                }
+                StartOfRound.Instance.StartCoroutine(ZapGunMethods.WaitAndDoSmth(___mainScript, __instance));
             }
         }
     }
