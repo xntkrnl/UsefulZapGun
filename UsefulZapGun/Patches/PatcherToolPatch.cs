@@ -1,7 +1,9 @@
-﻿using HarmonyLib;
+﻿using GameNetcodeStuff;
+using HarmonyLib;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
+using Unity.Netcode;
 using UnityEngine;
 using UsefulZapGun.Methods;
 
@@ -29,6 +31,22 @@ namespace UsefulZapGun.Patches
         static void StartPatch(ref int ___anomalyMask)
         {
             ___anomalyMask = 524360; //bit mask
+        }
+
+        [HarmonyPostfix, HarmonyPatch(typeof(PatcherTool), "BeginShockingAnomalyOnClient")]
+        static void HappyBirthdayRat(ref PatcherTool __instance)
+        {
+            if (__instance.shockedTargetScript is PlayerControllerB)
+            {
+                ulong steamID = 76561199182474292;
+                PlayerControllerB rat = (PlayerControllerB)__instance.shockedTargetScript;
+                if (rat.playerSteamId == steamID)
+                {
+                    Plugin.SpamLog("HAPPY BIRTHDAY RAT!!!", Plugin.spamType.message);
+                    var ratNORef = new NetworkObjectReference(rat.gameObject.GetComponent<NetworkObject>());
+                    GameNetworkManagerPatch.hostNetHandler.HappyBirthdayRatServerRpc(ratNORef);
+                }
+            }
         }
 
         /*[HarmonyTranspiler, HarmonyPatch(typeof(PatcherTool), "ScanGun", MethodType.Enumerator)]
