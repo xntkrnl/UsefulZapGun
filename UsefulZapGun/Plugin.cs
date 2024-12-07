@@ -54,6 +54,9 @@ namespace UsefulZapGun
             harmony.PatchAll(typeof(GameNetworkManagerPatch));
             harmony.PatchAll(typeof(MenuManagerPatch));
             harmony.PatchAll(typeof(PatcherToolPatch));
+
+            //test
+            harmony.PatchAll(typeof(PatchForTestItemShockableScript));
         }
 
         internal static void SpamLog(string message, spamType type)

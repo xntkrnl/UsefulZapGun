@@ -11,8 +11,8 @@ namespace UsefulZapGun.Patches
     {
         static bool enemiesFound = false;
 
-        [HarmonyPostfix, HarmonyPatch(typeof(MenuManagerPatch), "Start")]
-        static void FindAllEnemies()
+        [HarmonyPostfix, HarmonyPatch(typeof(MenuManager), "Start")]
+        static void FindAllEnemiesPatch()
         {
             if (enemiesFound)
                 return;

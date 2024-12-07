@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace UsefulZapGun.Scripts
 {
-    internal class TestEquipShockableScript : NetworkBehaviour, IShockableWithGun
+    internal class TestEquipShockableScript : MonoBehaviour, IShockableWithGun
     {
         GrabbableObject itemScript;
         Battery battery;
@@ -31,7 +31,7 @@ namespace UsefulZapGun.Scripts
 
         public NetworkObject GetNetworkObject()
         {
-            return base.NetworkObject;
+            return itemScript.NetworkObject;
         }
 
         public Vector3 GetShockablePosition()
