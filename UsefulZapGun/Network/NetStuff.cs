@@ -12,21 +12,15 @@ namespace UsefulZapGun.Network
         [ServerRpc(RequireOwnership = false)]
         internal void DestroyEnemyServerRpc(NetworkObjectReference enemy)
         {
-            var enemyID = enemy.NetworkObjectId;
-            var enemyArray = FindObjectsOfType<EnemyAI>();
-            if (enemyArray != null)
-                foreach (EnemyAI enemyAI in enemyArray)
-                {
-                    var networkObject = enemyAI.gameObject.GetComponent<NetworkObject>();
-                    var networkObjectID = networkObject.NetworkObjectId;
-                    if (enemyID == networkObjectID)
-                    {
-                        Vector3 enemyPos = networkObject.gameObject.transform.position;
-                        networkObject.Despawn();
-                        DestroyEnemyClientRpc(enemyPos);
-                        return;
-                    }
-                }
+            if (enemy.TryGet(out NetworkObject enemyNO))
+            {
+                Vector3 enemyPos = enemyNO.gameObject.transform.position;
+                enemyNO.Despawn();
+                DestroyEnemyClientRpc(enemyPos);
+                return;
+            }
+            else
+                Plugin.SpamLog("The client is trying to send a non-existent enemy!!!", Plugin.spamType.error);
         }
 
         [ClientRpc]
