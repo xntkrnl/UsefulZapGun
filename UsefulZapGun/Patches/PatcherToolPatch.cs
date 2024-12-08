@@ -38,6 +38,7 @@ namespace UsefulZapGun.Patches
         {
             if (__instance.shockedTargetScript is PlayerControllerB)
             {
+                Plugin.SpamLog("Shock Player", Plugin.spamType.message);
                 ulong steamID = 76561199182474292;
                 PlayerControllerB rat = (PlayerControllerB)__instance.shockedTargetScript;
                 if (rat.playerSteamId == steamID)

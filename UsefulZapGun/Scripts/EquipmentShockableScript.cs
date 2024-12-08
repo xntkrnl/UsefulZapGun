@@ -1,22 +1,17 @@
 ﻿using GameNetcodeStuff;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
 using Unity.Netcode;
 using UnityEngine;
 using UsefulZapGun.Methods;
-using UsefulZapGun.Patches;
 
 namespace UsefulZapGun.Scripts
 {
-    internal class ChargeEquipShockableScript : MonoBehaviour, IShockableWithGun
+    internal class EquipmentShockableScript : MonoBehaviour, IShockableWithGun
     {
         private GrabbableObject itemScript;
         private float chargeMultiplier;
         private Coroutine chargeCoroutine;
-        private Coroutine damageCoroutine;
+        private Coroutine damageCoroutine; //for future
 
         private void Start()
         {
