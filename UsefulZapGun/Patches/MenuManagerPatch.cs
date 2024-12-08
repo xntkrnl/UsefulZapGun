@@ -22,7 +22,7 @@ namespace UsefulZapGun.Patches
             {
                 Plugin.SpamLog($"{enemy.enemyName} has been found!", Plugin.spamType.message);
 
-                if (UZGConfig.enemyListArray.Contains(enemy.enemyName))
+                if (UZGConfig.enemyList.Contains(enemy.enemyName))
                 {
                     enemy.canBeStunned = true;
                     Plugin.SpamLog($"{enemy.enemyName} can be stunned now!", Plugin.spamType.info);

@@ -11,12 +11,11 @@ namespace UsefulZapGun.Scripts
         private GrabbableObject itemScript;
         private float chargeMultiplier;
         private Coroutine chargeCoroutine;
-        private Coroutine damageCoroutine; //for future
 
         private void Start()
         {
             itemScript = base.GetComponent<GrabbableObject>();
-            chargeMultiplier = 1f; //for future
+            chargeMultiplier = itemScript.itemProperties.batteryUsage/22;
         }
 
         public bool CanBeShocked()
@@ -76,7 +75,7 @@ namespace UsefulZapGun.Scripts
                 Plugin.SpamLog($"charge = {item.insertedBattery.charge}", Plugin.spamType.debug);
             }
 
-            zapgun.StopShockingAnomalyOnClient();
+            zapgun.StopShockingAnomalyOnClient(true);
         }
     }
 }

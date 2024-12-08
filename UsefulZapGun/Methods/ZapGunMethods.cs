@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using GameNetcodeStuff;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
@@ -21,11 +22,24 @@ namespace UsefulZapGun.Methods
                     if (tool.isBeingUsed && tool.playerHeldBy == GameNetworkManager.Instance.localPlayerController)
                     {
                         NetworkObjectReference enemyNOR = new NetworkObjectReference(enemyScript.gameObject.GetComponent<NetworkObject>());
-                        tool.StopShockingAnomalyOnClient();
+                        tool.StopShockingAnomalyOnClient(true);
                         //do smth
                         GameNetworkManagerPatch.hostNetHandler.DestroyEnemyServerRpc(enemyNOR);
                     }
                 }
+            }
+        }
+
+        //unused
+        internal static IEnumerator DOTPlayer(GrabbableObject item, PlayerControllerB player, int index)
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(1f);
+                if (player.ItemSlots[index] != item)
+                    break;
+                else
+                    player.DamagePlayer(5, causeOfDeath: CauseOfDeath.Electrocution);
             }
         }
     }

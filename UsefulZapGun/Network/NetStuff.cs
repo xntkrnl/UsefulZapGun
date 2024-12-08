@@ -30,6 +30,7 @@ namespace UsefulZapGun.Network
             Landmine.SpawnExplosion(position, true, 0, 3, 20, 3);
         }
 
+        //unused
         [ServerRpc(RequireOwnership = false)]
         internal void ToggleInteractTriggerServerRpc(NetworkObjectReference itemNORef)
         {
@@ -42,6 +43,7 @@ namespace UsefulZapGun.Network
                 Plugin.SpamLog("The client is trying to send a non-existent item!!!", Plugin.spamType.error);
         }
 
+        //unused
         [ClientRpc]
         internal void ToggleInteractTriggerClientRpc(NetworkObjectReference itemNORef)
         {

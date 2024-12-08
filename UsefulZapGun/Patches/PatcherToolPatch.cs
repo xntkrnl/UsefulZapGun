@@ -6,6 +6,7 @@ using System.Reflection.Emit;
 using Unity.Netcode;
 using UnityEngine;
 using UsefulZapGun.Methods;
+using UsefulZapGun.Scripts;
 
 namespace UsefulZapGun.Patches
 {
@@ -34,21 +35,47 @@ namespace UsefulZapGun.Patches
         }
 
         [HarmonyPostfix, HarmonyPatch(typeof(PatcherTool), "BeginShockingAnomalyOnClient")]
-        static void HappyBirthdayRat(ref PatcherTool __instance)
+        static void ShockPlayerPatch(ref PatcherTool __instance)
         {
             if (__instance.shockedTargetScript is PlayerControllerB)
             {
                 Plugin.SpamLog("Shock Player", Plugin.spamType.message);
                 ulong steamID = 76561199182474292;
-                PlayerControllerB rat = (PlayerControllerB)__instance.shockedTargetScript;
-                if (rat.playerSteamId == steamID)
+                PlayerControllerB player = (PlayerControllerB)__instance.shockedTargetScript;
+
+                if (player.playerSteamId == steamID)
                 {
                     Plugin.SpamLog("HAPPY BIRTHDAY RAT!!!", Plugin.spamType.message);
-                    var ratNORef = new NetworkObjectReference(rat.gameObject.GetComponent<NetworkObject>());
+                    var ratNORef = new NetworkObjectReference(player.gameObject.GetComponent<NetworkObject>());
                     GameNetworkManagerPatch.hostNetHandler.HappyBirthdayRatServerRpc(ratNORef);
                 }
+                //the code below is partially broken and/or requires improvement
+                /*
+                                for (int i = 0; i < player.ItemSlots.Length; i++) {
+                                    if (player.ItemSlots[i] != null)
+                                    {
+                                        if (player.ItemSlots[i].itemProperties.isConductiveMetal)
+                                        {
+                                            StartOfRound.Instance.StartCoroutine(ZapGunMethods.DOTPlayer(player.ItemSlots[i], player, i));
+                                        }
+
+                                        if (player.ItemSlots[i].gameObject.TryGetComponent<EquipmentShockableScript>(out var equipment))
+                                        {
+                                            equipment.ShockWithGun(__instance.playerHeldBy);
+                                            continue;
+                                        }
+                                        if (player.ItemSlots[i].gameObject.TryGetComponent<WeaponShockableScript>(out var weapon))
+                                        {
+                                            weapon.ShockWithGun(__instance.playerHeldBy);
+                                            continue;
+                                        }
+                                    }
+                                }
+                */
             }
         }
+
+
 
         /*[HarmonyTranspiler, HarmonyPatch(typeof(PatcherTool), "ScanGun", MethodType.Enumerator)]
         static IEnumerable<CodeInstruction> ScanGunTranspiler(IEnumerable<CodeInstruction> instructions)
@@ -56,7 +83,7 @@ namespace UsefulZapGun.Patches
             //IL_016c - IL_018e
             //OR IL_0189
 
-            
+
             int MultipleSphereCastNonAlloc(Ray ray, float radius, RaycastHit[] raycastHits, float maxDistance, int layerMask, QueryTriggerInteraction queryTriggerInteraction)
             {
                 int result;

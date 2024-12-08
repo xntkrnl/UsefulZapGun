@@ -11,7 +11,7 @@ namespace UsefulZapGun.Scripts
         private Shovel itemScript;
         private bool charged;
         private Coroutine chargeCoroutine;
-        private Coroutine damageCoroutine; //for future
+
         private void Start()
         {
             itemScript = base.GetComponent<Shovel>();
@@ -67,23 +67,22 @@ namespace UsefulZapGun.Scripts
 
         private IEnumerator ChargeWeapon(PatcherTool zapgun)
         {
-            yield return new WaitForSeconds(3f); //make config
+            yield return new WaitForSeconds(UZGConfig.timeUntilCharge.Value);
             if (zapgun.isShocking && zapgun.shockedTargetScript == this)
             {
                 charged = true;
-                itemScript.shovelHitForce *= 2; //make config
+                itemScript.shovelHitForce *= 2;
                 StartCoroutine(WaitUntilChargeRunsOut());
                 //TODO: particle
-                zapgun.StopShockingAnomalyOnClient();
+                zapgun.StopShockingAnomalyOnClient(true);
             }
-
         }
 
         private IEnumerator WaitUntilChargeRunsOut()
         {
-            yield return new WaitForSeconds(15f); //make config
+            yield return new WaitForSeconds(UZGConfig.chargeLifeTime.Value);
             charged = false;
-            itemScript.shovelHitForce /= 2; //make config
+            itemScript.shovelHitForce /= 2;
             
         }
     }
