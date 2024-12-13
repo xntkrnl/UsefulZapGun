@@ -73,7 +73,7 @@ namespace UsefulZapGun.Scripts
         {
             float chargeNeeded = zapgun.insertedBattery.charge - batteryChargeNeedUntilChargedState;
 
-            while (zapgun.insertedBattery.charge > 0f && chargeNeeded != zapgun.insertedBattery.charge)
+            while (zapgun.insertedBattery.charge > 0f && zapgun.insertedBattery.charge >= chargeNeeded)
             {   
                 yield return new WaitForEndOfFrame();
             }
