@@ -23,9 +23,7 @@ namespace UsefulZapGun.Patches
         static void RemoveZapGun(ref PatcherTool __instance)
         {
             if (!ZapGunMethods.zapGuns.Remove(__instance))
-            {
                 Plugin.SpamLog($"Couldn't remove the zap gun! networkObjectID: {__instance.NetworkObjectId}", Plugin.spamType.warning);
-            }
         }
 
         [HarmonyPostfix, HarmonyPatch(typeof(PatcherTool), "Start")]
