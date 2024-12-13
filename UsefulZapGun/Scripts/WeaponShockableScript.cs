@@ -18,6 +18,7 @@ namespace UsefulZapGun.Scripts
             itemScript = base.GetComponent<Shovel>();
             charged = false;
             batteryChargeNeedUntilChargedState = UZGConfig.needForShovelCharge.Value / 100;
+
         }
 
         public bool CanBeShocked()
