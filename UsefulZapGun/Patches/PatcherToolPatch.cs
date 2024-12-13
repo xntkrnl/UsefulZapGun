@@ -24,7 +24,7 @@ namespace UsefulZapGun.Patches
         {
             if (!ZapGunMethods.zapGuns.Remove(__instance))
             {
-                Plugin.SpamLog($"Couldn't remove the zap gun! networkObjectID: {__instance.NetworkObjectId}", Plugin.spamType.error);
+                Plugin.SpamLog($"Couldn't remove the zap gun! networkObjectID: {__instance.NetworkObjectId}", Plugin.spamType.warning);
             }
         }
 
