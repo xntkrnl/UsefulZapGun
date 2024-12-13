@@ -15,18 +15,16 @@ namespace UsefulZapGun.Patches
                 return;
             }
 
-            if (__instance.itemProperties.requiresBattery)
+            if (!__instance.itemProperties.requiresBattery) //im so stupid omg
             {
                 return;
             }
 
-            if (__instance.insertedBattery != null && !__instance.gameObject.TryGetComponent<EquipmentShockableScript>(out EquipmentShockableScript itemComponent) && UZGConfig.enableItemCharging.Value)
+            if (!__instance.gameObject.TryGetComponent<EquipmentShockableScript>(out EquipmentShockableScript itemComponent) && UZGConfig.enableItemCharging.Value && __instance.itemProperties.requiresBattery)
             {
                 __instance.gameObject.AddComponent<EquipmentShockableScript>();
                 return;
             }
-
-            //todo: separate method for checking items and switch-case here
         }
     }
 }

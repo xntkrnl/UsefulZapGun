@@ -30,7 +30,7 @@ namespace UsefulZapGun
             enemyListString = cfg.Bind("General", "Enemy list", "Red Locust Bees,Butler Bees,Docile Locust Bees");
             enemyList = enemyListString.Value.Split(',').ToList();
 
-            enableItemCharging = cfg.Bind("Equipment", "Enable equipment charging", true, "Charging ratio: item.batteryUsage/22");
+            enableItemCharging = cfg.Bind("Equipment", "Enable equipment charging", true, "Charging ratio: chargeMultiplier * (Time.deltaTime / item.itemProperties.batteryUsage)");
 
             enableWeaponCharging = cfg.Bind("Weapon", "Enable weapon charging", true, "x2 damage for charged weapon (shovel, stop sign, mace (code rebirth), etc.");
             timeUntilCharge = cfg.Bind("Weapon", "Time until charge", 3f);
@@ -47,9 +47,9 @@ namespace UsefulZapGun
             enemyList.Remove("Tornado");
         }
 
-        internal static float CreateAndCheckConfigEntry(string section, string key, float multiplayer)
+        internal static float CreateAndCheckConfigEntry(string itemName, float multiplayer)
         {
-            var configEntry = cfg.Bind(section, key, multiplayer);
+            var configEntry = cfg.Bind("Items", itemName + ": Zap gun charge multiplayer", multiplayer);
             multiplayerList.Add(configEntry);
             return configEntry.Value;
         }

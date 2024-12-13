@@ -16,7 +16,7 @@ namespace UsefulZapGun.Scripts
         {
             itemScript = base.GetComponent<GrabbableObject>();
             var name = itemScript.itemProperties.itemName;
-            chargeMultiplier = UZGConfig.CreateAndCheckConfigEntry(name, "Zap gun charge multiplayer", itemScript.itemProperties.batteryUsage/22);
+            chargeMultiplier = UZGConfig.CreateAndCheckConfigEntry(name, itemScript.itemProperties.batteryUsage/22);
         }
 
         public bool CanBeShocked()
@@ -72,7 +72,7 @@ namespace UsefulZapGun.Scripts
             while (item.insertedBattery.charge < 1f)
             {
                 yield return new WaitForEndOfFrame();
-                item.insertedBattery.charge += chargeMultiplier * (Time.deltaTime / zapgun.itemProperties.batteryUsage); //I think I need to optimize this but we'll see
+                item.insertedBattery.charge += chargeMultiplier * (Time.deltaTime / item.itemProperties.batteryUsage); //I think I need to change this but we'll see
                 Plugin.SpamLog($"charge = {item.insertedBattery.charge}", Plugin.spamType.debug);
             }
 
