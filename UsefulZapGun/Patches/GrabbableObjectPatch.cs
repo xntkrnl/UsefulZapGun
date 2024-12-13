@@ -15,14 +15,15 @@ namespace UsefulZapGun.Patches
                 return;
             }
 
-            if (!__instance.itemProperties.requiresBattery) //im so stupid omg
+            if (__instance.itemProperties.requiresBattery && !__instance.gameObject.TryGetComponent<EquipmentShockableScript>(out EquipmentShockableScript itemComponent) && UZGConfig.enableItemCharging.Value && __instance.itemProperties.requiresBattery)
             {
+                __instance.gameObject.AddComponent<EquipmentShockableScript>();
                 return;
             }
 
-            if (!__instance.gameObject.TryGetComponent<EquipmentShockableScript>(out EquipmentShockableScript itemComponent) && UZGConfig.enableItemCharging.Value && __instance.itemProperties.requiresBattery)
+            if (UZGConfig.enableItemCharging.Value && !__instance.gameObject.TryGetComponent<ConductiveShockableScript>(out ConductiveShockableScript conductiveItem) && __instance.itemProperties.isConductiveMetal)
             {
-                __instance.gameObject.AddComponent<EquipmentShockableScript>();
+                __instance.gameObject.AddComponent<ConductiveShockableScript>();
                 return;
             }
         }
