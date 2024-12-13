@@ -15,6 +15,12 @@ namespace UsefulZapGun.Network
         {
             if (enemyNORef.TryGet(out NetworkObject enemyNO))
             {
+                if (UZGConfig.enemyList.Contains(enemyNO.GetComponent<EnemyAI>().enemyType.enemyName))
+                {
+                    Plugin.SpamLog("The client is trying to send an enemy that is not in the config!!!", Plugin.spamType.error);
+                    return;
+                }
+
                 Vector3 enemyPos = enemyNO.gameObject.transform.position;
                 if (UZGConfig.despawnEnemy.Value)
                     enemyNO.Despawn();
