@@ -15,12 +15,13 @@ namespace UsefulZapGun.Scripts
         private void Start()
         {
             itemScript = base.GetComponent<GrabbableObject>();
-            chargeMultiplier = itemScript.itemProperties.batteryUsage/22;
+            var name = itemScript.itemProperties.itemName;
+            chargeMultiplier = UZGConfig.CreateAndCheckConfigEntry(name, "Zap gun charge multiplayer", itemScript.itemProperties.batteryUsage/22);
         }
 
         public bool CanBeShocked()
         {
-            if (itemScript.insertedBattery.charge < 1f)
+            if (itemScript.insertedBattery.charge < 1f || itemScript.playerHeldBy == null)
                 return true;
             else return false;
         }

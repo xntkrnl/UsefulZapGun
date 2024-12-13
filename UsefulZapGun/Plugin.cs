@@ -46,8 +46,7 @@ namespace UsefulZapGun
             mls = BepInEx.Logging.Logger.CreateLogSource(modName);
             mls = Logger;
 
-            var cfg = new ConfigFile(Path.Combine(Paths.ConfigPath, $"{modGUID}.cfg"), true);
-            UZGConfig.ConfigSetup(cfg);
+            UZGConfig.ConfigSetup();
 
             mls.LogInfo($"{modName} {modVersion} loaded. Patching.");
             harmony.PatchAll(typeof(EnemyAICollisionDetectPatch));

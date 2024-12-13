@@ -24,7 +24,7 @@ namespace UsefulZapGun.Methods
                         NetworkObjectReference enemyNOR = new NetworkObjectReference(enemyScript.gameObject.GetComponent<NetworkObject>());
                         tool.StopShockingAnomalyOnClient(true);
                         //do smth
-                        GameNetworkManagerPatch.hostNetHandler.DestroyEnemyServerRpc(enemyNOR);
+                        GameNetworkManagerPatch.hostNetHandler.BlowUpEnemyServerRpc(enemyNOR);
                     }
                 }
             }

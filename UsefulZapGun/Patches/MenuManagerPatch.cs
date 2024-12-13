@@ -25,6 +25,8 @@ namespace UsefulZapGun.Patches
                 if (UZGConfig.enemyList.Contains(enemy.enemyName))
                 {
                     enemy.canBeStunned = true;
+                    if (!enemy.canDie)
+                        enemy.canBeDestroyed = true;
                     Plugin.SpamLog($"{enemy.enemyName} can be stunned now!", Plugin.spamType.info);
                 }
             }

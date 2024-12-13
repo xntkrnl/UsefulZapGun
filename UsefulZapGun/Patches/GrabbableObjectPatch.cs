@@ -15,7 +15,7 @@ namespace UsefulZapGun.Patches
                 return;
             }
 
-            if (__instance.insertedBattery.charge == 0f || __instance.insertedBattery.charge == Mathf.Infinity)
+            if (__instance.itemProperties.requiresBattery)
             {
                 return;
             }

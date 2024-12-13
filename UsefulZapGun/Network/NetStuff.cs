@@ -11,13 +11,19 @@ namespace UsefulZapGun.Network
     {
 
         [ServerRpc(RequireOwnership = false)]
-        internal void DestroyEnemyServerRpc(NetworkObjectReference enemyNORef)
+        internal void BlowUpEnemyServerRpc(NetworkObjectReference enemyNORef)
         {
             if (enemyNORef.TryGet(out NetworkObject enemyNO))
             {
                 Vector3 enemyPos = enemyNO.gameObject.transform.position;
-                enemyNO.Despawn();
-                DestroyEnemyClientRpc(enemyPos);
+                if (UZGConfig.despawnEnemy.Value)
+                    enemyNO.Despawn();
+                else
+                {
+                    enemyNO.gameObject.GetComponent<EnemyAI>().KillEnemyServerRpc(true);
+                }
+
+                BlowUpEnemyClientRpc(enemyPos);
                 return;
             }
             else
@@ -25,30 +31,9 @@ namespace UsefulZapGun.Network
         }
 
         [ClientRpc]
-        internal void DestroyEnemyClientRpc(Vector3 position)
+        internal void BlowUpEnemyClientRpc(Vector3 position)
         {
-            Landmine.SpawnExplosion(position, true, 0, 3, 20, 3);
-        }
-
-        //unused
-        [ServerRpc(RequireOwnership = false)]
-        internal void ToggleInteractTriggerServerRpc(NetworkObjectReference itemNORef)
-        {
-            if (itemNORef.TryGet(out NetworkObject itemNO))
-            {
-                itemNO.GetComponent<GrabbableObject>().playerHeldBy.DiscardHeldObject();
-                ToggleInteractTriggerClientRpc(itemNORef);
-            }
-            else
-                Plugin.SpamLog("The client is trying to send a non-existent item!!!", Plugin.spamType.error);
-        }
-
-        //unused
-        [ClientRpc]
-        internal void ToggleInteractTriggerClientRpc(NetworkObjectReference itemNORef)
-        {
-            itemNORef.TryGet(out NetworkObject itemNO);
-            itemNO.GetComponent<InteractTrigger>().interactable = !itemNO.GetComponent<InteractTrigger>().interactable;
+            Landmine.SpawnExplosion(position, true, 0, 5, 20, 3);
         }
 
         [ServerRpc(RequireOwnership = false)]
