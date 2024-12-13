@@ -13,13 +13,15 @@ namespace UsefulZapGun
 
         internal static ConfigEntry<bool> enableLogging;
         internal static ConfigEntry<string> enemyListString;
-        internal static List<string> enemyList;
         internal static ConfigEntry<bool> enableItemCharging;
         internal static ConfigEntry<bool> enableWeaponCharging;
-        internal static ConfigEntry<float> timeUntilCharge;
+        //internal static ConfigEntry<float> timeUntilCharge;
         internal static ConfigEntry<float> chargeLifeTime;
-        internal static List<ConfigEntry<float>> multiplayerList = new List<ConfigEntry<float>>();
-        internal static ConfigEntry<bool> despawnEnemy;
+
+        internal static List<string> enemyList;
+        internal static Dictionary<string, ConfigEntry<float>> multiplayerDict = new Dictionary<string, ConfigEntry<float>>();
+        internal static ConfigEntry<float> needForShovelCharge;
+        //internal static ConfigEntry<bool> despawnEnemy;
 
 
         internal static void ConfigSetup()
@@ -27,16 +29,17 @@ namespace UsefulZapGun
             cfg = new ConfigFile(Path.Combine(Paths.ConfigPath, "mborsh.UsefulZapGun.cfg"), true);
 
             enableLogging = cfg.Bind("General", "Enable logging", true);
-            enemyListString = cfg.Bind("General", "Enemy list", "Red Locust Bees,Butler Bees,Docile Locust Bees");
+            enemyListString = cfg.Bind("General", "Enemy list", "Red Locust Bees,Butler Bees,Docile Locust Bees"); //TODO: general -> enemies
             enemyList = enemyListString.Value.Split(',').ToList();
 
-            enableItemCharging = cfg.Bind("Equipment", "Enable equipment charging", true, "Charging ratio: chargeMultiplier * (Time.deltaTime / item.itemProperties.batteryUsage)");
+            enableItemCharging = cfg.Bind("Items", "Enable equipment charging", true, "Charging ratio: chargeMultiplier * (Time.deltaTime / item.itemProperties.batteryUsage)");
 
             enableWeaponCharging = cfg.Bind("Weapon", "Enable weapon charging", true, "x2 damage for charged weapon (shovel, stop sign, mace (code rebirth), etc.");
-            timeUntilCharge = cfg.Bind("Weapon", "Time until charge", 3f);
+            //timeUntilCharge = cfg.Bind("Weapon", "Time until charge", 3f);
             chargeLifeTime = cfg.Bind("Weapon", "Time until charge runs out", 15f);
+            needForShovelCharge = cfg.Bind("Weapon", "Zap gun charge% for charged state", 33f);
 
-            despawnEnemy = cfg.Bind("Enemy", "Despawn enemy", true, "If enabled - destroy the enemy\nIf disabled - try to kill the enemy, and if the enemy cannot be killed - destroy it.");
+            //despawnEnemy = cfg.Bind("Enemy", "Despawn enemy", true, "If enabled - destroy the enemy\nIf disabled - try to kill the enemy, and if the enemy cannot be killed - destroy it.");
 
             CheckConfig();
         }
@@ -47,11 +50,10 @@ namespace UsefulZapGun
             enemyList.Remove("Tornado");
         }
 
-        internal static float CreateAndCheckConfigEntry(string itemName, float multiplayer)
+        internal static void CreateAndCheckConfigEntryForItem(string itemName, float multiplayer)
         {
             var configEntry = cfg.Bind("Items", itemName + ": Zap gun charge multiplayer", multiplayer);
-            multiplayerList.Add(configEntry);
-            return configEntry.Value;
+            multiplayerDict.Add(itemName, configEntry);
         }
     }
 }

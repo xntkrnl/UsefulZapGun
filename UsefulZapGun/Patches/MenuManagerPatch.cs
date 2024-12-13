@@ -9,12 +9,12 @@ namespace UsefulZapGun.Patches
 {
     internal class MenuManagerPatch
     {
-        static bool enemiesFound = false;
+        static bool enemiesAndItemsFound = false;
 
         [HarmonyPostfix, HarmonyPatch(typeof(MenuManager), "Start")]
         static void FindAllEnemiesPatch()
         {
-            if (enemiesFound)
+            if (enemiesAndItemsFound)
                 return;
 
             var enemyArray = Resources.FindObjectsOfTypeAll<EnemyType>(); //thanks, Zaggy1024
@@ -25,13 +25,27 @@ namespace UsefulZapGun.Patches
                 if (UZGConfig.enemyList.Contains(enemy.enemyName))
                 {
                     enemy.canBeStunned = true;
-                    if (!enemy.canDie)
-                        enemy.canBeDestroyed = true;
-                    Plugin.SpamLog($"{enemy.enemyName} can be stunned now!", Plugin.spamType.info);
+                    enemy.canBeDestroyed = true;
+                    Plugin.SpamLog($"{enemy.enemyName} can be stunned and destoyed now!", Plugin.spamType.info);
                 }
             }
 
-            enemiesFound = true; //exiting to the menu launches this too, so we prevent the search just in case
+            if (UZGConfig.enableItemCharging.Value)
+            {
+                Plugin.SpamLog("---------------------------------------------------------", Plugin.spamType.message);
+
+                var itemArray = Resources.FindObjectsOfTypeAll<Item>();
+                foreach (Item item in itemArray)
+                {
+                    if (item.requiresBattery)
+                    {
+                        UZGConfig.CreateAndCheckConfigEntryForItem(item.itemName, item.batteryUsage / 22);
+                        Plugin.SpamLog($"{item.itemName} has been found!", Plugin.spamType.message);
+                    }
+                }
+            }
+
+            enemiesAndItemsFound = true; //exiting to the menu launches this too, so we prevent the search just in case
         }
     }
 }

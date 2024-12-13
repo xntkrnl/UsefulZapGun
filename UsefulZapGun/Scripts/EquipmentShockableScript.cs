@@ -16,12 +16,12 @@ namespace UsefulZapGun.Scripts
         {
             itemScript = base.GetComponent<GrabbableObject>();
             var name = itemScript.itemProperties.itemName;
-            chargeMultiplier = UZGConfig.CreateAndCheckConfigEntry(name, itemScript.itemProperties.batteryUsage/22);
+            chargeMultiplier = UZGConfig.multiplayerDict[itemScript.itemProperties.itemName].Value;
         }
 
         public bool CanBeShocked()
         {
-            if (itemScript.insertedBattery.charge < 1f || itemScript.playerHeldBy == null)
+            if (itemScript.insertedBattery.charge < 1f || itemScript.playerHeldBy == null || chargeMultiplier <= 0)
                 return true;
             else return false;
         }

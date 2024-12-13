@@ -11,16 +11,18 @@ namespace UsefulZapGun.Scripts
         private Shovel itemScript;
         private bool charged;
         private Coroutine chargeCoroutine;
+        private float batteryChargeNeedUntilChargedState;
 
         private void Start()
         {
             itemScript = base.GetComponent<Shovel>();
             charged = false;
+            batteryChargeNeedUntilChargedState = UZGConfig.needForShovelCharge.Value / 100;
         }
 
         public bool CanBeShocked()
         {
-            if (itemScript.playerHeldBy == null)
+            if (itemScript.playerHeldBy == null || batteryChargeNeedUntilChargedState > 1 || batteryChargeNeedUntilChargedState <= 0)
                 return true;
             else return false;
         }
@@ -69,15 +71,18 @@ namespace UsefulZapGun.Scripts
 
         private IEnumerator ChargeWeapon(PatcherTool zapgun)
         {
-            yield return new WaitForSeconds(UZGConfig.timeUntilCharge.Value);
-            if (zapgun.isShocking && zapgun.shockedTargetScript == this)
-            {
-                charged = true;
-                itemScript.shovelHitForce *= 2;
-                StartCoroutine(WaitUntilChargeRunsOut());
-                //TODO: particle
-                zapgun.StopShockingAnomalyOnClient(true);
+            float chargeNeeded = zapgun.insertedBattery.charge - batteryChargeNeedUntilChargedState;
+
+            while (zapgun.insertedBattery.charge > 0f && chargeNeeded != zapgun.insertedBattery.charge)
+            {   
+                yield return new WaitForEndOfFrame();
             }
+
+            charged = true;
+            itemScript.shovelHitForce *= 2;
+            StartCoroutine(WaitUntilChargeRunsOut());
+            //TODO: particle
+            zapgun.StopShockingAnomalyOnClient(true);
         }
 
         private IEnumerator WaitUntilChargeRunsOut()
