@@ -29,7 +29,7 @@ namespace UsefulZapGun.Patches
         [HarmonyPostfix, HarmonyPatch(typeof(PatcherTool), "Start")]
         static void StartPatch(ref int ___anomalyMask)
         {
-            ___anomalyMask = 524360; //bit mask
+            ___anomalyMask = 2621512; //524360 - old
         }
 
         [HarmonyPostfix, HarmonyPatch(typeof(PatcherTool), "BeginShockingAnomalyOnClient")]
@@ -72,8 +72,6 @@ namespace UsefulZapGun.Patches
                 */
             }
         }
-
-
 
         /*[HarmonyTranspiler, HarmonyPatch(typeof(PatcherTool), "ScanGun", MethodType.Enumerator)]
         static IEnumerable<CodeInstruction> ScanGunTranspiler(IEnumerable<CodeInstruction> instructions)

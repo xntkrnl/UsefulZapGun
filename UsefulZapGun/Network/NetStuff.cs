@@ -9,7 +9,6 @@ namespace UsefulZapGun.Network
 {
     internal class NetStuff : NetworkBehaviour
     {
-
         [ServerRpc(RequireOwnership = false)]
         internal void BlowUpEnemyServerRpc(NetworkObjectReference enemyNORef)
         {

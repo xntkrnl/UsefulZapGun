@@ -53,6 +53,7 @@ namespace UsefulZapGun
             harmony.PatchAll(typeof(GameNetworkManagerPatch));
             harmony.PatchAll(typeof(MenuManagerPatch));
             harmony.PatchAll(typeof(PatcherToolPatch));
+            harmony.PatchAll(typeof(MapHazardsPatch));
 
             if (UZGConfig.enableItemCharging.Value)
                 harmony.PatchAll(typeof(GrabbableObjectPatch));
