@@ -3,8 +3,9 @@ using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using UsefulZapGun.Methods;
+using UsefulZapGun.Patches;
 
-namespace UsefulZapGun.Scripts
+namespace UsefulZapGun.Scripts.Items
 {
     internal class WeaponShockableScript : MonoBehaviour, IShockableWithGun
     {
@@ -15,7 +16,7 @@ namespace UsefulZapGun.Scripts
 
         private void Start()
         {
-            itemScript = base.GetComponent<Shovel>();
+            itemScript = GetComponent<Shovel>();
             charged = false;
             batteryChargeNeedUntilChargedState = UZGConfig.needForShovelCharge.Value / 100;
 
@@ -40,12 +41,12 @@ namespace UsefulZapGun.Scripts
 
         public Vector3 GetShockablePosition()
         {
-            return base.transform.position;
+            return transform.position;
         }
 
         public Transform GetShockableTransform()
         {
-            return base.transform;
+            return transform;
         }
 
         public void ShockWithGun(PlayerControllerB shockedByPlayer)
@@ -75,23 +76,29 @@ namespace UsefulZapGun.Scripts
             float chargeNeeded = zapgun.insertedBattery.charge - batteryChargeNeedUntilChargedState;
 
             while (zapgun.insertedBattery.charge > 0f && zapgun.insertedBattery.charge >= chargeNeeded)
-            {   
+            {
                 yield return new WaitForEndOfFrame();
             }
 
-            charged = true;
-            itemScript.shovelHitForce *= 2;
-            StartCoroutine(WaitUntilChargeRunsOut());
+            var shovelNORef = new NetworkObjectReference(GetNetworkObject());
+            GameNetworkManagerPatch.hostNetHandler.SyncShovelDamageServerRpc(shovelNORef);
             //TODO: particle
             zapgun.StopShockingAnomalyOnClient(true);
         }
 
-        private IEnumerator WaitUntilChargeRunsOut()
+        private IEnumerator WaitUntilChargeRunsOut(float seconds)
         {
-            yield return new WaitForSeconds(UZGConfig.chargeLifeTime.Value);
+            yield return new WaitForSeconds(seconds);
             charged = false;
             itemScript.shovelHitForce /= 2;
-            
+
+        }
+
+        internal void SyncDamageOnLocalClient(float seconds = 0)
+        {
+            charged = true;
+            itemScript.shovelHitForce *= 2;
+            StartCoroutine(WaitUntilChargeRunsOut(seconds));
         }
     }
 }

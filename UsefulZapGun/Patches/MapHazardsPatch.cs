@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine;
 using UsefulZapGun.Scripts.Hazards;
 
 namespace UsefulZapGun.Patches
@@ -18,6 +19,18 @@ namespace UsefulZapGun.Patches
         static void LandmineStartPatch(ref Landmine __instance)
         {
             __instance.gameObject.AddComponent<LandmineShockableScript>();
+        }
+
+        [HarmonyPostfix, HarmonyPatch(typeof(SpikeRoofTrap), "Start")]
+        static void SpiketrapStartPatch(ref SpikeRoofTrap __instance)
+        {
+            var go = __instance.gameObject;
+            go.AddComponent<SpiketrapShockableScript>();
+            go.GetComponent<MeshRenderer>().enabled = false;
+            go.layer = 21;
+            go.transform.parent.gameObject.layer = 21;
+            go.transform.parent.parent.gameObject.layer = 21;
+            go.transform.parent.parent.parent.gameObject.layer = 21;
         }
     }
 }

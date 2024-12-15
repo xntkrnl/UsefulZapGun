@@ -8,7 +8,7 @@ using UnityEngine;
 using UsefulZapGun.Methods;
 using UsefulZapGun.Scripts;
 
-namespace UsefulZapGun.Patches
+namespace UsefulZapGun.Patches.Items
 {
     internal class PatcherToolPatch
     {

@@ -1,4 +1,5 @@
-﻿using GameNetcodeStuff;
+﻿using DigitalRuby.ThunderAndLightning;
+using GameNetcodeStuff;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Text;
 using Unity.Netcode;
 using UnityEngine;
 using UsefulZapGun.Methods;
+using UsefulZapGun.Patches;
 
 namespace UsefulZapGun.Scripts.Hazards
 {
@@ -13,11 +15,16 @@ namespace UsefulZapGun.Scripts.Hazards
     {
         internal System.Random random;
         bool canShock;
+        int totalWeight;
+        int berserkWeight;
+        int successWeight;
         Turret turretScript;
         Coroutine coroutine;
 
         private void Start()
         {
+            berserkWeight = 
+            totalWeight = berserkWeight + successWeight;
             canShock = true;
             turretScript = base.GetComponent<Turret>();
         }
@@ -72,20 +79,21 @@ namespace UsefulZapGun.Scripts.Hazards
         {
             random = new System.Random((int)TimeOfDay.Instance.currentDayTime);
             Plugin.SpamLog($"time {TimeOfDay.Instance.currentDayTime} = {(int)TimeOfDay.Instance.currentDayTime}", Plugin.spamType.debug);
-            canShock = false;
+            var NORef = new NetworkObjectReference(GetNetworkObject());
+            GameNetworkManagerPatch.hostNetHandler.SyncCanShockServerRpc(NORef, false);
 
-            int randomInt = random.Next(0, 5); //TODO: config
-            Plugin.SpamLog($"{randomInt}", Plugin.spamType.debug);
-            if (randomInt > 0)
-            {
-                //TODO: smoke
-                turretScript.turretMode = TurretMode.Berserk;
-                turretScript.EnterBerserkModeServerRpc((int)player.playerClientId);
-                yield return new WaitForSeconds(1.4f + 9f);
-            }
+            //TODO: smoke
+            turretScript.turretMode = TurretMode.Berserk;
+            turretScript.EnterBerserkModeServerRpc((int)player.playerClientId);
+            yield return new WaitForSeconds(1.4f + 9f);
 
             turretScript.turretMode = TurretMode.Detection;
             turretScript.ToggleTurretServerRpc(false);
+        }
+
+        internal void SyncCanShockOnLocalClient(bool sync)
+        {
+            canShock = sync;
         }
     }
 }

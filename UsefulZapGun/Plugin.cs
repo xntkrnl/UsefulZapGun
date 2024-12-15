@@ -6,6 +6,7 @@ using System.IO;
 using System.Reflection;
 using UnityEngine;
 using UsefulZapGun.Patches;
+using UsefulZapGun.Patches.Items;
 
 namespace UsefulZapGun
 {
@@ -53,7 +54,9 @@ namespace UsefulZapGun
             harmony.PatchAll(typeof(GameNetworkManagerPatch));
             harmony.PatchAll(typeof(MenuManagerPatch));
             harmony.PatchAll(typeof(PatcherToolPatch));
-            harmony.PatchAll(typeof(MapHazardsPatch));
+
+            if (UZGConfig.enableWeaponCharging.Value)
+                harmony.PatchAll(typeof(MapHazardsPatch));
 
             if (UZGConfig.enableItemCharging.Value)
                 harmony.PatchAll(typeof(GrabbableObjectPatch));

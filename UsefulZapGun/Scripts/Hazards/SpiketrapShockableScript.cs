@@ -6,18 +6,22 @@ using System.Text;
 using Unity.Netcode;
 using UnityEngine;
 using UsefulZapGun.Methods;
+using UsefulZapGun.Patches;
 
 namespace UsefulZapGun.Scripts.Hazards
 {
-    internal class LandmineShockableScript : MonoBehaviour, IShockableWithGun
+    internal class SpiketrapShockableScript : MonoBehaviour, IShockableWithGun
     {
-        Landmine mineScript;
+        internal int zapCount;
         bool canShock;
+        SpikeRoofTrap spikeScript;
+        Coroutine coroutine;
 
         private void Start()
         {
+            zapCount = 0;
             canShock = true;
-            mineScript = base.GetComponent<Landmine>();
+            spikeScript = base.GetComponent<SpikeRoofTrap>();
         }
 
         public bool CanBeShocked()
@@ -27,12 +31,12 @@ namespace UsefulZapGun.Scripts.Hazards
 
         public float GetDifficultyMultiplier()
         {
-            return 0f;
+            return 0.4f;
         }
 
         public NetworkObject GetNetworkObject()
         {
-            return mineScript.NetworkObject;
+            return spikeScript.NetworkObject;
         }
 
         public Vector3 GetShockablePosition()
@@ -50,16 +54,22 @@ namespace UsefulZapGun.Scripts.Hazards
             foreach (PatcherTool zapgun in ZapGunMethods.zapGuns)
                 if (zapgun.isShocking && zapgun.shockedTargetScript == this)
                 {
+                    zapCount++;
                     zapgun.StopShockingAnomalyOnClient(true);
-                    mineScript.ExplodeMineServerRpc();
-                    canShock = false;
                     break;
                 }
         }
 
         public void StopShockingWithGun()
         {
-            return;
+            var NORef = new NetworkObjectReference(GetNetworkObject());
+            GameNetworkManagerPatch.hostNetHandler.SyncZapCountServerRpc(NORef, zapCount);
+        }
+
+        internal void SyncCanShockOnLocalClient(bool sync)
+        {
+            canShock = sync;
+            spikeScript.trapActive = sync;
         }
     }
 }

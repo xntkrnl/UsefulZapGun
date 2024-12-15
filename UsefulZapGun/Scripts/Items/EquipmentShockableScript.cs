@@ -4,7 +4,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UsefulZapGun.Methods;
 
-namespace UsefulZapGun.Scripts
+namespace UsefulZapGun.Scripts.Items
 {
     internal class EquipmentShockableScript : MonoBehaviour, IShockableWithGun
     {
@@ -14,7 +14,7 @@ namespace UsefulZapGun.Scripts
 
         private void Start()
         {
-            itemScript = base.GetComponent<GrabbableObject>();
+            itemScript = GetComponent<GrabbableObject>();
             var name = itemScript.itemProperties.itemName;
             chargeMultiplier = UZGConfig.multiplayerDict[itemScript.itemProperties.itemName].Value;
         }
@@ -38,12 +38,12 @@ namespace UsefulZapGun.Scripts
 
         public Vector3 GetShockablePosition()
         {
-            return base.transform.position;
+            return transform.position;
         }
 
         public Transform GetShockableTransform()
         {
-            return base.transform;
+            return transform;
         }
 
         public void ShockWithGun(PlayerControllerB shockedByPlayer)
