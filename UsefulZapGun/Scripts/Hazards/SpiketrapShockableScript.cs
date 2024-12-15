@@ -54,7 +54,8 @@ namespace UsefulZapGun.Scripts.Hazards
             foreach (PatcherTool zapgun in ZapGunMethods.zapGuns)
                 if (zapgun.isShocking && zapgun.shockedTargetScript == this)
                 {
-                    zapCount++;
+                    var NORef = new NetworkObjectReference(GetNetworkObject());
+                    GameNetworkManagerPatch.hostNetHandler.SyncZapCountServerRpc(NORef, zapCount+1);
                     zapgun.StopShockingAnomalyOnClient(true);
                     break;
                 }
@@ -62,8 +63,7 @@ namespace UsefulZapGun.Scripts.Hazards
 
         public void StopShockingWithGun()
         {
-            var NORef = new NetworkObjectReference(GetNetworkObject());
-            GameNetworkManagerPatch.hostNetHandler.SyncZapCountServerRpc(NORef, zapCount);
+            return;
         }
 
         internal void SyncCanShockOnLocalClient(bool sync)

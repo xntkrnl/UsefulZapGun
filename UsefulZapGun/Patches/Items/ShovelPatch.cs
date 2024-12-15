@@ -8,13 +8,12 @@ namespace UsefulZapGun.Patches.Items
 {
     internal class ShovelPatch
     {
-        [HarmonyPostfix, HarmonyPatch(typeof(Shovel), "Start")]
-        static void StartPatch(ref Shovel __instance)
+        [HarmonyPostfix, HarmonyPatch(typeof(GrabbableObject), "Start")]
+        static void StartPatch(ref GrabbableObject __instance)
         {
-            if (!__instance.gameObject.TryGetComponent(out WeaponShockableScript weaponComponent))
+            if (__instance is Shovel && !__instance.gameObject.TryGetComponent(out WeaponShockableScript weaponComponent))
             {
                 __instance.gameObject.AddComponent<WeaponShockableScript>();
-                return;
             }
         }
     }

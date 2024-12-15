@@ -23,7 +23,8 @@ namespace UsefulZapGun
         internal static ConfigEntry<float> needForShovelCharge;
 
         internal static ConfigEntry<bool> enableZapHazards;
-        internal static ConfigEntry<int> SpiketrapZapNeeded;
+        internal static ConfigEntry<float> timeNeedForTurretDisable;
+        internal static ConfigEntry<int> spiketrapZapNeeded;
 
 
 
@@ -42,7 +43,8 @@ namespace UsefulZapGun
             needForShovelCharge = cfg.Bind("Weapon", "Zap gun charge% for charged state", 33f);
 
             enableZapHazards = cfg.Bind("Hazards", "Enable hazard zap", true);
-            SpiketrapZapNeeded = cfg.Bind("Hazards", "Zap before deactivating the spiketrap", 4);
+            timeNeedForTurretDisable = cfg.Bind("Hazards", "Time need for turret", 3f);
+            spiketrapZapNeeded = cfg.Bind("Hazards", "Zap before deactivating the spiketrap", 2);
 
 
             CheckConfig();

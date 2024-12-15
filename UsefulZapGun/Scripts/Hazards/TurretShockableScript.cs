@@ -13,18 +13,12 @@ namespace UsefulZapGun.Scripts.Hazards
 {
     internal class TurretShockableScript : MonoBehaviour, IShockableWithGun
     {
-        internal System.Random random;
         bool canShock;
-        int totalWeight;
-        int berserkWeight;
-        int successWeight;
         Turret turretScript;
         Coroutine coroutine;
 
         private void Start()
         {
-            berserkWeight = 
-            totalWeight = berserkWeight + successWeight;
             canShock = true;
             turretScript = base.GetComponent<Turret>();
         }
@@ -69,7 +63,7 @@ namespace UsefulZapGun.Scripts.Hazards
 
         private IEnumerator Wait(PatcherTool zapgun, PlayerControllerB player)
         {
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(UZGConfig.timeNeedForTurretDisable.Value);
             StartCoroutine(BerserkAndDisable(player));
             zapgun.StopShockingAnomalyOnClient(true);
            
@@ -77,8 +71,6 @@ namespace UsefulZapGun.Scripts.Hazards
 
         private IEnumerator BerserkAndDisable(PlayerControllerB player)
         {
-            random = new System.Random((int)TimeOfDay.Instance.currentDayTime);
-            Plugin.SpamLog($"time {TimeOfDay.Instance.currentDayTime} = {(int)TimeOfDay.Instance.currentDayTime}", Plugin.spamType.debug);
             var NORef = new NetworkObjectReference(GetNetworkObject());
             GameNetworkManagerPatch.hostNetHandler.SyncCanShockServerRpc(NORef, false);
 

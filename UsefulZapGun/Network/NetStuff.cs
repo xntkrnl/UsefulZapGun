@@ -88,7 +88,7 @@ namespace UsefulZapGun.Network
         internal void SyncCanShockClientRpc(NetworkObjectReference obj, bool canShock)
         {
             obj.TryGet(out NetworkObject netObj);
-            if (netObj.gameObject.TryGetComponent<SpiketrapShockableScript>(out SpiketrapShockableScript compSpike))
+            if (netObj.transform.Find("Container/AnimContainer/Trigger").gameObject.TryGetComponent<SpiketrapShockableScript>(out SpiketrapShockableScript compSpike))
             {
                 compSpike.SyncCanShockOnLocalClient(canShock);
                 return;
@@ -103,7 +103,7 @@ namespace UsefulZapGun.Network
         [ServerRpc(RequireOwnership = false)]
         internal void SyncZapCountServerRpc(NetworkObjectReference obj, int zapCount)
         {
-            bool disable = zapCount >= UZGConfig.SpiketrapZapNeeded.Value;
+            bool disable = zapCount >= UZGConfig.spiketrapZapNeeded.Value;
             if (disable)
                 SyncCanShockClientRpc(obj, false);
 
@@ -114,7 +114,7 @@ namespace UsefulZapGun.Network
         internal void SyncZapCountClientRpc(NetworkObjectReference obj, int zapCount)
         {
             obj.TryGet(out NetworkObject netObj);
-            var comp = netObj.GetComponent<SpiketrapShockableScript>();
+            var comp = netObj.transform.Find("Container/AnimContainer/Trigger").gameObject.GetComponent<SpiketrapShockableScript>();
 
             if (comp.zapCount > zapCount)
                 SyncZapCountServerRpc(obj, comp.zapCount+1);
