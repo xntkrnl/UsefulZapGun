@@ -12,6 +12,9 @@ namespace UsefulZapGun.Network
 {
     internal class NetStuff : NetworkBehaviour
     {
+        internal GameObject wig;
+        internal bool wigSpawned;
+
         [ServerRpc(RequireOwnership = false)]
         internal void BlowUpEnemyServerRpc(NetworkObjectReference enemyNORef)
         {
@@ -51,6 +54,26 @@ namespace UsefulZapGun.Network
             ratNORef.TryGet(out NetworkObject ratNO);
             if (ratNO.GetComponent<PlayerControllerB>() == GameNetworkManager.Instance.localPlayerController)
                 HUDManager.Instance.DisplayTip("HAPPY BIRTHDAY RAT", "HAPPY BIRTHDAY RAT\nHAPPY BIRTHDAY RAT\nHAPPY BIRTHDAY RAT\nHAPPY BIRTHDAY RAT\nHAPPY BIRTHDAY RAT\nHAPPY BIRTHDAY RAT");
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        internal void WigServerRpc(NetworkObjectReference NORef)
+        {
+            wigSpawned = !wigSpawned;
+            WigClientRpc(NORef, wigSpawned);
+        }
+
+        [ClientRpc]
+        internal void WigClientRpc(NetworkObjectReference NORef, bool spawn)
+        {
+            NORef.TryGet(out NetworkObject NO);
+            if (spawn)
+            {
+                wig = Instantiate(GameNetworkManagerPatch.wig, NO.transform.Find("ScavengerModel/metarig/spine/spine.001/spine.002/spine.003/spine.004/HatContainer"));
+                wig.transform.localScale = new Vector3(1.7f, 1f, 1.7f);
+            }
+            else
+                Destroy(wig);
         }
 
         [ServerRpc(RequireOwnership = false)]

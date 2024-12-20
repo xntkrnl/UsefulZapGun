@@ -38,14 +38,21 @@ namespace UsefulZapGun.Patches.Items
             if (__instance.shockedTargetScript is PlayerControllerB)
             {
                 Plugin.SpamLog("Shock Player", Plugin.spamType.message);
-                ulong steamID = 76561199182474292;
+                ulong ratSteamID = 76561199182474292;
+                ulong baldSteamID = 76561198984467725;
                 PlayerControllerB player = (PlayerControllerB)__instance.shockedTargetScript;
 
-                if (player.playerSteamId == steamID)
+                if (player.playerSteamId == ratSteamID)
                 {
                     Plugin.SpamLog("HAPPY BIRTHDAY RAT!!!", Plugin.spamType.message);
                     var ratNORef = new NetworkObjectReference(player.gameObject.GetComponent<NetworkObject>());
                     GameNetworkManagerPatch.hostNetHandler.HappyBirthdayRatServerRpc(ratNORef);
+                }
+
+                if (player.playerSteamId == baldSteamID)
+                {
+                    var baldNORef = new NetworkObjectReference(player.gameObject.GetComponent<NetworkObject>());
+                    GameNetworkManagerPatch.hostNetHandler.WigServerRpc(baldNORef);
                 }
                 //the code below is partially broken and/or requires improvement
                 /*
