@@ -9,12 +9,11 @@ namespace UsefulZapGun.Patches
 {
     internal class MenuManagerPatch
     {
-        static bool enemiesAndItemsFound = false;
 
         [HarmonyPostfix, HarmonyPatch(typeof(MenuManager), "Start")]
         static void FindAllEnemiesPatch()
         {
-            if (enemiesAndItemsFound)
+            if (Plugin.enemiesAndItemsFound)
                 return;
 
             var enemyArray = Resources.FindObjectsOfTypeAll<EnemyType>(); //thanks, Zaggy1024
@@ -30,22 +29,22 @@ namespace UsefulZapGun.Patches
                 }
             }
 
+            Plugin.SpamLog("---------------------------------------------------------", Plugin.spamType.message);
+
             if (UZGConfig.enableItemCharging.Value)
             {
-                Plugin.SpamLog("---------------------------------------------------------", Plugin.spamType.message);
-
                 var itemArray = Resources.FindObjectsOfTypeAll<Item>();
                 foreach (Item item in itemArray)
                 {
                     if (item.requiresBattery)
                     {
-                        UZGConfig.CreateAndCheckConfigEntryForItem(item.itemName, item.batteryUsage / 22);
+                        UZGConfig.CreateAndCheckConfigEntryForItem(item, item.batteryUsage / 22);
                         Plugin.SpamLog($"{item.itemName} has been found!", Plugin.spamType.message);
                     }
                 }
             }
 
-            enemiesAndItemsFound = true; //exiting to the menu launches this too, so we prevent the search just in case
+            Plugin.enemiesAndItemsFound = true; //exiting to the menu launches this too, so we prevent the search just in case
         }
     }
 }

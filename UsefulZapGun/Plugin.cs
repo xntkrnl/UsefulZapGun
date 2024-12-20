@@ -22,6 +22,8 @@ namespace UsefulZapGun
         private static ManualLogSource mls;
         private static Plugin Instance;
 
+        internal static bool enemiesAndItemsFound = false;
+
         private static void NetcodePatcher()
         {
             var types = Assembly.GetExecutingAssembly().GetTypes();

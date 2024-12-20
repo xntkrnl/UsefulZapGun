@@ -16,7 +16,7 @@ namespace UsefulZapGun.Scripts.Items
         {
             itemScript = GetComponent<GrabbableObject>();
             var name = itemScript.itemProperties.itemName;
-            chargeMultiplier = UZGConfig.multiplayerDict[itemScript.itemProperties.itemName].Value;
+            chargeMultiplier = UZGConfig.multiplayerDict[itemScript.itemProperties].Value;
         }
 
         public bool CanBeShocked()

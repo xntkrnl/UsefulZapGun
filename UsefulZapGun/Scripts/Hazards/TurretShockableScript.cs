@@ -66,13 +66,12 @@ namespace UsefulZapGun.Scripts.Hazards
             yield return new WaitForSeconds(UZGConfig.timeNeedForTurretDisable.Value);
             StartCoroutine(BerserkAndDisable(player));
             zapgun.StopShockingAnomalyOnClient(true);
-           
         }
 
         private IEnumerator BerserkAndDisable(PlayerControllerB player)
         {
             var NORef = new NetworkObjectReference(GetNetworkObject());
-            GameNetworkManagerPatch.hostNetHandler.SyncCanShockServerRpc(NORef, false);
+            //GameNetworkManagerPatch.hostNetHandler.SyncCanShockTurretServerRpc(NORef, false);
 
             //TODO: smoke
             turretScript.turretMode = TurretMode.Berserk;
@@ -81,11 +80,6 @@ namespace UsefulZapGun.Scripts.Hazards
 
             turretScript.turretMode = TurretMode.Detection;
             turretScript.ToggleTurretServerRpc(false);
-        }
-
-        internal void SyncCanShockOnLocalClient(bool sync)
-        {
-            canShock = sync;
         }
     }
 }

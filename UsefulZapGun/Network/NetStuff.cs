@@ -78,26 +78,26 @@ namespace UsefulZapGun.Network
             shovelNO.GetComponent<WeaponShockableScript>().SyncDamageOnLocalClient(seconds);
         }
 
-        [ServerRpc(RequireOwnership = false)]
-        internal void SyncCanShockServerRpc(NetworkObjectReference obj, bool canShock)
+        /*[ServerRpc(RequireOwnership = false)]
+        internal void SyncCanShockTurretServerRpc(NetworkObjectReference obj, bool canShock)
         {
-            SyncCanShockClientRpc(obj, canShock);
+            SyncCanShockTurretClientRpc(obj, canShock);
         }
 
         [ClientRpc]
-        internal void SyncCanShockClientRpc(NetworkObjectReference obj, bool canShock)
+        internal void SyncCanShockTurretClientRpc(NetworkObjectReference obj, bool canShock)
         {
             obj.TryGet(out NetworkObject netObj);
-            if (netObj.transform.Find("Container/AnimContainer/Trigger").gameObject.TryGetComponent<SpiketrapShockableScript>(out SpiketrapShockableScript compSpike))
-            {
-                compSpike.SyncCanShockOnLocalClient(canShock);
-                return;
-            }
-            if (netObj.gameObject.TryGetComponent<TurretShockableScript>(out TurretShockableScript compTurret))
-            {
-                compTurret.SyncCanShockOnLocalClient(canShock);
-                return;
-            }
+            netObj.gameObject.TryGetComponent<TurretShockableScript>(out TurretShockableScript compTurret);
+            compTurret.SyncCanShockOnLocalClient(canShock);
+        }*/
+
+        [ClientRpc]
+        internal void SyncCanShockSpikeClientRpc(NetworkObjectReference obj, bool canShock)
+        {
+            obj.TryGet(out NetworkObject netObj);
+            netObj.transform.Find("Container/AnimContainer/Trigger").gameObject.TryGetComponent<SpiketrapShockableScript>(out SpiketrapShockableScript compSpike);
+            compSpike.SyncCanShockOnLocalClient(canShock);
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -105,7 +105,7 @@ namespace UsefulZapGun.Network
         {
             bool disable = zapCount >= UZGConfig.spiketrapZapNeeded.Value;
             if (disable)
-                SyncCanShockClientRpc(obj, false);
+                SyncCanShockSpikeClientRpc(obj, false);
 
             SyncZapCountClientRpc(obj, zapCount);
         }
@@ -117,10 +117,10 @@ namespace UsefulZapGun.Network
             var comp = netObj.transform.Find("Container/AnimContainer/Trigger").gameObject.GetComponent<SpiketrapShockableScript>();
 
             if (comp.zapCount > zapCount)
-                SyncZapCountServerRpc(obj, comp.zapCount+1);
+                SyncZapCountServerRpc(obj, comp.zapCount + 1);
             else
                 comp.zapCount = zapCount;
-                
+
         }
     }
 }

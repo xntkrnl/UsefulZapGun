@@ -16,7 +16,7 @@ namespace UsefulZapGun
         internal static ConfigEntry<bool> enableItemCharging;
 
         internal static List<string> enemyList;
-        internal static Dictionary<string, ConfigEntry<float>> multiplayerDict = new Dictionary<string, ConfigEntry<float>>();
+        internal static Dictionary<Item, ConfigEntry<float>> multiplayerDict = new Dictionary<Item, ConfigEntry<float>>();
 
         internal static ConfigEntry<float> chargeLifeTime;
         internal static ConfigEntry<bool> enableWeaponCharging;
@@ -44,7 +44,7 @@ namespace UsefulZapGun
 
             enableZapHazards = cfg.Bind("Hazards", "Enable hazard zap", true);
             timeNeedForTurretDisable = cfg.Bind("Hazards", "Time need for turret", 3f);
-            spiketrapZapNeeded = cfg.Bind("Hazards", "Zap before deactivating the spiketrap", 2);
+            spiketrapZapNeeded = cfg.Bind("Hazards", "Zaps before deactivating the spiketrap", 2);
 
 
             CheckConfig();
@@ -56,10 +56,10 @@ namespace UsefulZapGun
             enemyList.Remove("Tornado");
         }
 
-        internal static void CreateAndCheckConfigEntryForItem(string itemName, float multiplayer)
+        internal static void CreateAndCheckConfigEntryForItem(Item item, float multiplayer)
         {
-            var configEntry = cfg.Bind("Items", itemName + ": Zap gun charge multiplayer", multiplayer);
-            multiplayerDict.Add(itemName, configEntry);
+            var configEntry = cfg.Bind("Items", item.itemName + ": charge multiplayer", multiplayer);
+            multiplayerDict.TryAdd(item, configEntry);
         }
     }
 }
