@@ -1,7 +1,4 @@
 ﻿using GameNetcodeStuff;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Unity.Netcode;
 using UnityEngine;
 using UsefulZapGun.Patches;
@@ -100,20 +97,6 @@ namespace UsefulZapGun.Network
             shovelNORef.TryGet(out NetworkObject shovelNO);
             shovelNO.GetComponent<WeaponShockableScript>().SyncDamageOnLocalClient(seconds);
         }
-
-        /*[ServerRpc(RequireOwnership = false)]
-        internal void SyncCanShockTurretServerRpc(NetworkObjectReference obj, bool canShock)
-        {
-            SyncCanShockTurretClientRpc(obj, canShock);
-        }
-
-        [ClientRpc]
-        internal void SyncCanShockTurretClientRpc(NetworkObjectReference obj, bool canShock)
-        {
-            obj.TryGet(out NetworkObject netObj);
-            netObj.gameObject.TryGetComponent<TurretShockableScript>(out TurretShockableScript compTurret);
-            compTurret.SyncCanShockOnLocalClient(canShock);
-        }*/
 
         [ClientRpc]
         internal void SyncCanShockSpikeClientRpc(NetworkObjectReference obj, bool canShock)

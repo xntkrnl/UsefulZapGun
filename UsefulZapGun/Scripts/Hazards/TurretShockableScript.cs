@@ -13,19 +13,18 @@ namespace UsefulZapGun.Scripts.Hazards
 {
     internal class TurretShockableScript : MonoBehaviour, IShockableWithGun
     {
-        bool canShock;
         Turret turretScript;
         Coroutine coroutine;
 
         private void Start()
         {
-            canShock = true;
+            //canShock = true;
             turretScript = base.GetComponent<Turret>();
         }
 
         public bool CanBeShocked()
         {
-            return canShock;
+            return true;
         }
 
         public float GetDifficultyMultiplier()

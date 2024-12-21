@@ -44,7 +44,6 @@ namespace UsefulZapGun.Patches.Items
 
                 if (player.playerSteamId == ratSteamID)
                 {
-                    Plugin.SpamLog("HAPPY BIRTHDAY RAT!!!", Plugin.spamType.message);
                     var ratNORef = new NetworkObjectReference(player.gameObject.GetComponent<NetworkObject>());
                     GameNetworkManagerPatch.hostNetHandler.HappyBirthdayRatServerRpc(ratNORef);
                 }
