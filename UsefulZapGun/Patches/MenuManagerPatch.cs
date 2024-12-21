@@ -37,7 +37,7 @@ namespace UsefulZapGun.Patches
                 var itemArray = Resources.FindObjectsOfTypeAll<Item>();
                 foreach (Item item in itemArray)
                 {
-                    if (item.requiresBattery)
+                    if (item.requiresBattery && !String.IsNullOrEmpty(item.itemName))
                     {
                         UZGConfig.CreateAndCheckConfigEntryForItem(item, item.batteryUsage / 22);
                         Plugin.SpamLog($"{item.itemName} has been found!", Plugin.spamType.message);

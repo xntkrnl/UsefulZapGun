@@ -14,10 +14,10 @@ namespace UsefulZapGun
         internal static ConfigEntry<bool> enableLogging;
         internal static ConfigEntry<string> enemyListString;
         internal static ConfigEntry<bool> enableItemCharging;
+        internal static Dictionary<Item, ConfigEntry<float>> multiplayerDict = new Dictionary<Item, ConfigEntry<float>>();
 
         internal static List<string> enemyList;
         internal static Dictionary<EnemyType, ConfigEntry<float>> timeDict = new Dictionary<EnemyType, ConfigEntry<float>>();
-        internal static Dictionary<Item, ConfigEntry<float>> multiplayerDict = new Dictionary<Item, ConfigEntry<float>>();
 
         internal static ConfigEntry<float> chargeLifeTime;
         internal static ConfigEntry<bool> enableWeaponCharging;
@@ -26,8 +26,6 @@ namespace UsefulZapGun
         internal static ConfigEntry<bool> enableZapHazards;
         internal static ConfigEntry<float> timeNeedForTurretDisable;
         internal static ConfigEntry<int> spiketrapZapNeeded;
-
-
 
         internal static void ConfigSetup()
         {
