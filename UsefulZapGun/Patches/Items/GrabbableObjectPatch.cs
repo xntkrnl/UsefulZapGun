@@ -12,18 +12,17 @@ namespace UsefulZapGun.Patches.Items
             if (__instance is Shovel)
                 return;
 
-
             if (__instance.itemProperties.requiresBattery && !__instance.gameObject.TryGetComponent(out EquipmentShockableScript itemComponent) && __instance.itemProperties.requiresBattery)
             {
                 __instance.gameObject.AddComponent<EquipmentShockableScript>();
                 return;
             }
 
-            /*if (!__instance.gameObject.TryGetComponent(out ConductiveShockableScript conductiveItem) && __instance.itemProperties.isConductiveMetal)
+            if (!__instance.gameObject.TryGetComponent(out ConductiveShockableScript conductiveItem) && __instance.itemProperties.isConductiveMetal)
             {
                 __instance.gameObject.AddComponent<ConductiveShockableScript>();
                 return;
-            }*/
+            }
         }
     }
 }

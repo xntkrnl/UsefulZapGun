@@ -43,6 +43,20 @@ namespace UsefulZapGun.Network
         }
 
         [ServerRpc(RequireOwnership = false)]
+        internal void SlayerServerRpc(NetworkObjectReference slayerNORef)
+        {
+            SlayerClientRpc(slayerNORef);
+        }
+
+        [ClientRpc]
+        internal void SlayerClientRpc(NetworkObjectReference slayerNORef)
+        {
+            slayerNORef.TryGet(out NetworkObject slayerNO);
+            if (slayerNO.GetComponent<PlayerControllerB>() == GameNetworkManager.Instance.localPlayerController)
+                HUDManager.Instance.DisplayTip("SLAYER =(", "THE SACRIFICER IS BROKEN =(");
+        }
+
+        [ServerRpc(RequireOwnership = false)]
         internal void HappyBirthdayRatServerRpc(NetworkObjectReference ratNORef)
         {
             HappyBirthdayRatClientRpc(ratNORef);
@@ -66,6 +80,9 @@ namespace UsefulZapGun.Network
         [ClientRpc]
         internal void WigClientRpc(NetworkObjectReference NORef, bool spawn)
         {
+            if (GameNetworkManager.Instance.localPlayerController.playerSteamId == 76561198984467725)
+                return;
+
             NORef.TryGet(out NetworkObject NO);
             if (spawn)
             {

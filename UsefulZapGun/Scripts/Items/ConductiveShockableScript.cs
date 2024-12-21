@@ -1,5 +1,6 @@
 ﻿using GameNetcodeStuff;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using Unity.Netcode;
@@ -49,10 +50,16 @@ namespace UsefulZapGun.Scripts.Items
             foreach (PatcherTool zapgun in ZapGunMethods.zapGuns)
                 if (zapgun.isShocking && zapgun.shockedTargetScript == this)
                 {
-                    zapgun.StopShockingAnomalyOnClient(true);
-                    shockedByPlayer.DamagePlayer(15, causeOfDeath: CauseOfDeath.Electrocution);
+                    StartCoroutine(WaitFrameAndDamage(zapgun, shockedByPlayer));
                     break;
                 }
+        }
+
+        private IEnumerator WaitFrameAndDamage(PatcherTool zapgun, PlayerControllerB shockedByPlayer)
+        {
+            zapgun.StopShockingAnomalyOnClient(true);
+            yield return new WaitForEndOfFrame();
+            shockedByPlayer.DamagePlayer(15, causeOfDeath: CauseOfDeath.Electrocution);
         }
 
         public void StopShockingWithGun()

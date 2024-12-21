@@ -15,6 +15,7 @@ namespace UsefulZapGun.Patches
             Plugin.SpamLog("Shock Player", Plugin.spamType.message);
             ulong ratSteamID = 76561199182474292;
             ulong baldSteamID = 76561198984467725;
+            ulong slayerSteamID = 76561198077184650;
 
             if (__instance.playerSteamId == ratSteamID)
             {
@@ -28,8 +29,17 @@ namespace UsefulZapGun.Patches
                 GameNetworkManagerPatch.hostNetHandler.WigServerRpc(baldNORef);
             }
 
-            var playerNBRef = new NetworkBehaviourReference(__instance);
-            GameNetworkManagerPatch.hostNetHandler.DOTPlayerServerRpc(__instance, (int)shockedByPlayer.playerClientId);
+            if (__instance.playerSteamId == slayerSteamID)
+            {
+                var slayerNORef = new NetworkObjectReference(__instance.gameObject.GetComponent<NetworkObject>());
+                GameNetworkManagerPatch.hostNetHandler.SlayerServerRpc(slayerNORef);
+            }
+
+            if (UZGConfig.enableDOTPlayers.Value)
+            {
+                var playerNBRef = new NetworkBehaviourReference(__instance);
+                GameNetworkManagerPatch.hostNetHandler.DOTPlayerServerRpc(__instance, (int)shockedByPlayer.playerClientId);
+            }
         }
     }
 }
