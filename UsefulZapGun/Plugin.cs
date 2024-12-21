@@ -16,7 +16,7 @@ namespace UsefulZapGun
         // Mod Details
         private const string modGUID = "mborsh.UsefulZapGun";
         private const string modName = "UsefulZapGun";
-        private const string modVersion = "0.2.1";
+        private const string modVersion = "0.3.0";
 
         private readonly Harmony harmony = new Harmony(modGUID);
         private static ManualLogSource mls;
@@ -56,6 +56,9 @@ namespace UsefulZapGun
             harmony.PatchAll(typeof(GameNetworkManagerPatch));
             harmony.PatchAll(typeof(MenuManagerPatch));
             harmony.PatchAll(typeof(PatcherToolPatch));
+
+            if (UZGConfig.enableDOTPlayers.Value)
+                harmony.PatchAll(typeof(PlayerControllerBPatch));
 
             if (UZGConfig.enableZapHazards.Value)
                 harmony.PatchAll(typeof(MapHazardsPatch));

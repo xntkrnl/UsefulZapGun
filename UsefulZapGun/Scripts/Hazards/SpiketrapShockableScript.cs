@@ -21,7 +21,7 @@ namespace UsefulZapGun.Scripts.Hazards
         {
             zapCount = 0;
             canShock = true;
-            spikeScript = base.GetComponent<SpikeRoofTrap>();
+            spikeScript = base.transform.parent.Find("Trigger").GetComponent<SpikeRoofTrap>();
         }
 
         public bool CanBeShocked()
@@ -70,6 +70,7 @@ namespace UsefulZapGun.Scripts.Hazards
         {
             canShock = sync;
             spikeScript.trapActive = sync;
+            base.GetComponent<Light>().enabled = sync;
         }
     }
 }

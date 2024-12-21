@@ -19,6 +19,9 @@ namespace UsefulZapGun.Patches
             var enemyArray = Resources.FindObjectsOfTypeAll<EnemyType>(); //thanks, Zaggy1024
             foreach (EnemyType enemy in enemyArray)
             {
+                if (String.IsNullOrEmpty(enemy.enemyName))
+                    continue; //dont care
+
                 Plugin.SpamLog($"{enemy.enemyName} has been found!", Plugin.spamType.message);
 
                 if (UZGConfig.enemyList.Contains(enemy.enemyName))

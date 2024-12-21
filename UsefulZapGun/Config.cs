@@ -18,6 +18,12 @@ namespace UsefulZapGun
 
         internal static List<string> enemyList;
         internal static Dictionary<EnemyType, ConfigEntry<float>> timeDict = new Dictionary<EnemyType, ConfigEntry<float>>();
+        internal static ConfigEntry<bool> enableExplosion;
+        internal static ConfigEntry<bool> enableDOTEnemy;
+        internal static ConfigEntry<bool> enableDOTPlayers;
+        internal static ConfigEntry<int> zapDamage;
+        internal static ConfigEntry<int> zapDamageToPlayer;
+        internal static ConfigEntry<float> zapTimeToDamage;
 
         internal static ConfigEntry<float> chargeLifeTime;
         internal static ConfigEntry<bool> enableWeaponCharging;
@@ -32,7 +38,15 @@ namespace UsefulZapGun
             cfg = new ConfigFile(Path.Combine(Paths.ConfigPath, "mborsh.UsefulZapGun.cfg"), true);
 
             enableLogging = cfg.Bind("General", "Enable logging", true);
+
             enemyListString = cfg.Bind("Enemies", "Enemy list", "Red Locust Bees,Butler Bees,Docile Locust Bees");
+            enableExplosion = cfg.Bind("Enemies", "Enable enemy explosion", true);
+            enableDOTEnemy = cfg.Bind("Enemies", "Damage enemy with zap", false);
+            enableDOTPlayers = cfg.Bind("Enemies", "Damage players with zap", false);
+            zapDamage = cfg.Bind("Enemies", "Zapgun damage to enemy", 1);
+            zapDamageToPlayer = cfg.Bind("Enemies", "Zapgun damage to player", 10);
+            zapTimeToDamage = cfg.Bind("Enemies", "Time to damage (seconds)", 1f);
+
             enemyList = enemyListString.Value.Split(',').ToList();
 
             enableItemCharging = cfg.Bind("Items", "Enable equipment charging", true, "Charging ratio: chargeMultiplier * (Time.deltaTime / item.itemProperties.batteryUsage)");
@@ -53,6 +67,9 @@ namespace UsefulZapGun
         {
             enemyList.Remove("Bruce");
             enemyList.Remove("Tornado");
+
+            if (zapDamage.Value <= 0)
+                zapDamage.Value = 1;
         }
 
         internal static void CreateAndCheckConfigEntryForItem(Item item, float multiplayer)

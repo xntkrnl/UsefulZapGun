@@ -31,16 +31,23 @@ namespace UsefulZapGun.Methods
             }
         }
 
-        //unused
-        internal static IEnumerator DOTPlayer(GrabbableObject item, PlayerControllerB player, int index)
+        internal static IEnumerator DOTPlayer(PlayerControllerB player, int playerWhoHit, int damageToPlayer, float time, PatcherTool zapgun)
         {
-            while (true)
+            while (zapgun.shockedTargetScript == player && zapgun.isBeingUsed)
             {
-                yield return new WaitForSeconds(1f);
-                if (player.ItemSlots[index] != item)
-                    break;
-                else
-                    player.DamagePlayer(5, causeOfDeath: CauseOfDeath.Electrocution);
+                player.DamagePlayerFromOtherClientServerRpc(damageToPlayer, player.transform.position, playerWhoHit);
+                yield return new WaitForSeconds(time);
+            }
+        }
+
+        internal static IEnumerator DOTEnemy(EnemyAICollisionDetect enemyAICol, PlayerControllerB playerWhoHit, int force, float time, PatcherTool zapgun)
+        {
+            var enemyAIColIHittable = (IHittable)enemyAICol;
+
+            while (zapgun.shockedTargetScript == enemyAICol && zapgun.isBeingUsed)
+            {
+                enemyAIColIHittable.Hit(force, enemyAICol.transform.position, playerWhoHit);
+                yield return new WaitForSeconds(time);
             }
         }
     }
