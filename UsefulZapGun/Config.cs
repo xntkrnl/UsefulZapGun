@@ -16,6 +16,7 @@ namespace UsefulZapGun
         internal static ConfigEntry<bool> enableItemCharging;
 
         internal static List<string> enemyList;
+        internal static Dictionary<EnemyType, ConfigEntry<float>> timeDict = new Dictionary<EnemyType, ConfigEntry<float>>();
         internal static Dictionary<Item, ConfigEntry<float>> multiplayerDict = new Dictionary<Item, ConfigEntry<float>>();
 
         internal static ConfigEntry<float> chargeLifeTime;
@@ -33,7 +34,7 @@ namespace UsefulZapGun
             cfg = new ConfigFile(Path.Combine(Paths.ConfigPath, "mborsh.UsefulZapGun.cfg"), true);
 
             enableLogging = cfg.Bind("General", "Enable logging", true);
-            enemyListString = cfg.Bind("General", "Enemy list", "Red Locust Bees,Butler Bees,Docile Locust Bees"); //TODO: general -> enemies
+            enemyListString = cfg.Bind("Enemies", "Enemy list", "Red Locust Bees,Butler Bees,Docile Locust Bees");
             enemyList = enemyListString.Value.Split(',').ToList();
 
             enableItemCharging = cfg.Bind("Items", "Enable equipment charging", true, "Charging ratio: chargeMultiplier * (Time.deltaTime / item.itemProperties.batteryUsage)");
@@ -60,6 +61,15 @@ namespace UsefulZapGun
         {
             var configEntry = cfg.Bind("Items", item.itemName + ": charge multiplayer", multiplayer);
             multiplayerDict.TryAdd(item, configEntry);
+        }
+
+        internal static void CreateAndCheckConfigEntryForEnemy(EnemyType enemy, float time)
+        {
+            var configEntry = cfg.Bind("Enemies", enemy.enemyName + ": time needed for explosion", time);
+            if (configEntry.Value <= 0f)
+                configEntry.Value = 1f;
+
+            timeDict.TryAdd(enemy, configEntry);
         }
     }
 }

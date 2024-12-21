@@ -12,9 +12,9 @@ namespace UsefulZapGun.Methods
     {
         internal static List<PatcherTool> zapGuns = new List<PatcherTool>();
 
-        internal static IEnumerator WaitAndDoSmth(EnemyAI enemyScript, EnemyAICollisionDetect instance)
+        internal static IEnumerator WaitAndExplode(EnemyAI enemyScript, float time)
         {
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(time);
 
             if (enemyScript.stunNormalizedTimer > 0f)
             {

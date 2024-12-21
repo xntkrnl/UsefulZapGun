@@ -25,8 +25,6 @@ namespace UsefulZapGun.Network
 
                 Vector3 enemyPos = enemyNO.gameObject.transform.position;
                 enemyNO.gameObject.GetComponent<EnemyAI>().KillEnemyServerRpc(true);
-
-
                 BlowUpEnemyClientRpc(enemyPos);
             }
             else
