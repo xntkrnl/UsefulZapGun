@@ -43,57 +43,6 @@ namespace UsefulZapGun.Network
         }
 
         [ServerRpc(RequireOwnership = false)]
-        internal void SlayerServerRpc(NetworkObjectReference slayerNORef)
-        {
-            SlayerClientRpc(slayerNORef);
-        }
-
-        [ClientRpc]
-        internal void SlayerClientRpc(NetworkObjectReference slayerNORef)
-        {
-            slayerNORef.TryGet(out NetworkObject slayerNO);
-            if (slayerNO.GetComponent<PlayerControllerB>() == GameNetworkManager.Instance.localPlayerController)
-                HUDManager.Instance.DisplayTip("SLAYER =(", "THE SACRIFICER IS BROKEN =(");
-        }
-
-        [ServerRpc(RequireOwnership = false)]
-        internal void HappyBirthdayRatServerRpc(NetworkObjectReference ratNORef)
-        {
-            HappyBirthdayRatClientRpc(ratNORef);
-        }
-
-        [ClientRpc]
-        internal void HappyBirthdayRatClientRpc(NetworkObjectReference ratNORef)
-        {
-            ratNORef.TryGet(out NetworkObject ratNO);
-            if (ratNO.GetComponent<PlayerControllerB>() == GameNetworkManager.Instance.localPlayerController)
-                HUDManager.Instance.DisplayTip("HAPPY BIRTHDAY RAT", "HAPPY BIRTHDAY RAT\nHAPPY BIRTHDAY RAT\nHAPPY BIRTHDAY RAT\nHAPPY BIRTHDAY RAT\nHAPPY BIRTHDAY RAT\nHAPPY BIRTHDAY RAT");
-        }
-
-        [ServerRpc(RequireOwnership = false)]
-        internal void WigServerRpc(NetworkObjectReference NORef)
-        {
-            wigSpawned = !wigSpawned;
-            WigClientRpc(NORef, wigSpawned);
-        }
-
-        [ClientRpc]
-        internal void WigClientRpc(NetworkObjectReference NORef, bool spawn)
-        {
-            if (GameNetworkManager.Instance.localPlayerController.playerSteamId == 76561198984467725)
-                return;
-
-            NORef.TryGet(out NetworkObject NO);
-            if (spawn)
-            {
-                wig = Instantiate(GameNetworkManagerPatch.wig, NO.transform.Find("ScavengerModel/metarig/spine/spine.001/spine.002/spine.003/spine.004/HatContainer"));
-                wig.transform.localScale = new Vector3(1.7f, 1f, 1.7f);
-            }
-            else
-                Destroy(wig);
-        }
-
-        [ServerRpc(RequireOwnership = false)]
         internal void SyncShovelDamageServerRpc(NetworkObjectReference shovelNORef)
         {
             if (shovelNORef.TryGet(out NetworkObject shovelNO))
