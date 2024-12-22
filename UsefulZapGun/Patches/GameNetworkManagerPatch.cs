@@ -14,7 +14,6 @@ namespace UsefulZapGun.Patches
     {
         internal static GameObject netHandler;
         internal static NetStuff hostNetHandler;
-        internal static GameObject wig;
 
         [HarmonyPrefix, HarmonyPatch(typeof(StartOfRound), "Start")]
         public static void SpawnNetworkHandler()
@@ -41,8 +40,6 @@ namespace UsefulZapGun.Patches
             netHandler = mainAssetBundle.LoadAsset<GameObject>("zapgunnetworkobject.prefab");
             netHandler.AddComponent<NetStuff>();
             NetworkManager.Singleton.AddNetworkPrefab(netHandler);
-
-            wig = mainAssetBundle.LoadAsset<GameObject>("wig.prefab");
         }
     }
 }

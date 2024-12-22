@@ -11,24 +11,42 @@ namespace UsefulZapGun.Methods
     internal class ZapGunMethods
     {
         internal static List<PatcherTool> zapGuns = new List<PatcherTool>();
+        internal static Coroutine explosionCoroutine;
 
-        internal static IEnumerator WaitAndExplode(EnemyAI enemyScript, float time)
+        internal static void WaitAndExplode(EnemyAICollisionDetect enemyCol, EnemyAI enemyScript, float time)
         {
-            yield return new WaitForSeconds(time);
-
-            if (enemyScript.stunNormalizedTimer > 0f)
+            foreach (PatcherTool tool in zapGuns)
             {
-                foreach (PatcherTool tool in zapGuns)
+                if (tool.isBeingUsed && tool.playerHeldBy == GameNetworkManager.Instance.localPlayerController && tool.shockedTargetScript == enemyCol)
                 {
-                    if (tool.isBeingUsed && tool.playerHeldBy == GameNetworkManager.Instance.localPlayerController)
-                    {
-                        NetworkObjectReference enemyNOR = new NetworkObjectReference(enemyScript.gameObject.GetComponent<NetworkObject>());
-                        tool.StopShockingAnomalyOnClient(true);
-                        //do smth
-                        GameNetworkManagerPatch.hostNetHandler.BlowUpEnemyServerRpc(enemyNOR);
-                    }
+                    explosionCoroutine = StartOfRound.Instance.StartCoroutine(WaitAndExplodeCoroutine(tool, enemyCol, enemyScript, time));
                 }
             }
+        }
+
+        internal static IEnumerator WaitAndExplodeCoroutine(PatcherTool zapgun, EnemyAICollisionDetect enemyCol, EnemyAI enemyScript, float time)
+        {
+            Plugin.SpamLog($"is zapgun null? {zapgun == null}", Plugin.spamType.debug);
+
+            while (time > 0)
+            {
+                //yield return new WaitForEndOfFrame();
+                //time -= Time.deltaTime;
+                yield return new WaitForSeconds(0.1f);
+                time -= 0.1f;
+                Plugin.SpamLog($"time = {time}", Plugin.spamType.debug);
+
+                if (!zapgun.isBeingUsed || zapgun.shockedTargetScript != enemyCol)
+                {
+                    Plugin.SpamLog("Stop charging explosion!", Plugin.spamType.debug);
+                    StartOfRound.Instance.StopCoroutine(explosionCoroutine);
+                }
+            }
+
+            zapgun.StopShockingAnomalyOnClient(true);
+            yield return new WaitForEndOfFrame();
+            var enemyNORef = new NetworkObjectReference(enemyScript.NetworkObject);
+            GameNetworkManagerPatch.hostNetHandler.BlowUpEnemyServerRpc(enemyNORef);
         }
 
         internal static IEnumerator DOTPlayer(PlayerControllerB player, int playerWhoHit, int damageToPlayer, float time, PatcherTool zapgun)

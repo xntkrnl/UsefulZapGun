@@ -10,8 +10,6 @@ namespace UsefulZapGun.Network
 {
     internal class NetStuff : NetworkBehaviour
     {
-        internal GameObject wig;
-        internal bool wigSpawned;
         internal PatcherTool zapgun;
 
         [ServerRpc(RequireOwnership = false)]

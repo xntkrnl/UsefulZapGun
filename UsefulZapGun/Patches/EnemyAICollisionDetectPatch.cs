@@ -15,7 +15,10 @@ namespace UsefulZapGun.Patches
         static void ShockWithGunPatch(ref EnemyAI ___mainScript, ref EnemyAICollisionDetect __instance, PlayerControllerB shockedByPlayer)
         {
             if (UZGConfig.timeDict.ContainsKey(___mainScript.enemyType) && UZGConfig.enableExplosion.Value)
-                StartOfRound.Instance.StartCoroutine(ZapGunMethods.WaitAndExplode(___mainScript, UZGConfig.timeDict[___mainScript.enemyType].Value));
+            {
+                //StartOfRound.Instance.StartCoroutine(ZapGunMethods.WaitAndExplode(___mainScript, UZGConfig.timeDict[___mainScript.enemyType].Value));
+                ZapGunMethods.WaitAndExplode(__instance, ___mainScript, UZGConfig.timeDict[___mainScript.enemyType].Value);
+            }
             else
             {
                 var enemyNBRef = new NetworkBehaviourReference(___mainScript);
