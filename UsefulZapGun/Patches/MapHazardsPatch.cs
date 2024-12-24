@@ -25,8 +25,14 @@ namespace UsefulZapGun.Patches
         static void SpiketrapStartPatch(ref SpikeRoofTrap __instance)
         {
             var go = __instance.gameObject;
+            go = go.transform.parent.Find("Spot Light").gameObject;
+
+            var collider = go.AddComponent<BoxCollider>();
+            //collider.size = new Vector3(0.1f, 0.1f, 0.1f);
+            collider.isTrigger = true;
+
             go.AddComponent<SpiketrapShockableScript>();
-            go.GetComponent<MeshRenderer>().enabled = false;
+
             go.layer = 21;
             go.transform.parent.gameObject.layer = 21;
             go.transform.parent.parent.gameObject.layer = 21;

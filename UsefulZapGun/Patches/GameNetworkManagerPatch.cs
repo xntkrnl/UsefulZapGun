@@ -38,7 +38,6 @@ namespace UsefulZapGun.Patches
             var mainAssetBundle = AssetBundle.LoadFromFile(Path.Combine(sAssemblyLocation, "zapgunnetworkobject"));
 
             netHandler = mainAssetBundle.LoadAsset<GameObject>("zapgunnetworkobject.prefab");
-
             netHandler.AddComponent<NetStuff>();
             NetworkManager.Singleton.AddNetworkPrefab(netHandler);
         }

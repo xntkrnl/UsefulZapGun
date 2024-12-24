@@ -13,19 +13,18 @@ namespace UsefulZapGun.Scripts.Hazards
 {
     internal class TurretShockableScript : MonoBehaviour, IShockableWithGun
     {
-        bool canShock;
         Turret turretScript;
         Coroutine coroutine;
 
         private void Start()
         {
-            canShock = true;
+            //canShock = true;
             turretScript = base.GetComponent<Turret>();
         }
 
         public bool CanBeShocked()
         {
-            return canShock;
+            return true;
         }
 
         public float GetDifficultyMultiplier()
@@ -66,13 +65,12 @@ namespace UsefulZapGun.Scripts.Hazards
             yield return new WaitForSeconds(UZGConfig.timeNeedForTurretDisable.Value);
             StartCoroutine(BerserkAndDisable(player));
             zapgun.StopShockingAnomalyOnClient(true);
-           
         }
 
         private IEnumerator BerserkAndDisable(PlayerControllerB player)
         {
             var NORef = new NetworkObjectReference(GetNetworkObject());
-            GameNetworkManagerPatch.hostNetHandler.SyncCanShockServerRpc(NORef, false);
+            //GameNetworkManagerPatch.hostNetHandler.SyncCanShockTurretServerRpc(NORef, false);
 
             //TODO: smoke
             turretScript.turretMode = TurretMode.Berserk;
@@ -81,11 +79,6 @@ namespace UsefulZapGun.Scripts.Hazards
 
             turretScript.turretMode = TurretMode.Detection;
             turretScript.ToggleTurretServerRpc(false);
-        }
-
-        internal void SyncCanShockOnLocalClient(bool sync)
-        {
-            canShock = sync;
         }
     }
 }

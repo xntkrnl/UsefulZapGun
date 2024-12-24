@@ -16,7 +16,7 @@ namespace UsefulZapGun.Scripts.Items
         {
             itemScript = GetComponent<GrabbableObject>();
             var name = itemScript.itemProperties.itemName;
-            chargeMultiplier = UZGConfig.multiplayerDict[itemScript.itemProperties.itemName].Value;
+            chargeMultiplier = UZGConfig.multiplayerDict[itemScript.itemProperties].Value;
         }
 
         public bool CanBeShocked()
@@ -38,7 +38,10 @@ namespace UsefulZapGun.Scripts.Items
 
         public Vector3 GetShockablePosition()
         {
-            return transform.position;
+            var position = base.transform.position;
+            position = new Vector3(position.x, position.y + 0.2f, position.z);
+
+            return position;
         }
 
         public Transform GetShockableTransform()

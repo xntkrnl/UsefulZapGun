@@ -1,9 +1,7 @@
 ﻿using GameNetcodeStuff;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Unity.Netcode;
 using UnityEngine;
+using UsefulZapGun.Methods;
 using UsefulZapGun.Patches;
 using UsefulZapGun.Scripts.Hazards;
 using UsefulZapGun.Scripts.Items;
@@ -12,6 +10,8 @@ namespace UsefulZapGun.Network
 {
     internal class NetStuff : NetworkBehaviour
     {
+        internal PatcherTool zapgun;
+
         [ServerRpc(RequireOwnership = false)]
         internal void BlowUpEnemyServerRpc(NetworkObjectReference enemyNORef)
         {
@@ -22,6 +22,9 @@ namespace UsefulZapGun.Network
                     Plugin.SpamLog("The client is trying to send an enemy that is not in the config!!!", Plugin.spamType.error);
                     return;
                 }
+
+                if (!UZGConfig.enableExplosion.Value)
+                    return;
 
                 Vector3 enemyPos = enemyNO.gameObject.transform.position;
                 EnemyAI enemy = enemyNO.gameObject.GetComponent<EnemyAI>();
@@ -40,20 +43,6 @@ namespace UsefulZapGun.Network
         internal void BlowUpEnemyClientRpc(Vector3 position)
         {
             Landmine.SpawnExplosion(position, true, 0, 5, 20, 3);
-        }
-
-        [ServerRpc(RequireOwnership = false)]
-        internal void HappyBirthdayRatServerRpc(NetworkObjectReference ratNORef)
-        {
-            HappyBirthdayRatClientRpc(ratNORef);
-        }
-
-        [ClientRpc]
-        internal void HappyBirthdayRatClientRpc(NetworkObjectReference ratNORef)
-        {
-            ratNORef.TryGet(out NetworkObject ratNO);
-            if (ratNO.GetComponent<PlayerControllerB>() == GameNetworkManager.Instance.localPlayerController)
-                HUDManager.Instance.DisplayTip("HAPPY BIRTHDAY RAT", "HAPPY BIRTHDAY RAT\nHAPPY BIRTHDAY RAT\nHAPPY BIRTHDAY RAT\nHAPPY BIRTHDAY RAT\nHAPPY BIRTHDAY RAT\nHAPPY BIRTHDAY RAT");
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -81,26 +70,12 @@ namespace UsefulZapGun.Network
             shovelNO.GetComponent<WeaponShockableScript>().SyncDamageOnLocalClient(seconds);
         }
 
-        [ServerRpc(RequireOwnership = false)]
-        internal void SyncCanShockServerRpc(NetworkObjectReference obj, bool canShock)
-        {
-            SyncCanShockClientRpc(obj, canShock);
-        }
-
         [ClientRpc]
-        internal void SyncCanShockClientRpc(NetworkObjectReference obj, bool canShock)
+        internal void SyncCanShockSpikeClientRpc(NetworkObjectReference obj, bool canShock)
         {
             obj.TryGet(out NetworkObject netObj);
-            if (netObj.transform.Find("Container/AnimContainer/Trigger").gameObject.TryGetComponent<SpiketrapShockableScript>(out SpiketrapShockableScript compSpike))
-            {
-                compSpike.SyncCanShockOnLocalClient(canShock);
-                return;
-            }
-            if (netObj.gameObject.TryGetComponent<TurretShockableScript>(out TurretShockableScript compTurret))
-            {
-                compTurret.SyncCanShockOnLocalClient(canShock);
-                return;
-            }
+            var compSpike = netObj.GetComponentInChildren<SpiketrapShockableScript>();
+            compSpike.SyncCanShockOnLocalClient(canShock);
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -108,7 +83,7 @@ namespace UsefulZapGun.Network
         {
             bool disable = zapCount >= UZGConfig.spiketrapZapNeeded.Value;
             if (disable)
-                SyncCanShockClientRpc(obj, false);
+                SyncCanShockSpikeClientRpc(obj, false);
 
             SyncZapCountClientRpc(obj, zapCount);
         }
@@ -117,13 +92,66 @@ namespace UsefulZapGun.Network
         internal void SyncZapCountClientRpc(NetworkObjectReference obj, int zapCount)
         {
             obj.TryGet(out NetworkObject netObj);
-            var comp = netObj.transform.Find("Container/AnimContainer/Trigger").gameObject.GetComponent<SpiketrapShockableScript>();
+            var comp = netObj.GetComponentInChildren<SpiketrapShockableScript>();
 
             if (comp.zapCount > zapCount)
-                SyncZapCountServerRpc(obj, comp.zapCount+1);
+                SyncZapCountServerRpc(obj, comp.zapCount + 1);
             else
                 comp.zapCount = zapCount;
-                
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        internal void DOTPlayerServerRpc(NetworkBehaviourReference playerNBRef, int playerWhoHit)
+        {
+            if (playerNBRef.TryGet(out PlayerControllerB targetedPlayer))
+            {
+                if (!UZGConfig.enableDOTPlayers.Value || UZGConfig.zapDamageToPlayer.Value == 0)
+                    return;
+
+                foreach (PatcherTool zapgun2 in ZapGunMethods.zapGuns)
+                {
+                    if (zapgun2.isBeingUsed && zapgun2.shockedTargetScript == targetedPlayer)
+                        zapgun = zapgun2;
+                }
+
+                StartCoroutine(ZapGunMethods.DOTPlayer(targetedPlayer, playerWhoHit, UZGConfig.zapDamageToPlayer.Value, UZGConfig.zapTimeToDamage.Value, zapgun));
+            }
+            else
+                Plugin.SpamLog($"Can't find targetedPlayer!!!", Plugin.spamType.error);
+
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        internal void DOTEnemyServerRpc(NetworkBehaviourReference enemyNBRef, NetworkBehaviourReference playerWhoHitNBRef)
+        {
+            if (enemyNBRef.TryGet(out EnemyAI enemyAI))
+            {
+                if (playerWhoHitNBRef.TryGet(out PlayerControllerB playerWhoHit))
+                {
+                    if (!UZGConfig.enableDOTEnemy.Value)
+                        return;
+
+                    var shockableScript = enemyAI.GetComponentInChildren<EnemyAICollisionDetect>();
+                    if (shockableScript == null)
+                    {
+                        Plugin.SpamLog($"Can't find EnemyAICollisionDetect!!!", Plugin.spamType.error);
+                        return;
+                    }
+
+                    foreach (PatcherTool zapgun2 in ZapGunMethods.zapGuns)
+                    {
+                        if (zapgun2.isBeingUsed && zapgun2.shockedTargetScript == shockableScript)
+                            zapgun = zapgun2;
+                    }
+
+                    StartCoroutine(ZapGunMethods.DOTEnemy(shockableScript, playerWhoHit, UZGConfig.zapDamage.Value, UZGConfig.zapTimeToDamage.Value, zapgun));
+                }
+                else
+                    Plugin.SpamLog($"Can't find playerWhoHit!!!", Plugin.spamType.error);
+            }
+            else
+                Plugin.SpamLog($"The client is trying to send a non-existent enemy!!!", Plugin.spamType.error);
+
         }
     }
 }

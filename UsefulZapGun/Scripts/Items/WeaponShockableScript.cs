@@ -41,7 +41,10 @@ namespace UsefulZapGun.Scripts.Items
 
         public Vector3 GetShockablePosition()
         {
-            return transform.position;
+            var position = base.transform.position;
+            position = new Vector3(position.x, position.y + 0.2f, position.z);
+
+            return position;
         }
 
         public Transform GetShockableTransform()

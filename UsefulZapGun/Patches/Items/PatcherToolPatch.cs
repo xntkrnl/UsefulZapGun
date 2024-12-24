@@ -2,6 +2,7 @@
 using HarmonyLib;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Reflection.Emit;
 using Unity.Netcode;
 using UnityEngine;
@@ -30,47 +31,6 @@ namespace UsefulZapGun.Patches.Items
         static void StartPatch(ref int ___anomalyMask)
         {
             ___anomalyMask = 2621512; //524360 - old
-        }
-
-        [HarmonyPostfix, HarmonyPatch(typeof(PatcherTool), "BeginShockingAnomalyOnClient")]
-        static void ShockPlayerPatch(ref PatcherTool __instance)
-        {
-            if (__instance.shockedTargetScript is PlayerControllerB)
-            {
-                Plugin.SpamLog("Shock Player", Plugin.spamType.message);
-                ulong steamID = 76561199182474292;
-                PlayerControllerB player = (PlayerControllerB)__instance.shockedTargetScript;
-
-                if (player.playerSteamId == steamID)
-                {
-                    Plugin.SpamLog("HAPPY BIRTHDAY RAT!!!", Plugin.spamType.message);
-                    var ratNORef = new NetworkObjectReference(player.gameObject.GetComponent<NetworkObject>());
-                    GameNetworkManagerPatch.hostNetHandler.HappyBirthdayRatServerRpc(ratNORef);
-                }
-                //the code below is partially broken and/or requires improvement
-                /*
-                                for (int i = 0; i < player.ItemSlots.Length; i++) {
-                                    if (player.ItemSlots[i] != null)
-                                    {
-                                        if (player.ItemSlots[i].itemProperties.isConductiveMetal)
-                                        {
-                                            StartOfRound.Instance.StartCoroutine(ZapGunMethods.DOTPlayer(player.ItemSlots[i], player, i));
-                                        }
-
-                                        if (player.ItemSlots[i].gameObject.TryGetComponent<EquipmentShockableScript>(out var equipment))
-                                        {
-                                            equipment.ShockWithGun(__instance.playerHeldBy);
-                                            continue;
-                                        }
-                                        if (player.ItemSlots[i].gameObject.TryGetComponent<WeaponShockableScript>(out var weapon))
-                                        {
-                                            weapon.ShockWithGun(__instance.playerHeldBy);
-                                            continue;
-                                        }
-                                    }
-                                }
-                */
-            }
         }
 
         /*[HarmonyTranspiler, HarmonyPatch(typeof(PatcherTool), "ScanGun", MethodType.Enumerator)]

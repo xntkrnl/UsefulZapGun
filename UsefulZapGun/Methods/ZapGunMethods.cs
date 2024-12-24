@@ -11,36 +11,61 @@ namespace UsefulZapGun.Methods
     internal class ZapGunMethods
     {
         internal static List<PatcherTool> zapGuns = new List<PatcherTool>();
+        internal static Coroutine explosionCoroutine;
 
-        internal static IEnumerator WaitAndDoSmth(EnemyAI enemyScript, EnemyAICollisionDetect instance)
+        internal static void WaitAndExplode(EnemyAICollisionDetect enemyCol, EnemyAI enemyScript, float time)
         {
-            yield return new WaitForSeconds(3f);
-
-            if (enemyScript.stunNormalizedTimer > 0f)
+            foreach (PatcherTool tool in zapGuns)
             {
-                foreach (PatcherTool tool in zapGuns)
+                if (tool.isBeingUsed && tool.playerHeldBy == GameNetworkManager.Instance.localPlayerController && tool.shockedTargetScript == enemyCol)
                 {
-                    if (tool.isBeingUsed && tool.playerHeldBy == GameNetworkManager.Instance.localPlayerController)
-                    {
-                        NetworkObjectReference enemyNOR = new NetworkObjectReference(enemyScript.gameObject.GetComponent<NetworkObject>());
-                        tool.StopShockingAnomalyOnClient(true);
-                        //do smth
-                        GameNetworkManagerPatch.hostNetHandler.BlowUpEnemyServerRpc(enemyNOR);
-                    }
+                    explosionCoroutine = StartOfRound.Instance.StartCoroutine(WaitAndExplodeCoroutine(tool, enemyCol, enemyScript, time));
                 }
             }
         }
 
-        //unused
-        internal static IEnumerator DOTPlayer(GrabbableObject item, PlayerControllerB player, int index)
+        internal static IEnumerator WaitAndExplodeCoroutine(PatcherTool zapgun, EnemyAICollisionDetect enemyCol, EnemyAI enemyScript, float time)
         {
-            while (true)
+            Plugin.SpamLog($"is zapgun null? {zapgun == null}", Plugin.spamType.debug);
+
+            while (time > 0)
             {
-                yield return new WaitForSeconds(1f);
-                if (player.ItemSlots[index] != item)
-                    break;
-                else
-                    player.DamagePlayer(5, causeOfDeath: CauseOfDeath.Electrocution);
+                //yield return new WaitForEndOfFrame();
+                //time -= Time.deltaTime;
+                yield return new WaitForSeconds(0.1f);
+                time -= 0.1f;
+                Plugin.SpamLog($"time = {time}", Plugin.spamType.debug);
+
+                if (!zapgun.isBeingUsed || zapgun.shockedTargetScript != enemyCol)
+                {
+                    Plugin.SpamLog("Stop charging explosion!", Plugin.spamType.debug);
+                    StartOfRound.Instance.StopCoroutine(explosionCoroutine);
+                }
+            }
+
+            zapgun.StopShockingAnomalyOnClient(true);
+            yield return new WaitForEndOfFrame();
+            var enemyNORef = new NetworkObjectReference(enemyScript.NetworkObject);
+            GameNetworkManagerPatch.hostNetHandler.BlowUpEnemyServerRpc(enemyNORef);
+        }
+
+        internal static IEnumerator DOTPlayer(PlayerControllerB player, int playerWhoHit, int damageToPlayer, float time, PatcherTool zapgun)
+        {
+            while (zapgun.shockedTargetScript == player && zapgun.isBeingUsed)
+            {
+                player.DamagePlayerFromOtherClientServerRpc(damageToPlayer, player.transform.position, playerWhoHit);
+                yield return new WaitForSeconds(time);
+            }
+        }
+
+        internal static IEnumerator DOTEnemy(EnemyAICollisionDetect enemyAICol, PlayerControllerB playerWhoHit, int force, float time, PatcherTool zapgun)
+        {
+            var enemyAIColIHittable = (IHittable)enemyAICol;
+
+            while (zapgun.shockedTargetScript == enemyAICol && zapgun.isBeingUsed)
+            {
+                enemyAIColIHittable.Hit(force, enemyAICol.transform.position, playerWhoHit);
+                yield return new WaitForSeconds(time);
             }
         }
     }

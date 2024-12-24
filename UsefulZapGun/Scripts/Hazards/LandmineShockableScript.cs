@@ -37,7 +37,10 @@ namespace UsefulZapGun.Scripts.Hazards
 
         public Vector3 GetShockablePosition()
         {
-            return base.transform.position;
+            var position = base.transform.position;
+            position = new Vector3(position.x, position.y + 0.5f, position.z);
+
+            return position;
         }
 
         public Transform GetShockableTransform()
@@ -50,9 +53,9 @@ namespace UsefulZapGun.Scripts.Hazards
             foreach (PatcherTool zapgun in ZapGunMethods.zapGuns)
                 if (zapgun.isShocking && zapgun.shockedTargetScript == this)
                 {
-                    zapgun.StopShockingAnomalyOnClient(true);
                     mineScript.ExplodeMineServerRpc();
                     canShock = false;
+                    zapgun.StopShockingAnomalyOnClient(true);
                     break;
                 }
         }
