@@ -29,7 +29,7 @@ namespace UsefulZapGun.Network
                 Vector3 enemyPos = enemyNO.gameObject.transform.position;
                 EnemyAI enemy = enemyNO.gameObject.GetComponent<EnemyAI>();
                 if (enemy.enemyType.canDie)
-                    enemy.KillEnemyServerRpc();
+                    enemy.KillEnemyServerRpc(false);
                 else
                     enemy.KillEnemyServerRpc(true);
 
@@ -42,7 +42,7 @@ namespace UsefulZapGun.Network
         [ClientRpc]
         internal void BlowUpEnemyClientRpc(Vector3 position)
         {
-            Landmine.SpawnExplosion(position, true, 0, 5, 20, 3);
+            StartCoroutine(ZapGunMethods.ExplodeNextFrame(position));
         }
 
         [ServerRpc(RequireOwnership = false)]

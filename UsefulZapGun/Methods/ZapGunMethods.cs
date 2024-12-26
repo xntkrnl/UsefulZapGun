@@ -13,6 +13,12 @@ namespace UsefulZapGun.Methods
         internal static List<PatcherTool> zapGuns = new List<PatcherTool>();
         internal static Coroutine explosionCoroutine;
 
+        internal static IEnumerator ExplodeNextFrame(Vector3 position)
+        {
+            yield return new WaitForEndOfFrame();
+            Landmine.SpawnExplosion(position, true, 0, 5, 20, 3);
+        }
+
         internal static void WaitAndExplode(EnemyAICollisionDetect enemyCol, EnemyAI enemyScript, float time)
         {
             foreach (PatcherTool tool in zapGuns)
