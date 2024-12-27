@@ -1,4 +1,5 @@
 ﻿using GameNetcodeStuff;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UsefulZapGun.Methods;
@@ -40,7 +41,7 @@ namespace UsefulZapGun.Network
         }
 
         [ClientRpc]
-        internal void BlowUpEnemyClientRpc(Vector3 position)
+        private void BlowUpEnemyClientRpc(Vector3 position)
         {
             StartCoroutine(ZapGunMethods.ExplodeNextFrame(position));
         }
@@ -64,14 +65,14 @@ namespace UsefulZapGun.Network
         }
 
         [ClientRpc]
-        internal void SyncShovelDamageClientRpc(NetworkObjectReference shovelNORef, float seconds)
+        private void SyncShovelDamageClientRpc(NetworkObjectReference shovelNORef, float seconds)
         {
             shovelNORef.TryGet(out NetworkObject shovelNO);
             shovelNO.GetComponent<WeaponShockableScript>().SyncDamageOnLocalClient(seconds);
         }
 
         [ClientRpc]
-        internal void SyncCanShockSpikeClientRpc(NetworkObjectReference obj, bool canShock)
+        private void SyncCanShockSpikeClientRpc(NetworkObjectReference obj, bool canShock)
         {
             obj.TryGet(out NetworkObject netObj);
             var compSpike = netObj.GetComponentInChildren<SpiketrapShockableScript>();
@@ -89,7 +90,7 @@ namespace UsefulZapGun.Network
         }
 
         [ClientRpc]
-        internal void SyncZapCountClientRpc(NetworkObjectReference obj, int zapCount)
+        private void SyncZapCountClientRpc(NetworkObjectReference obj, int zapCount)
         {
             obj.TryGet(out NetworkObject netObj);
             var comp = netObj.GetComponentInChildren<SpiketrapShockableScript>();
