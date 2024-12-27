@@ -11,8 +11,11 @@ namespace UsefulZapGun.Methods
     internal class ZapGunMethods
     {
         internal static List<PatcherTool> zapGuns = new List<PatcherTool>();
-        internal static Coroutine explosionCoroutine;
+        private static Coroutine coroutine;
 
+
+
+        //explosion
         internal static IEnumerator ExplodeNextFrame(Vector3 position)
         {
             yield return new WaitForEndOfFrame();
@@ -25,12 +28,12 @@ namespace UsefulZapGun.Methods
             {
                 if (tool.isBeingUsed && tool.playerHeldBy == GameNetworkManager.Instance.localPlayerController && tool.shockedTargetScript == enemyCol)
                 {
-                    explosionCoroutine = StartOfRound.Instance.StartCoroutine(WaitAndExplodeCoroutine(tool, enemyCol, enemyScript, time));
+                    coroutine = StartOfRound.Instance.StartCoroutine(WaitAndExplodeCoroutine(tool, enemyCol, enemyScript, time));
                 }
             }
         }
 
-        internal static IEnumerator WaitAndExplodeCoroutine(PatcherTool zapgun, EnemyAICollisionDetect enemyCol, EnemyAI enemyScript, float time)
+        private static IEnumerator WaitAndExplodeCoroutine(PatcherTool zapgun, EnemyAICollisionDetect enemyCol, EnemyAI enemyScript, float time)
         {
             Plugin.SpamLog($"is zapgun null? {zapgun == null}", Plugin.spamType.debug);
 
@@ -45,7 +48,7 @@ namespace UsefulZapGun.Methods
                 if (!zapgun.isBeingUsed || zapgun.shockedTargetScript != enemyCol)
                 {
                     Plugin.SpamLog("Stop charging explosion!", Plugin.spamType.debug);
-                    StartOfRound.Instance.StopCoroutine(explosionCoroutine);
+                    StartOfRound.Instance.StopCoroutine(coroutine);
                 }
             }
 
@@ -55,24 +58,39 @@ namespace UsefulZapGun.Methods
             GameNetworkManagerPatch.hostNetHandler.BlowUpEnemyServerRpc(enemyNORef);
         }
 
-        internal static IEnumerator DOTPlayer(PlayerControllerB player, int playerWhoHit, int damageToPlayer, float time, PatcherTool zapgun)
+        //blob evaporation
+        internal static void StartEvaporation(EnemyAICollisionDetect blobCol, BlobAI blobScript)
         {
-            while (zapgun.shockedTargetScript == player && zapgun.isBeingUsed)
+            foreach (PatcherTool tool in zapGuns)
             {
-                player.DamagePlayerFromOtherClientServerRpc(damageToPlayer, player.transform.position, playerWhoHit);
-                yield return new WaitForSeconds(time);
+                if (tool.isBeingUsed && tool.playerHeldBy == GameNetworkManager.Instance.localPlayerController && tool.shockedTargetScript == blobCol)
+                {
+                    coroutine = StartOfRound.Instance.StartCoroutine(EvaporateBlob(tool, blobCol, blobScript));
+                }
             }
         }
 
-        internal static IEnumerator DOTEnemy(EnemyAICollisionDetect enemyAICol, PlayerControllerB playerWhoHit, int force, float time, PatcherTool zapgun)
+        private static IEnumerator EvaporateBlob(PatcherTool zapgun, EnemyAICollisionDetect blobCol, BlobAI blobScript)
         {
-            var enemyAIColIHittable = (IHittable)enemyAICol;
+            Plugin.SpamLog($"is zapgun null? {zapgun == null}", Plugin.spamType.debug);
 
-            while (zapgun.shockedTargetScript == enemyAICol && zapgun.isBeingUsed)
+            while (blobScript.slimeRange != 1.75)
             {
-                enemyAIColIHittable.Hit(force, enemyAICol.transform.position, playerWhoHit);
-                yield return new WaitForSeconds(time);
+                Plugin.SpamLog($"slimeRange = {blobScript.slimeRange}", Plugin.spamType.debug);
+
+                yield return new WaitForEndOfFrame();
+                //how to do this uuh
+
+                if (!zapgun.isBeingUsed || zapgun.shockedTargetScript != blobCol)
+                {
+                    Plugin.SpamLog("Stop evaporation!", Plugin.spamType.debug);
+                    StartOfRound.Instance.StopCoroutine(coroutine);
+                }
             }
+
+            zapgun.StopShockingAnomalyOnClient(true);
+            yield return new WaitForEndOfFrame();
+            blobScript.KillEnemyServerRpc(false);
         }
     }
 }

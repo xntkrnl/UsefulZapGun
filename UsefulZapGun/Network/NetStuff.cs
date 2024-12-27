@@ -114,7 +114,7 @@ namespace UsefulZapGun.Network
                         zapgun = zapgun2;
                 }
 
-                StartCoroutine(ZapGunMethods.DOTPlayer(targetedPlayer, playerWhoHit, UZGConfig.zapDamageToPlayer.Value, UZGConfig.zapTimeToDamage.Value, zapgun));
+                StartCoroutine(DOT.DOTPlayer(targetedPlayer, playerWhoHit, UZGConfig.zapDamageToPlayer.Value, UZGConfig.zapTimeToDamage.Value, zapgun));
             }
             else
                 Plugin.SpamLog($"Can't find targetedPlayer!!!", Plugin.spamType.error);
@@ -144,7 +144,7 @@ namespace UsefulZapGun.Network
                             zapgun = zapgun2;
                     }
 
-                    StartCoroutine(ZapGunMethods.DOTEnemy(shockableScript, playerWhoHit, UZGConfig.zapDamage.Value, UZGConfig.zapTimeToDamage.Value, zapgun));
+                    StartCoroutine(DOT.DOTEnemy(shockableScript, playerWhoHit, UZGConfig.zapDamage.Value, UZGConfig.zapTimeToDamage.Value, zapgun));
                 }
                 else
                     Plugin.SpamLog($"Can't find playerWhoHit!!!", Plugin.spamType.error);

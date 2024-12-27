@@ -13,7 +13,6 @@ namespace UsefulZapGun.Patches.Items
 {
     internal class PatcherToolPatch
     {
-
         [HarmonyPostfix, HarmonyPatch(typeof(PatcherTool), "BeginShockingAnomalyOnClient")]
         static void AddZapGun(ref PatcherTool __instance)
         {
