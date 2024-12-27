@@ -13,8 +13,6 @@ namespace UsefulZapGun.Methods
         internal static List<PatcherTool> zapGuns = new List<PatcherTool>();
         private static Coroutine coroutine;
 
-
-
         //explosion
         internal static IEnumerator ExplodeNextFrame(Vector3 position)
         {
@@ -56,37 +54,37 @@ namespace UsefulZapGun.Methods
             GameNetworkManagerPatch.hostNetHandler.BlowUpEnemyServerRpc(enemyNORef);
         }
 
-        //blob evaporation
-        internal static void StartEvaporation(EnemyAICollisionDetect blobCol, BlobAI blobScript)
+        //fire
+        internal static void StartFire(EnemyAICollisionDetect enemyCol, EnemyAI enemyScript)
         {
             foreach (PatcherTool tool in zapGuns)
             {
-                if (tool.isBeingUsed && tool.playerHeldBy == GameNetworkManager.Instance.localPlayerController && tool.shockedTargetScript == blobCol)
+                if (tool.isBeingUsed && tool.playerHeldBy == GameNetworkManager.Instance.localPlayerController && tool.shockedTargetScript == enemyCol)
                 {
-                    coroutine = StartOfRound.Instance.StartCoroutine(EvaporateBlob(tool, blobCol, blobScript));
+                    coroutine = StartOfRound.Instance.StartCoroutine(WaitAndStartFire(enemyScript, tool, enemyCol));
                 }
             }
         }
 
-        private static IEnumerator EvaporateBlob(PatcherTool zapgun, EnemyAICollisionDetect blobCol, BlobAI blobScript)
+        private static IEnumerator WaitAndStartFire(EnemyAI enemyScript, PatcherTool zapgun, EnemyAICollisionDetect enemyCol)
         {
-            while (blobScript.slimeRange != 1.75)
+            float time = 3f;
+            while (time > 0)
             {
-                Plugin.SpamLog($"slimeRange = {blobScript.slimeRange}", Plugin.spamType.debug);
+                yield return new WaitForSeconds(0.1f);
+                time -= 0.1f;
+                Plugin.SpamLog($"time = {time}", Plugin.spamType.debug);
 
-                yield return new WaitForEndOfFrame();
-                //how to do this uuh
-
-                if (!zapgun.isBeingUsed || zapgun.shockedTargetScript != blobCol)
+                if (!zapgun.isBeingUsed || zapgun.shockedTargetScript != enemyCol)
                 {
-                    Plugin.SpamLog("Stop evaporation!", Plugin.spamType.debug);
+                    Plugin.SpamLog("Stop zapping!", Plugin.spamType.debug);
                     StartOfRound.Instance.StopCoroutine(coroutine);
                 }
             }
 
-            zapgun.StopShockingAnomalyOnClient(true);
             yield return new WaitForEndOfFrame();
-            blobScript.KillEnemyServerRpc(false);
+            if (enemyScript is ForestGiantAI)
+                enemyScript.HitFromExplosion(Vector3.Distance(GameNetworkManager.Instance.localPlayerController.transform.position, enemyScript.transform.position));
         }
     }
 }

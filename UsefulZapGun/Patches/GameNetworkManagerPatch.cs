@@ -29,6 +29,7 @@ namespace UsefulZapGun.Patches
         public static void FindNetworkHandler()
         {
             hostNetHandler = UnityEngine.Object.FindAnyObjectByType<NetStuff>();
+            Plugin.SpamLog("hostNetHandler found", Plugin.spamType.debug);
         }
 
         [HarmonyPostfix, HarmonyPatch(typeof(GameNetworkManager), "Start")]

@@ -27,13 +27,17 @@ namespace UsefulZapGun.Patches.Enemies
                 var enemyNBRef = new NetworkBehaviourReference(___mainScript);
                 var playerNBRef = new NetworkBehaviourReference(shockedByPlayer);
                 GameNetworkManagerPatch.hostNetHandler.DOTEnemyServerRpc(enemyNBRef, playerNBRef);
-                return;
             }
 
             /*if (___mainScript is BlobAI)
             {
                 ZapGunMethods.StartEvaporation(__instance, (BlobAI)___mainScript);
             }*/
+
+            if (___mainScript is ForestGiantAI)
+            {
+                ZapGunMethods.StartFire(__instance, (ForestGiantAI)___mainScript);
+            }
         }
     }
 }

@@ -48,6 +48,8 @@ namespace UsefulZapGun.Patches
                 }
             }
 
+
+
             Plugin.enemiesAndItemsFound = true; //exiting to the menu launches this too, so we prevent the search just in case
         }
     }
