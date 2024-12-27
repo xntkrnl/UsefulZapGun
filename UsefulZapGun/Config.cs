@@ -19,6 +19,7 @@ namespace UsefulZapGun
         internal static List<string> enemyList;
         internal static Dictionary<EnemyType, ConfigEntry<float>> timeDict = new Dictionary<EnemyType, ConfigEntry<float>>();
         internal static ConfigEntry<bool> enableExplosion;
+
         internal static ConfigEntry<bool> enableDOTEnemy;
         internal static ConfigEntry<bool> enableDOTPlayers;
         internal static ConfigEntry<int> zapDamage;
@@ -41,11 +42,12 @@ namespace UsefulZapGun
 
             enemyListString = cfg.Bind("Enemies", "Enemy list", "Red Locust Bees,Butler Bees,Docile Locust Bees");
             enableExplosion = cfg.Bind("Enemies", "Enable enemy explosion", true);
-            enableDOTEnemy = cfg.Bind("Enemies", "Damage enemy with zap", false);
-            enableDOTPlayers = cfg.Bind("Enemies", "Damage players with zap", false);
-            zapDamage = cfg.Bind("Enemies", "Zapgun damage to enemy", 1);
-            zapDamageToPlayer = cfg.Bind("Enemies", "Zapgun damage to player", 10);
-            zapTimeToDamage = cfg.Bind("Enemies", "Time to damage (seconds)", 1f);
+
+            enableDOTEnemy = cfg.Bind("DOT", "Damage enemy with zap", false);
+            enableDOTPlayers = cfg.Bind("DOT", "Damage players with zap", false);
+            zapDamage = cfg.Bind("DOT", "Zapgun damage to enemy", 1);
+            zapDamageToPlayer = cfg.Bind("DOT", "Zapgun damage to player", 10);
+            zapTimeToDamage = cfg.Bind("DOT", "Time to damage (seconds)", 1f);
 
             enemyList = enemyListString.Value.Split(',').ToList();
 
