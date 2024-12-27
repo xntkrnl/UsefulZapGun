@@ -64,7 +64,11 @@ namespace UsefulZapGun.Scripts.Items
         public void StopShockingWithGun()
         {
             if (chargeCoroutine != null)
+            {
                 StopCoroutine(chargeCoroutine);
+                Plugin.SpamLog($"charge = {itemScript.insertedBattery.charge}", Plugin.spamType.debug);
+                itemScript.SyncBatteryServerRpc((int)(itemScript.insertedBattery.charge * 100));
+            }
         }
 
         private IEnumerator ChargeItem(PatcherTool zapgun, GrabbableObject item)
