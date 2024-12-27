@@ -79,8 +79,7 @@ namespace UsefulZapGun.Scripts.Items
             while (item.insertedBattery.charge < 1f)
             {
                 yield return new WaitForEndOfFrame();
-                item.insertedBattery.charge += chargeMultiplier * (Time.deltaTime / item.itemProperties.batteryUsage); //I think I need to change this but we'll see
-                //Plugin.SpamLog($"charge = {item.insertedBattery.charge}", Plugin.spamType.debug);
+                item.insertedBattery.charge += chargeMultiplier * (Time.deltaTime / item.itemProperties.batteryUsage);
             }
 
             zapgun.StopShockingAnomalyOnClient(true);
