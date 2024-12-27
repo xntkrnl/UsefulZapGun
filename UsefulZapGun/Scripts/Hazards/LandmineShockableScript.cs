@@ -50,6 +50,8 @@ namespace UsefulZapGun.Scripts.Hazards
 
         public void ShockWithGun(PlayerControllerB shockedByPlayer)
         {
+            Plugin.SpamLog("Shock landmine", Plugin.spamType.message);
+
             foreach (PatcherTool zapgun in ZapGunMethods.zapGuns)
                 if (zapgun.isShocking && zapgun.shockedTargetScript == this)
                 {

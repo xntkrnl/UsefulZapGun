@@ -45,6 +45,8 @@ namespace UsefulZapGun.Scripts.Items
 
         public void ShockWithGun(PlayerControllerB shockedByPlayer)
         {
+            Plugin.SpamLog($"Shock conductive item ({itemScript.itemProperties.itemName})", Plugin.spamType.message);
+
             foreach (PatcherTool zapgun in ZapGunMethods.zapGuns)
                 if (zapgun.isShocking && zapgun.shockedTargetScript == this)
                 {

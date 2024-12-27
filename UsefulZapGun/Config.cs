@@ -12,8 +12,9 @@ namespace UsefulZapGun
         private static ConfigFile cfg;
 
         internal static ConfigEntry<bool> enableLogging;
+        internal static ConfigEntry<int> zapgunPrice;
+
         internal static ConfigEntry<string> enemyListString;
-        internal static ConfigEntry<bool> enableItemCharging;
         internal static Dictionary<Item, ConfigEntry<float>> multiplayerDict = new Dictionary<Item, ConfigEntry<float>>();
 
         internal static List<string> enemyList;
@@ -25,6 +26,8 @@ namespace UsefulZapGun
         internal static ConfigEntry<int> zapDamage;
         internal static ConfigEntry<int> zapDamageToPlayer;
         internal static ConfigEntry<float> zapTimeToDamage;
+
+        internal static ConfigEntry<bool> enableItemCharging;
 
         internal static ConfigEntry<float> chargeLifeTime;
         internal static ConfigEntry<bool> enableWeaponCharging;
@@ -39,6 +42,7 @@ namespace UsefulZapGun
             cfg = new ConfigFile(Path.Combine(Paths.ConfigPath, "mborsh.UsefulZapGun.cfg"), true);
 
             enableLogging = cfg.Bind("General", "Enable logging", true);
+            zapgunPrice = cfg.Bind("General", "Zap gun price", 400);
 
             enemyListString = cfg.Bind("Enemies", "Enemy list", "Red Locust Bees,Butler Bees,Docile Locust Bees");
             enableExplosion = cfg.Bind("Enemies", "Enable enemy explosion", true);
