@@ -20,9 +20,7 @@ namespace UsefulZapGun.Scripts.Items
 
         public bool CanBeShocked()
         {
-            if (itemScript.playerHeldBy == null)
-                return true;
-            return false;
+            return itemScript.playerHeldBy == null;
         }
 
         public float GetDifficultyMultiplier()

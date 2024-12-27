@@ -21,9 +21,7 @@ namespace UsefulZapGun.Scripts.Items
 
         public bool CanBeShocked()
         {
-            if (itemScript.insertedBattery.charge < 1f || itemScript.playerHeldBy == null || chargeMultiplier <= 0)
-                return true;
-            else return false;
+            return (itemScript.insertedBattery.charge < 1f && itemScript.playerHeldBy == null) || chargeMultiplier <= 0;
         }
 
         public float GetDifficultyMultiplier()

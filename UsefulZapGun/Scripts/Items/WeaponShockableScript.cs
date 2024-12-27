@@ -19,14 +19,11 @@ namespace UsefulZapGun.Scripts.Items
             itemScript = GetComponent<Shovel>();
             charged = false;
             batteryChargeNeedUntilChargedState = UZGConfig.needForShovelCharge.Value / 100;
-
         }
 
         public bool CanBeShocked()
         {
-            if (itemScript.playerHeldBy == null || batteryChargeNeedUntilChargedState > 1 || batteryChargeNeedUntilChargedState <= 0)
-                return true;
-            else return false;
+            return itemScript.playerHeldBy == null && batteryChargeNeedUntilChargedState > 1;
         }
 
         public float GetDifficultyMultiplier()

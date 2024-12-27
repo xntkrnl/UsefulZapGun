@@ -24,7 +24,7 @@ namespace UsefulZapGun.Scripts.Hazards
 
         public bool CanBeShocked()
         {
-            return true;
+            return turretScript.turretActive;
         }
 
         public float GetDifficultyMultiplier()

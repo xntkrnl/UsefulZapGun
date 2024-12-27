@@ -13,20 +13,18 @@ namespace UsefulZapGun.Scripts.Hazards
     internal class SpiketrapShockableScript : MonoBehaviour, IShockableWithGun
     {
         internal int zapCount;
-        bool canShock;
         SpikeRoofTrap spikeScript;
         Coroutine coroutine;
 
         private void Start()
         {
             zapCount = 0;
-            canShock = true;
             spikeScript = base.transform.parent.Find("Trigger").GetComponent<SpikeRoofTrap>();
         }
 
         public bool CanBeShocked()
         {
-            return canShock;
+            return spikeScript.trapActive;
         }
 
         public float GetDifficultyMultiplier()
@@ -67,7 +65,6 @@ namespace UsefulZapGun.Scripts.Hazards
 
         internal void SyncCanShockOnLocalClient(bool sync)
         {
-            canShock = sync;
             spikeScript.trapActive = sync;
             base.GetComponent<Light>().enabled = sync;
         }
