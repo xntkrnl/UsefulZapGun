@@ -35,8 +35,6 @@ namespace UsefulZapGun.Methods
 
         private static IEnumerator WaitAndExplodeCoroutine(PatcherTool zapgun, EnemyAICollisionDetect enemyCol, EnemyAI enemyScript, float time)
         {
-            Plugin.SpamLog($"is zapgun null? {zapgun == null}", Plugin.spamType.debug);
-
             while (time > 0)
             {
                 //yield return new WaitForEndOfFrame();
@@ -72,8 +70,6 @@ namespace UsefulZapGun.Methods
 
         private static IEnumerator EvaporateBlob(PatcherTool zapgun, EnemyAICollisionDetect blobCol, BlobAI blobScript)
         {
-            Plugin.SpamLog($"is zapgun null? {zapgun == null}", Plugin.spamType.debug);
-
             while (blobScript.slimeRange != 1.75)
             {
                 Plugin.SpamLog($"slimeRange = {blobScript.slimeRange}", Plugin.spamType.debug);
