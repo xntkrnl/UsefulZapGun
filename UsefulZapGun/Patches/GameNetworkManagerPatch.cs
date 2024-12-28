@@ -35,10 +35,7 @@ namespace UsefulZapGun.Patches
         [HarmonyPostfix, HarmonyPatch(typeof(GameNetworkManager), "Start")]
         static void AddPrefabsToNetwork()
         {
-            string sAssemblyLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var mainAssetBundle = AssetBundle.LoadFromFile(Path.Combine(sAssemblyLocation, "zapgunnetworkobject"));
-
-            netHandler = mainAssetBundle.LoadAsset<GameObject>("zapgunnetworkobject.prefab");
+            netHandler = Plugin.mainAssetBundle.LoadAsset<GameObject>("zapgunnetworkobject.prefab");
             netHandler.AddComponent<NetStuff>();
             NetworkManager.Singleton.AddNetworkPrefab(netHandler);
         }

@@ -25,6 +25,9 @@ namespace UsefulZapGun
 
         internal static bool enemiesAndItemsFound = false;
 
+        private static string sAssemblyLocation;
+        internal static AssetBundle mainAssetBundle;
+
         private static void NetcodePatcher()
         {
             var types = Assembly.GetExecutingAssembly().GetTypes();
@@ -49,6 +52,9 @@ namespace UsefulZapGun
             Instance = this;
             mls = BepInEx.Logging.Logger.CreateLogSource(modName);
             mls = Logger;
+
+            sAssemblyLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            mainAssetBundle = AssetBundle.LoadFromFile(Path.Combine(sAssemblyLocation, "zapgunnetworkobject"));
 
             UZGConfig.ConfigSetup();
 
