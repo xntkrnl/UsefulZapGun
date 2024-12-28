@@ -1,10 +1,7 @@
 ﻿using GameNetcodeStuff;
 using HarmonyLib;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Unity.Netcode;
+using UnityEngine;
 using UsefulZapGun.Methods;
 
 namespace UsefulZapGun.Patches.Enemies
@@ -29,15 +26,20 @@ namespace UsefulZapGun.Patches.Enemies
                 GameNetworkManagerPatch.hostNetHandler.DOTEnemyServerRpc(enemyNBRef, playerNBRef);
             }
 
-            /*if (___mainScript is BlobAI)
-            {
-                ZapGunMethods.StartEvaporation(__instance, (BlobAI)___mainScript);
-            }*/
-
-            if (___mainScript is ForestGiantAI)
+            if (___mainScript is ForestGiantAI && UZGConfig.setForestGiantsOnFire.Value)
             {
                 ZapGunMethods.StartFire(__instance, (ForestGiantAI)___mainScript);
+                return;
             }
+        }
+
+        [HarmonyPostfix, HarmonyPatch(typeof(EnemyAICollisionDetect), "IShockableWithGun.GetDifficultyMultiplier")]
+        static void GetDifficultyMultiplierPatch(ref EnemyAICollisionDetect __instance, ref float __result)
+        {
+            Plugin.SpamLog("GetDifficultyMultilier before = " + __result, Plugin.spamType.debug);
+            __result *= Vector3.Distance(GameNetworkManager.Instance.localPlayerController.transform.position, __instance.mainScript.transform.position)/;
+            Plugin.SpamLog("GetDifficultyMultilier after = " + __result, Plugin.spamType.debug);
+
         }
     }
 }

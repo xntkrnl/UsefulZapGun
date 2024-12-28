@@ -20,6 +20,10 @@ namespace UsefulZapGun
         internal static List<string> enemyList;
         internal static Dictionary<EnemyType, ConfigEntry<float>> timeDict = new Dictionary<EnemyType, ConfigEntry<float>>();
         internal static ConfigEntry<bool> enableExplosion;
+        internal static ConfigEntry<bool> setForestGiantsOnFire;
+        internal static ConfigEntry<float> timeToStartAFire;
+        internal static ConfigEntry<bool> enableDifficultyMultiplierPatch;
+        internal static ConfigEntry<float> distanceDivider;
 
         internal static ConfigEntry<bool> enableDOTEnemy;
         internal static ConfigEntry<bool> enableDOTPlayers;

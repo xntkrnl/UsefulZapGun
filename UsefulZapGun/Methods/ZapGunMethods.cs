@@ -55,7 +55,7 @@ namespace UsefulZapGun.Methods
         }
 
         //fire
-        internal static void StartFire(EnemyAICollisionDetect enemyCol, EnemyAI enemyScript)
+        internal static void StartFire(EnemyAICollisionDetect enemyCol, ForestGiantAI enemyScript)
         {
             foreach (PatcherTool tool in zapGuns)
             {
@@ -66,9 +66,9 @@ namespace UsefulZapGun.Methods
             }
         }
 
-        private static IEnumerator WaitAndStartFire(EnemyAI enemyScript, PatcherTool zapgun, EnemyAICollisionDetect enemyCol)
+        private static IEnumerator WaitAndStartFire(ForestGiantAI enemyScript, PatcherTool zapgun, EnemyAICollisionDetect enemyCol)
         {
-            float time = 3f;
+            float time = UZGConfig.timeToStartAFire.Value;
             while (time > 0)
             {
                 yield return new WaitForSeconds(0.1f);
@@ -77,14 +77,13 @@ namespace UsefulZapGun.Methods
 
                 if (!zapgun.isBeingUsed || zapgun.shockedTargetScript != enemyCol)
                 {
-                    Plugin.SpamLog("Stop zapping!", Plugin.spamType.debug);
+                    Plugin.SpamLog("Stop zapping giant!", Plugin.spamType.debug);
                     StartOfRound.Instance.StopCoroutine(coroutine);
                 }
             }
 
             yield return new WaitForEndOfFrame();
-            if (enemyScript is ForestGiantAI)
-                enemyScript.HitFromExplosion(Vector3.Distance(GameNetworkManager.Instance.localPlayerController.transform.position, enemyScript.transform.position));
+            enemyScript.HitFromExplosion(Vector3.Distance(GameNetworkManager.Instance.localPlayerController.transform.position, enemyScript.transform.position));
         }
     }
 }
