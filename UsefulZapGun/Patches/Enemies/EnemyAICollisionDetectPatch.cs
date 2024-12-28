@@ -36,6 +36,9 @@ namespace UsefulZapGun.Patches.Enemies
         [HarmonyPostfix, HarmonyPatch(typeof(EnemyAICollisionDetect), "IShockableWithGun.GetDifficultyMultiplier")]
         static void GetDifficultyMultiplierPatch(ref EnemyAICollisionDetect __instance, ref float __result)
         {
+            if (!UZGConfig.enableDifficultyMultiplierPatch.Value || UZGConfig.distanceDivider.Value == 0)
+                return;
+
             Plugin.SpamLog("GetDifficultyMultilier before = " + __result, Plugin.spamType.debug);
             __result *= Vector3.Distance(GameNetworkManager.Instance.localPlayerController.transform.position, __instance.mainScript.transform.position)/;
             Plugin.SpamLog("GetDifficultyMultilier after = " + __result, Plugin.spamType.debug);
