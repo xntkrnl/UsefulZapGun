@@ -9,30 +9,34 @@ namespace UsefulZapGun.Patches.Enemies
     internal class EnemyAICollisionDetectPatch
     {
         [HarmonyPostfix, HarmonyPatch(typeof(EnemyAICollisionDetect), "IShockableWithGun.ShockWithGun")]
-        static void ShockWithGunPatch(ref EnemyAI ___mainScript, ref EnemyAICollisionDetect __instance, PlayerControllerB shockedByPlayer)
+        static void ShockWithGunPatch(ref EnemyAICollisionDetect __instance, PlayerControllerB shockedByPlayer)
         {
             Plugin.SpamLog("Shock Enemy", Plugin.spamType.message);
 
-            if (UZGConfig.timeDict.ContainsKey(___mainScript.enemyType) && UZGConfig.enableExplosion.Value)
+            if (UZGConfig.timeDict.ContainsKey(__instance.mainScript.enemyType) && UZGConfig.enableExplosion.Value)
             {
                 //StartOfRound.Instance.StartCoroutine(ZapGunMethods.WaitAndExplode(___mainScript, UZGConfig.timeDict[___mainScript.enemyType].Value));
-                ZapGunMethods.WaitAndExplode(__instance, ___mainScript, UZGConfig.timeDict[___mainScript.enemyType].Value);
+                ZapGunMethods.WaitAndExplode(__instance, __instance.mainScript, UZGConfig.timeDict[__instance.mainScript.enemyType].Value);
                 return;
             }
             else
             {
-                var enemyNBRef = new NetworkBehaviourReference(___mainScript);
+                var enemyNBRef = new NetworkBehaviourReference(__instance.mainScript);
                 var playerNBRef = new NetworkBehaviourReference(shockedByPlayer);
                 GameNetworkManagerPatch.hostNetHandler.DOTEnemyServerRpc(enemyNBRef, playerNBRef);
             }
 
-            if (___mainScript is ForestGiantAI && UZGConfig.setForestGiantsOnFire.Value)
+            if (__instance.mainScript is ForestGiantAI && UZGConfig.setForestGiantsOnFire.Value)
             {
-                ZapGunMethods.StartFire(__instance, (ForestGiantAI)___mainScript);
+                ZapGunMethods.StartFire(__instance, (ForestGiantAI)__instance.mainScript);
                 return;
             }
 
-            if (___mainScript is BlobAI && )
+            if (__instance.mainScript is BlobAI && UZGConfig.evaporateBlob.Value)
+            {
+                ZapGunMethods.StartEvaporation(__instance, (BlobAI)__instance.mainScript);
+                return;
+            }
         }
 
         [HarmonyPostfix, HarmonyPatch(typeof(EnemyAICollisionDetect), "IShockableWithGun.GetDifficultyMultiplier")]

@@ -54,7 +54,7 @@ namespace UsefulZapGun.Methods
             GameNetworkManagerPatch.hostNetHandler.BlowUpEnemyServerRpc(enemyNORef);
         }
 
-        //fire
+        //fire for giant
         internal static void StartFire(EnemyAICollisionDetect enemyCol, ForestGiantAI enemyScript)
         {
             foreach (PatcherTool tool in zapGuns)
@@ -84,6 +84,44 @@ namespace UsefulZapGun.Methods
 
             yield return new WaitForEndOfFrame();
             enemyScript.HitFromExplosion(Vector3.Distance(GameNetworkManager.Instance.localPlayerController.transform.position, enemyScript.transform.position));
+        }
+
+        //evaporate blob
+        internal static void StartEvaporation(EnemyAICollisionDetect enemyCol, BlobAI enemyScript)
+        {
+            foreach (PatcherTool tool in zapGuns)
+            {
+                if (tool.isBeingUsed && tool.playerHeldBy == GameNetworkManager.Instance.localPlayerController && tool.shockedTargetScript == enemyCol)
+                {
+                    coroutine = StartOfRound.Instance.StartCoroutine(Evaporate(enemyScript, tool, enemyCol));
+                }
+            }
+        }
+
+        private static IEnumerator Evaporate(BlobAI enemyScript, PatcherTool zapgun, EnemyAICollisionDetect enemyCol)
+        {
+            var blobYScale = 1f;
+            
+            while (blobYScale > 0f)
+            {
+                blobYScale = enemyScript.gameObject.transform.localScale.y;
+                Plugin.SpamLog($"blob Y scale: {blobYScale}", Plugin.spamType.debug);
+                yield return new WaitForSeconds(0.1f);
+                enemyScript.transform.localScale -= new Vector3(0.01f, 0.01f, 0.01f);
+
+                if (zapgun.shockedTargetScript != enemyCol || !zapgun.isBeingUsed)
+                {
+                    Plugin.SpamLog("Stop zapping blob!", Plugin.spamType.debug);
+                    StartOfRound.Instance.StopCoroutine(coroutine);
+                }
+            }
+
+            zapgun.StopShockingAnomalyOnClient(true);
+            yield return new WaitForEndOfFrame();
+            if (enemyScript.enemyType.canDie)
+                enemyScript.KillEnemyServerRpc(false);
+            else
+                enemyScript.KillEnemyServerRpc(true);
         }
     }
 }

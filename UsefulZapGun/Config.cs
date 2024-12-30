@@ -56,6 +56,7 @@ namespace UsefulZapGun
             enableExplosion = cfg.Bind("Enemies", "Enable enemy explosion", true);
             setForestGiantsOnFire = cfg.Bind("Enemies", "Set forest giants on fire", true);
             timeToStartAFire = cfg.Bind("Enemies", "Time to start a fire", 3f);
+            evaporateBlob = cfg.Bind("Enemies", "Evaporate blob", true);
 
 
             enableDOTEnemy = cfg.Bind("DOT", "Damage enemy with zap", false);
