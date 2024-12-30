@@ -22,6 +22,8 @@ namespace UsefulZapGun
         internal static ConfigEntry<bool> enableExplosion;
         internal static ConfigEntry<bool> setForestGiantsOnFire;
         internal static ConfigEntry<float> timeToStartAFire;
+        internal static ConfigEntry<bool> evaporateBlob;
+        internal static ConfigEntry<float> timeToEvaporate;
         internal static ConfigEntry<bool> enableDifficultyMultiplierPatch;
         internal static ConfigEntry<float> distanceDivider;
 

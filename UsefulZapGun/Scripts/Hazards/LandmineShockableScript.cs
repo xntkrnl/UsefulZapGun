@@ -55,9 +55,7 @@ namespace UsefulZapGun.Scripts.Hazards
             foreach (PatcherTool zapgun in ZapGunMethods.zapGuns)
                 if (zapgun.isShocking && zapgun.shockedTargetScript == this)
                 {
-                    mineScript.ExplodeMineServerRpc();
-                    canShock = false;
-                    zapgun.StopShockingAnomalyOnClient(true);
+                    StartCoroutine(WaitAndExplode(zapgun));
                     break;
                 }
         }
@@ -65,6 +63,14 @@ namespace UsefulZapGun.Scripts.Hazards
         public void StopShockingWithGun()
         {
             return;
+        }
+
+        private IEnumerator WaitAndExplode(PatcherTool zapgun)
+        {
+            zapgun.StopShockingAnomalyOnClient(true);
+            canShock = false;
+            yield return new WaitForSeconds(0.1f);
+            mineScript.ExplodeMineServerRpc();
         }
     }
 }

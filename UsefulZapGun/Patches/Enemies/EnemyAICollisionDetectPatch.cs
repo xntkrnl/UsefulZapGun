@@ -31,6 +31,8 @@ namespace UsefulZapGun.Patches.Enemies
                 ZapGunMethods.StartFire(__instance, (ForestGiantAI)___mainScript);
                 return;
             }
+
+            if (___mainScript is BlobAI && )
         }
 
         [HarmonyPostfix, HarmonyPatch(typeof(EnemyAICollisionDetect), "IShockableWithGun.GetDifficultyMultiplier")]
@@ -42,7 +44,6 @@ namespace UsefulZapGun.Patches.Enemies
             Plugin.SpamLog("GetDifficultyMultilier before = " + __result, Plugin.spamType.debug);
             __result *= Vector3.Distance(GameNetworkManager.Instance.localPlayerController.transform.position, __instance.mainScript.transform.position) / UZGConfig.distanceDivider.Value;
             Plugin.SpamLog("GetDifficultyMultilier after = " + __result, Plugin.spamType.debug);
-
         }
     }
 }
