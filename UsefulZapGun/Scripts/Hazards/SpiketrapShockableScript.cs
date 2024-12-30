@@ -74,9 +74,12 @@ namespace UsefulZapGun.Scripts.Hazards
         private IEnumerator WaitAndStopShocking(PatcherTool zapgun)
         {
             yield return new WaitForSeconds(0.1f);
-            var NORef = new NetworkObjectReference(GetNetworkObject());
-            GameNetworkManagerPatch.hostNetHandler.SyncZapCountServerRpc(NORef, zapCount + 1);
-            zapgun.StopShockingAnomalyOnClient(true);
+            if (zapgun.shockedTargetScript == this)
+            {
+                var NORef = new NetworkObjectReference(GetNetworkObject());
+                GameNetworkManagerPatch.hostNetHandler.SyncZapCountServerRpc(NORef, zapCount + 1);
+                zapgun.StopShockingAnomalyOnClient(true);
+            }
         }
     }
 }
