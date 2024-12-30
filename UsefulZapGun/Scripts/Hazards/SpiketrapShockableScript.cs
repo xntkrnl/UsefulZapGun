@@ -74,7 +74,7 @@ namespace UsefulZapGun.Scripts.Hazards
         private IEnumerator WaitAndStopShocking(PatcherTool zapgun)
         {
             yield return new WaitForSeconds(0.1f);
-            if (zapgun.shockedTargetScript == this)
+            if (zapgun.shockedTargetScript == this && zapgun.isBeingUsed)
             {
                 var NORef = new NetworkObjectReference(GetNetworkObject());
                 GameNetworkManagerPatch.hostNetHandler.SyncZapCountServerRpc(NORef, zapCount + 1);

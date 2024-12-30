@@ -65,8 +65,11 @@ namespace UsefulZapGun.Scripts.Hazards
         private IEnumerator Wait(PatcherTool zapgun, PlayerControllerB player)
         {
             yield return new WaitForSeconds(UZGConfig.timeNeedForTurretDisable.Value);
-            StartCoroutine(BerserkAndDisable(player));
-            zapgun.StopShockingAnomalyOnClient(true);
+            if (zapgun.shockedTargetScript == this && zapgun.isBeingUsed)
+            {
+                StartCoroutine(BerserkAndDisable(player));
+                zapgun.StopShockingAnomalyOnClient(true);
+            }
         }
 
         private IEnumerator BerserkAndDisable(PlayerControllerB player)

@@ -53,7 +53,7 @@ namespace UsefulZapGun.Scripts.Hazards
             Plugin.SpamLog("Shock landmine", Plugin.spamType.message);
 
             foreach (PatcherTool zapgun in ZapGunMethods.zapGuns)
-                if (zapgun.isShocking && zapgun.shockedTargetScript == this)
+                if (zapgun.isBeingUsed && zapgun.shockedTargetScript == this)
                 {
                     StartCoroutine(WaitAndExplode(zapgun));
                     break;
