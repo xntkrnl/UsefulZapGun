@@ -40,7 +40,7 @@ namespace UsefulZapGun.Patches.Enemies
                 return;
 
             Plugin.SpamLog("GetDifficultyMultilier before = " + __result, Plugin.spamType.debug);
-            __result *= Vector3.Distance(GameNetworkManager.Instance.localPlayerController.transform.position, __instance.mainScript.transform.position)/;
+            __result *= Vector3.Distance(GameNetworkManager.Instance.localPlayerController.transform.position, __instance.mainScript.transform.position) / UZGConfig.distanceDivider.Value;
             Plugin.SpamLog("GetDifficultyMultilier after = " + __result, Plugin.spamType.debug);
 
         }
