@@ -13,6 +13,8 @@ namespace UsefulZapGun
 
         internal static ConfigEntry<bool> enableLogging;
         internal static ConfigEntry<int> zapgunPrice;
+        internal static ConfigEntry<bool> enableDifficultyMultiplierPatch;
+        internal static ConfigEntry<float> distanceDivider;
 
         internal static ConfigEntry<string> enemyListString;
         internal static Dictionary<Item, ConfigEntry<float>> multiplayerDict = new Dictionary<Item, ConfigEntry<float>>();
@@ -24,8 +26,6 @@ namespace UsefulZapGun
         internal static ConfigEntry<float> timeToStartAFire;
         internal static ConfigEntry<bool> evaporateBlob;
         internal static ConfigEntry<float> timeToEvaporate;
-        internal static ConfigEntry<bool> enableDifficultyMultiplierPatch;
-        internal static ConfigEntry<float> distanceDivider;
 
         internal static ConfigEntry<bool> enableDOTEnemy;
         internal static ConfigEntry<bool> enableDOTPlayers;
