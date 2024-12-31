@@ -4,7 +4,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UsefulZapGun.Methods;
 
-namespace UsefulZapGun.Patches.Enemies
+namespace UsefulZapGun.Patches
 {
     internal class EnemyAICollisionDetectPatch
     {
