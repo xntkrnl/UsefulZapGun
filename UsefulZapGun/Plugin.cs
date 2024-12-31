@@ -6,6 +6,7 @@ using System.IO;
 using System.Reflection;
 using UnityEngine;
 using UsefulZapGun.Patches;
+using UsefulZapGun.Patches.Enemy;
 using UsefulZapGun.Patches.Items;
 
 namespace UsefulZapGun
