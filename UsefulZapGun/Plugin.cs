@@ -59,21 +59,7 @@ namespace UsefulZapGun
             UZGConfig.ConfigSetup();
 
             mls.LogInfo($"{modName} {modVersion} loaded. Patching.");
-            harmony.PatchAll(typeof(EnemyAICollisionDetectPatch));
-            harmony.PatchAll(typeof(GameNetworkManagerPatch));
-            harmony.PatchAll(typeof(MenuManagerPatch));
-            harmony.PatchAll(typeof(PatcherToolPatch));
-            harmony.PatchAll(typeof(PlayerControllerBPatch));
-            harmony.PatchAll(typeof(TerminalPatch));
-
-            if (UZGConfig.enableZapHazards.Value)
-                harmony.PatchAll(typeof(MapHazardsPatch));
-
-            if (UZGConfig.enableWeaponCharging.Value)
-                harmony.PatchAll(typeof(ShovelPatch));
-
-            if (UZGConfig.enableItemCharging.Value)
-                harmony.PatchAll(typeof(GrabbableObjectPatch));
+            PatchAllStuff();
         }
 
         internal static void SpamLog(string message, spamType type)
@@ -107,6 +93,31 @@ namespace UsefulZapGun
             debug,
             error,
             fatal
+        }
+
+        private void PatchAllStuff()
+        {
+
+            harmony.PatchAll(typeof(GameNetworkManagerPatch));
+            harmony.PatchAll(typeof(MenuManagerPatch));
+
+            harmony.PatchAll(typeof(PlayerControllerBPatch));
+
+            harmony.PatchAll(typeof(TerminalPatch));
+
+            harmony.PatchAll(typeof(EnemyAICollisionDetectPatch));
+            harmony.PatchAll(typeof(EnemyAIPatch));
+
+            if (UZGConfig.enableZapHazards.Value)
+                harmony.PatchAll(typeof(MapHazardsPatch));
+
+            if (UZGConfig.enableWeaponCharging.Value)
+                harmony.PatchAll(typeof(ShovelPatch));
+
+            if (UZGConfig.enableItemCharging.Value)
+                harmony.PatchAll(typeof(GrabbableObjectPatch));
+
+            harmony.PatchAll(typeof(PatcherToolPatch));
         }
     }
 }
