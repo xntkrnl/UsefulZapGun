@@ -26,13 +26,13 @@ namespace UsefulZapGun.Patches.Enemies
                 GameNetworkManagerPatch.hostNetHandler.DOTEnemyServerRpc(enemyNBRef, playerNBRef);
             }
 
-            if (__instance.mainScript is ForestGiantAI && UZGConfig.setForestGiantsOnFire.Value)
+            if (__instance.mainScript is ForestGiantAI && UZGConfig.setForestGiantsOnFire.Value && !UZGConfig.timeDict.ContainsKey(__instance.mainScript.enemyType))
             {
                 ZapGunMethods.StartFire(__instance, (ForestGiantAI)__instance.mainScript);
                 return;
             }
 
-            if (__instance.mainScript is BlobAI && UZGConfig.evaporateBlob.Value)
+            if (__instance.mainScript is BlobAI && UZGConfig.evaporateBlob.Value && !UZGConfig.timeDict.ContainsKey(__instance.mainScript.enemyType))
             {
                 ZapGunMethods.StartEvaporation(__instance, (BlobAI)__instance.mainScript);
                 return;
