@@ -26,6 +26,9 @@
     <Reference Include="BepInEx">
       <HintPath>..\..\WiderShipMod\WiderShipMod\bin\Debug\BepInEx.dll</HintPath>
     </Reference>
+    <Reference Include="CodeRebirth">
+      <HintPath>..\..\..\..\AppData\Roaming\com.kesomannen.gale\lethal-company\profiles\test\BepInEx\plugins\XuXiaolan-CodeRebirth\CodeRebirth\CodeRebirth.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Netcode.Runtime">
       <HintPath>..\..\..\..\..\..\Steam\steamapps\common\Lethal Company\Lethal Company_Data\Managed\Unity.Netcode.Runtime.dll</HintPath>
     </Reference>
