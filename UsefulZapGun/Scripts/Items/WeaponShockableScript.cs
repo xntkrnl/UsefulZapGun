@@ -73,7 +73,7 @@ namespace UsefulZapGun.Scripts.Items
                 StopCoroutine(chargeCoroutine);
         }
 
-        private IEnumerator ChargeWeapon(PatcherTool zapgun)
+        private IEnumerator ChargeWeapon(PatcherTool zapgun) //TODO: change it
         {
             float chargeNeeded = zapgun.insertedBattery.charge - batteryChargeNeedUntilChargedState;
 

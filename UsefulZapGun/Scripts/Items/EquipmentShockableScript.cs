@@ -71,7 +71,7 @@ namespace UsefulZapGun.Scripts.Items
             }
         }
 
-        private IEnumerator ChargeItem(PatcherTool zapgun, GrabbableObject item)
+        private IEnumerator ChargeItem(PatcherTool zapgun, GrabbableObject item) //TODO: slightly change it
         {
             if (item.insertedBattery.empty)
                 item.insertedBattery.empty = false;

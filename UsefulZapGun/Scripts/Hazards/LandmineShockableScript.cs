@@ -65,7 +65,7 @@ namespace UsefulZapGun.Scripts.Hazards
             return;
         }
 
-        private IEnumerator WaitAndExplode(PatcherTool zapgun)
+        private IEnumerator WaitAndExplode(PatcherTool zapgun) //TODO: CHANGE IT
         {
             zapgun.StopShockingAnomalyOnClient(true);
             canShock = false;

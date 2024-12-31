@@ -55,7 +55,7 @@ namespace UsefulZapGun.Scripts.Items
                 }
         }
 
-        private IEnumerator WaitFrameAndDamage(PatcherTool zapgun, PlayerControllerB shockedByPlayer)
+        private IEnumerator WaitFrameAndDamage(PatcherTool zapgun, PlayerControllerB shockedByPlayer) //TODO: dot player until stop shocking
         {
             zapgun.StopShockingAnomalyOnClient(true);
             yield return new WaitForEndOfFrame();

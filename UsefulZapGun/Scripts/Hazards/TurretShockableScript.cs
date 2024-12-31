@@ -62,7 +62,7 @@ namespace UsefulZapGun.Scripts.Hazards
                 StopCoroutine(coroutine);
         }
 
-        private IEnumerator Wait(PatcherTool zapgun, PlayerControllerB player)
+        private IEnumerator Wait(PatcherTool zapgun, PlayerControllerB player) //TODO: PROB CHANGE IT TOO
         {
             yield return new WaitForSeconds(UZGConfig.timeNeedForTurretDisable.Value);
             if (zapgun.shockedTargetScript == this && zapgun.isBeingUsed)

@@ -71,7 +71,7 @@ namespace UsefulZapGun.Scripts.Hazards
             base.GetComponent<Light>().enabled = sync;
         }
 
-        private IEnumerator WaitAndStopShocking(PatcherTool zapgun)
+        private IEnumerator WaitAndStopShocking(PatcherTool zapgun) //TODO: PROB CHANGE IT TOO
         {
             yield return new WaitForSeconds(0.1f);
             if (zapgun.shockedTargetScript == this && zapgun.isBeingUsed)
