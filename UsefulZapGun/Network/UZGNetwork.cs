@@ -9,7 +9,7 @@ using UsefulZapGun.Scripts.Items;
 
 namespace UsefulZapGun.Network
 {
-    internal class NetStuff : NetworkBehaviour
+    internal class UZGNetwork : NetworkBehaviour
     {
         internal PatcherTool zapgun;
 

@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using Unity.Netcode;
 using UnityEngine;
+using UsefulZapGun.Compatibility.CodeRebirth.Network;
 using UsefulZapGun.Network;
 
 namespace UsefulZapGun.Patches
@@ -13,7 +14,8 @@ namespace UsefulZapGun.Patches
     internal class GameNetworkManagerPatch
     {
         internal static GameObject netHandler;
-        internal static NetStuff hostNetHandler;
+        internal static UZGNetwork hostNetHandler;
+        internal static CodeRebirthNetwork rebirthNetwork;
 
         [HarmonyPrefix, HarmonyPatch(typeof(StartOfRound), "Start")]
         public static void SpawnNetworkHandler()
@@ -28,7 +30,8 @@ namespace UsefulZapGun.Patches
         [HarmonyPostfix, HarmonyPatch(typeof(StartOfRound), "Start")]
         public static void FindNetworkHandler()
         {
-            hostNetHandler = UnityEngine.Object.FindAnyObjectByType<NetStuff>();
+            hostNetHandler = UnityEngine.Object.FindAnyObjectByType<UZGNetwork>();
+            if (Plugin.CREnabled) rebirthNetwork = hostNetHandler.GetComponent<CodeRebirthNetwork>();
             Plugin.SpamLog("hostNetHandler found", Plugin.spamType.debug);
         }
 
@@ -36,7 +39,8 @@ namespace UsefulZapGun.Patches
         static void AddPrefabsToNetwork()
         {
             netHandler = Plugin.mainAssetBundle.LoadAsset<GameObject>("zapgunnetworkobject.prefab");
-            netHandler.AddComponent<NetStuff>();
+            netHandler.AddComponent<UZGNetwork>();
+            if (Plugin.CREnabled) netHandler.AddComponent<CodeRebirthNetwork>();
             NetworkManager.Singleton.AddNetworkPrefab(netHandler);
         }
     }
