@@ -15,6 +15,7 @@ namespace UsefulZapGun.Scripts.Hazards
         internal int zapCount;
         SpikeRoofTrap spikeScript;
         Coroutine coroutine;
+        bool localPlayer;
 
         private void Start()
         {
@@ -24,7 +25,7 @@ namespace UsefulZapGun.Scripts.Hazards
 
         public bool CanBeShocked()
         {
-            return spikeScript.trapActive;
+            return spikeScript.trapActive && !localPlayer;
         }
 
         public float GetDifficultyMultiplier()
@@ -51,18 +52,16 @@ namespace UsefulZapGun.Scripts.Hazards
         {
             Plugin.SpamLog("Shock spiketrap", Plugin.spamType.message);
 
-            foreach (PatcherTool zapgun in ZapGunMethods.zapGuns)
-                if (zapgun.isShocking && zapgun.shockedTargetScript == this)
-                {
-                    coroutine = StartCoroutine(WaitAndStopShocking(zapgun));
-                    break;
-                }
+            PatcherTool zapgun = (PatcherTool)shockedByPlayer.currentlyHeldObjectServer;
+            coroutine = StartCoroutine(WaitAndStopShocking(zapgun));
+            localPlayer = shockedByPlayer == GameNetworkManager.Instance.localPlayerController;
         }
 
         public void StopShockingWithGun()
         {
             if (coroutine != null)
                 StopCoroutine(coroutine);
+            localPlayer = false;
         }
 
         internal void SyncCanShockOnLocalClient(bool sync)
@@ -71,10 +70,10 @@ namespace UsefulZapGun.Scripts.Hazards
             base.GetComponent<Light>().enabled = sync;
         }
 
-        private IEnumerator WaitAndStopShocking(PatcherTool zapgun) //TODO: PROB CHANGE IT TOO
+        private IEnumerator WaitAndStopShocking(PatcherTool zapgun)
         {
-            yield return new WaitForSeconds(0.1f);
-            if (zapgun.shockedTargetScript == this && zapgun.isBeingUsed)
+            yield return new WaitForSeconds(1f);
+            if (zapgun.shockedTargetScript == this && zapgun.isBeingUsed && localPlayer)
             {
                 var NORef = new NetworkObjectReference(GetNetworkObject());
                 GameNetworkManagerPatch.hostNetHandler.SyncZapCountServerRpc(NORef, zapCount + 1);

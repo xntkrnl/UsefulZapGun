@@ -12,17 +12,16 @@ namespace UsefulZapGun.Scripts.Hazards
     internal class LandmineShockableScript : MonoBehaviour, IShockableWithGun
     {
         Landmine mineScript;
-        bool canShock;
+        bool isShocked;
 
         private void Start()
         {
-            canShock = true;
             mineScript = base.GetComponent<Landmine>();
         }
 
         public bool CanBeShocked()
         {
-            return canShock;
+            return !mineScript.hasExploded && !isShocked;
         }
 
         public float GetDifficultyMultiplier()
@@ -51,25 +50,11 @@ namespace UsefulZapGun.Scripts.Hazards
         public void ShockWithGun(PlayerControllerB shockedByPlayer)
         {
             Plugin.SpamLog("Shock landmine", Plugin.spamType.message);
-
-            foreach (PatcherTool zapgun in ZapGunMethods.zapGuns)
-                if (zapgun.isBeingUsed && zapgun.shockedTargetScript == this)
-                {
-                    StartCoroutine(WaitAndExplode(zapgun));
-                    break;
-                }
+            isShocked = shockedByPlayer != GameNetworkManager.Instance.localPlayerController;
         }
 
         public void StopShockingWithGun()
         {
-            return;
-        }
-
-        private IEnumerator WaitAndExplode(PatcherTool zapgun) //TODO: CHANGE IT
-        {
-            zapgun.StopShockingAnomalyOnClient(true);
-            canShock = false;
-            yield return new WaitForSeconds(0.1f);
             mineScript.ExplodeMineServerRpc();
         }
     }

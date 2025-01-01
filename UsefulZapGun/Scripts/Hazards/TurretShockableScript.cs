@@ -51,9 +51,8 @@ namespace UsefulZapGun.Scripts.Hazards
         {
             Plugin.SpamLog("Shock turret", Plugin.spamType.message);
 
-            foreach (PatcherTool zapgun in ZapGunMethods.zapGuns)
-                if (zapgun.isShocking && zapgun.shockedTargetScript == this)
-                    coroutine = StartCoroutine(Wait(zapgun, shockedByPlayer));
+            PatcherTool zapgun = (PatcherTool)shockedByPlayer.currentlyHeldObjectServer;
+            coroutine = StartCoroutine(Wait(zapgun, shockedByPlayer));
         }
 
         public void StopShockingWithGun()
@@ -62,21 +61,17 @@ namespace UsefulZapGun.Scripts.Hazards
                 StopCoroutine(coroutine);
         }
 
-        private IEnumerator Wait(PatcherTool zapgun, PlayerControllerB player) //TODO: PROB CHANGE IT TOO
+        private IEnumerator Wait(PatcherTool zapgun, PlayerControllerB player)
         {
             yield return new WaitForSeconds(UZGConfig.timeNeedForTurretDisable.Value);
             if (zapgun.shockedTargetScript == this && zapgun.isBeingUsed)
             {
                 StartCoroutine(BerserkAndDisable(player));
-                zapgun.StopShockingAnomalyOnClient(true);
             }
         }
 
         private IEnumerator BerserkAndDisable(PlayerControllerB player)
         {
-            var NORef = new NetworkObjectReference(GetNetworkObject());
-            //GameNetworkManagerPatch.hostNetHandler.SyncCanShockTurretServerRpc(NORef, false);
-
             //TODO: smoke
             turretScript.turretMode = TurretMode.Berserk;
             turretScript.EnterBerserkModeServerRpc((int)player.playerClientId);
