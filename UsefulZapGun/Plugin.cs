@@ -5,12 +5,14 @@ using HarmonyLib;
 using System.IO;
 using System.Reflection;
 using UnityEngine;
+using UsefulZapGun.Compatibility.CodeRebirth.Patches;
 using UsefulZapGun.Patches;
 using UsefulZapGun.Patches.Enemy;
 using UsefulZapGun.Patches.Items;
 
 namespace UsefulZapGun
 {
+    [BepInDependency("TestAccount666.ShipWindows", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInPlugin(modGUID, modName, modVersion)]
     public class Plugin : BaseUnityPlugin
     {
@@ -27,6 +29,8 @@ namespace UsefulZapGun
 
         private static string sAssemblyLocation;
         internal static AssetBundle mainAssetBundle;
+
+        internal static bool CREnabled;
 
         private static void NetcodePatcher()
         {
@@ -55,6 +59,8 @@ namespace UsefulZapGun
 
             sAssemblyLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             mainAssetBundle = AssetBundle.LoadFromFile(Path.Combine(sAssemblyLocation, "zapgunnetworkobject"));
+
+            CREnabled = BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("CodeRebirth");
 
             UZGConfig.ConfigSetup();
 
@@ -108,8 +114,14 @@ namespace UsefulZapGun
             harmony.PatchAll(typeof(EnemyAICollisionDetectPatch));
             harmony.PatchAll(typeof(EnemyAIPatch));
 
+            harmony.PatchAll(typeof(PatcherToolPatch));
+
             if (UZGConfig.enableZapHazards.Value)
+            {
                 harmony.PatchAll(typeof(MapHazardsPatch));
+                if (CREnabled)
+                    harmony.PatchAll(typeof(CodeRebirthMapHazardsPatch));
+            }
 
             if (UZGConfig.enableWeaponCharging.Value)
                 harmony.PatchAll(typeof(ShovelPatch));
@@ -117,7 +129,6 @@ namespace UsefulZapGun
             if (UZGConfig.enableItemCharging.Value)
                 harmony.PatchAll(typeof(GrabbableObjectPatch));
 
-            harmony.PatchAll(typeof(PatcherToolPatch));
         }
     }
 }
