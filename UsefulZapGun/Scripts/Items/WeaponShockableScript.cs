@@ -53,24 +53,24 @@ namespace UsefulZapGun.Scripts.Items
         {
             Plugin.SpamLog($"Shock weapon ({itemScript.itemProperties.itemName})", Plugin.spamType.message);
 
-            foreach (PatcherTool zapgun in ZapGunMethods.zapGuns)
-                if (zapgun.isShocking && zapgun.shockedTargetScript == this)
-                {
-                    if (charged)
-                    {
-                        zapgun.StopShockingAnomalyOnClient();
-                        shockedByPlayer.DamagePlayer(15, causeOfDeath: CauseOfDeath.Electrocution);
-                    }
-                    else
-                        chargeCoroutine = StartCoroutine(ChargeWeapon(zapgun));
-                    break;
-                }
+            PatcherTool zapgun = (PatcherTool)shockedByPlayer.currentlyHeldObjectServer;
+            if (charged)
+                WaitFrameAndDamage(zapgun, shockedByPlayer);
+            else
+                chargeCoroutine = StartCoroutine(ChargeWeapon(zapgun));
         }
 
         public void StopShockingWithGun()
         {
             if (chargeCoroutine != null)
                 StopCoroutine(chargeCoroutine);
+        }
+
+        private IEnumerator WaitFrameAndDamage(PatcherTool zapgun, PlayerControllerB shockedByPlayer)
+        {
+            zapgun.StopShockingAnomalyOnClient(true);
+            yield return new WaitForEndOfFrame();
+            shockedByPlayer.DamagePlayer(15, causeOfDeath: CauseOfDeath.Electrocution);
         }
 
         private IEnumerator ChargeWeapon(PatcherTool zapgun) //TODO: change it

@@ -51,14 +51,9 @@ namespace UsefulZapGun.Scripts.Items
         {
             Plugin.SpamLog($"Shock item with battery ({itemScript.itemProperties.itemName})", Plugin.spamType.message);
 
-            foreach (PatcherTool zapgun in ZapGunMethods.zapGuns)
-            {
-                if (zapgun.isShocking && zapgun.shockedTargetScript == this)
-                {
-                    chargeCoroutine = StartCoroutine(ChargeItem(zapgun, itemScript));
-                    break;
-                }
-            }
+            PatcherTool zapgun = (PatcherTool)shockedByPlayer.currentlyHeldObjectServer;
+            chargeCoroutine = StartCoroutine(ChargeItem(zapgun, itemScript));
+
         }
 
         public void StopShockingWithGun()

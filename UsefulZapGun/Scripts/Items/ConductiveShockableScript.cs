@@ -47,15 +47,11 @@ namespace UsefulZapGun.Scripts.Items
         {
             Plugin.SpamLog($"Shock conductive item ({itemScript.itemProperties.itemName})", Plugin.spamType.message);
 
-            foreach (PatcherTool zapgun in ZapGunMethods.zapGuns)
-                if (zapgun.isShocking && zapgun.shockedTargetScript == this)
-                {
-                    StartCoroutine(WaitFrameAndDamage(zapgun, shockedByPlayer));
-                    break;
-                }
+            PatcherTool zapgun = (PatcherTool)shockedByPlayer.currentlyHeldObjectServer;
+            StartCoroutine(WaitFrameAndDamage(zapgun, shockedByPlayer));
         }
 
-        private IEnumerator WaitFrameAndDamage(PatcherTool zapgun, PlayerControllerB shockedByPlayer) //TODO: dot player until stop shocking
+        private IEnumerator WaitFrameAndDamage(PatcherTool zapgun, PlayerControllerB shockedByPlayer)
         {
             zapgun.StopShockingAnomalyOnClient(true);
             yield return new WaitForEndOfFrame();
