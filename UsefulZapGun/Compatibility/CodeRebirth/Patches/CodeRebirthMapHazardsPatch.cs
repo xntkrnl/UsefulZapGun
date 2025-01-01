@@ -9,9 +9,15 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Patches
     internal class CodeRebirthMapHazardsPatch
     {
         [HarmonyPostfix, HarmonyPatch(typeof(AirControlUnit), "Start")]
-        static void TurretStartPatch(ref AirControlUnit __instance)
+        static void ACUStartPatch(ref AirControlUnit __instance)
         {
             __instance.transform.Find("Body").gameObject.AddComponent<ACUShockableScript>();
+        }
+
+        [HarmonyPostfix, HarmonyPatch(typeof(BearTrap), "Start")]
+        static void BearTrapStartPatch(ref BearTrap __instance)
+        {
+            __instance.gameObject.AddComponent<BearTrapShockableScript>();
         }
     }
 }
