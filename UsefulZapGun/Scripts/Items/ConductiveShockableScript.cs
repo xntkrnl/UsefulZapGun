@@ -35,7 +35,7 @@ namespace UsefulZapGun.Scripts.Items
 
         public Vector3 GetShockablePosition()
         {
-            return transform.position;
+            return itemScript.transform.position + new Vector3(0, 0.2f, 0);
         }
 
         public Transform GetShockableTransform()
@@ -47,6 +47,7 @@ namespace UsefulZapGun.Scripts.Items
         {
             Plugin.SpamLog($"Shock conductive item ({itemScript.itemProperties.itemName})", Plugin.spamType.message);
 
+            itemScript.grabbable = false;
             PatcherTool zapgun = (PatcherTool)shockedByPlayer.currentlyHeldObjectServer;
             StartCoroutine(WaitFrameAndDamage(zapgun, shockedByPlayer));
         }
@@ -60,6 +61,7 @@ namespace UsefulZapGun.Scripts.Items
 
         public void StopShockingWithGun()
         {
+            itemScript.grabbable = true;
             return;
         }
     }

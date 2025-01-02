@@ -38,10 +38,7 @@ namespace UsefulZapGun.Scripts.Items
 
         public Vector3 GetShockablePosition()
         {
-            var position = base.transform.position;
-            position = new Vector3(position.x, position.y + 0.2f, position.z);
-
-            return position;
+            return itemScript.transform.position + new Vector3(0, 0.2f, 0);
         }
 
         public Transform GetShockableTransform()
@@ -57,13 +54,18 @@ namespace UsefulZapGun.Scripts.Items
             if (charged)
                 WaitFrameAndDamage(zapgun, shockedByPlayer);
             else
+            {
                 chargeCoroutine = StartCoroutine(ChargeWeapon(zapgun));
+                itemScript.grabbable = false;
+            }
+
         }
 
         public void StopShockingWithGun()
         {
             if (chargeCoroutine != null)
                 StopCoroutine(chargeCoroutine);
+            itemScript.grabbable = true;
         }
 
         private IEnumerator WaitFrameAndDamage(PatcherTool zapgun, PlayerControllerB shockedByPlayer)

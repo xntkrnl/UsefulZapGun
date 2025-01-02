@@ -36,10 +36,7 @@ namespace UsefulZapGun.Scripts.Items
 
         public Vector3 GetShockablePosition()
         {
-            var position = base.transform.position;
-            position = new Vector3(position.x, position.y + 0.2f, position.z);
-
-            return position;
+            return itemScript.transform.position + new Vector3(0, 0.2f, 0);
         }
 
         public Transform GetShockableTransform()
@@ -51,6 +48,7 @@ namespace UsefulZapGun.Scripts.Items
         {
             Plugin.SpamLog($"Shock item with battery ({itemScript.itemProperties.itemName})", Plugin.spamType.message);
 
+            itemScript.grabbable = false;
             PatcherTool zapgun = (PatcherTool)shockedByPlayer.currentlyHeldObjectServer;
             chargeCoroutine = StartCoroutine(ChargeItem(zapgun, itemScript));
 
@@ -58,12 +56,10 @@ namespace UsefulZapGun.Scripts.Items
 
         public void StopShockingWithGun()
         {
-            if (chargeCoroutine != null)
-            {
-                StopCoroutine(chargeCoroutine);
-                Plugin.SpamLog($"charge = {itemScript.insertedBattery.charge}", Plugin.spamType.debug);
-                itemScript.SyncBatteryServerRpc((int)(itemScript.insertedBattery.charge * 100));
-            }
+            StopCoroutine(chargeCoroutine);
+            itemScript.grabbable = true;
+            Plugin.SpamLog($"charge = {itemScript.insertedBattery.charge}", Plugin.spamType.debug);
+            itemScript.SyncBatteryServerRpc((int)(itemScript.insertedBattery.charge * 100));
         }
 
         private IEnumerator ChargeItem(PatcherTool zapgun, GrabbableObject item) //TODO: slightly change it
