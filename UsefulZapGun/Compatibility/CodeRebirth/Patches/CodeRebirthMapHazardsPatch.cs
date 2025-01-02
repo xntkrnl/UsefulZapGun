@@ -19,5 +19,11 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Patches
         {
             __instance.gameObject.AddComponent<BearTrapShockableScript>();
         }
+
+        [HarmonyPostfix, HarmonyPatch(typeof(FlashTurret), "Start")]
+        static void FlashStartPatch(ref FlashTurret __instance)
+        {
+            __instance.gameObject.AddComponent<FlashShockableScript>();
+        }
     }
 }

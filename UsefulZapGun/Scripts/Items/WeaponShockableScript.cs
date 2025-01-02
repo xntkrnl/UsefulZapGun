@@ -23,7 +23,7 @@ namespace UsefulZapGun.Scripts.Items
 
         public bool CanBeShocked()
         {
-            return itemScript.playerHeldBy == null && UZGConfig.needForShovelCharge.Value > 1;
+            return itemScript.playerHeldBy == null && !charged;
         }
 
         public float GetDifficultyMultiplier()
