@@ -1,13 +1,8 @@
-﻿using DigitalRuby.ThunderAndLightning;
-using GameNetcodeStuff;
-using System;
+﻿using GameNetcodeStuff;
 using System.Collections;
-using System.Collections.Generic;
-using System.Text;
 using Unity.Netcode;
 using UnityEngine;
-using UsefulZapGun.Methods;
-using UsefulZapGun.Patches;
+
 
 namespace UsefulZapGun.Scripts.Hazards
 {
@@ -19,7 +14,7 @@ namespace UsefulZapGun.Scripts.Hazards
         private void Start()
         {
             //canShock = true;
-            turretScript = base.GetComponent<Turret>();
+            turretScript = GetComponent<Turret>();
         }
 
         public bool CanBeShocked()
@@ -39,12 +34,12 @@ namespace UsefulZapGun.Scripts.Hazards
 
         public Vector3 GetShockablePosition()
         {
-            return base.transform.position;
+            return transform.position;
         }
 
         public Transform GetShockableTransform()
         {
-            return base.transform;
+            return transform;
         }
 
         public void ShockWithGun(PlayerControllerB shockedByPlayer)

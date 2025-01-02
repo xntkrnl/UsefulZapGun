@@ -16,7 +16,7 @@ namespace UsefulZapGun.Scripts.Hazards
 
         private void Start()
         {
-            mineScript = base.GetComponent<Landmine>();
+            mineScript = GetComponent<Landmine>();
         }
 
         public bool CanBeShocked()
@@ -36,15 +36,12 @@ namespace UsefulZapGun.Scripts.Hazards
 
         public Vector3 GetShockablePosition()
         {
-            var position = base.transform.position;
-            position = new Vector3(position.x, position.y + 0.5f, position.z);
-
-            return position;
+            return mineScript.transform.position + new Vector3(0, 0.5f, 0);
         }
 
         public Transform GetShockableTransform()
         {
-            return base.transform;
+            return transform;
         }
 
         public void ShockWithGun(PlayerControllerB shockedByPlayer)

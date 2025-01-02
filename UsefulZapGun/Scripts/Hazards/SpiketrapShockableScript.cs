@@ -20,7 +20,7 @@ namespace UsefulZapGun.Scripts.Hazards
         private void Start()
         {
             zapCount = 0;
-            spikeScript = base.transform.parent.Find("Trigger").GetComponent<SpikeRoofTrap>();
+            spikeScript = transform.parent.Find("Trigger").GetComponent<SpikeRoofTrap>();
         }
 
         public bool CanBeShocked()
@@ -40,12 +40,12 @@ namespace UsefulZapGun.Scripts.Hazards
 
         public Vector3 GetShockablePosition()
         {
-            return base.transform.position;
+            return transform.position;
         }
 
         public Transform GetShockableTransform()
         {
-            return base.transform;
+            return transform;
         }
 
         public void ShockWithGun(PlayerControllerB shockedByPlayer)
@@ -67,7 +67,7 @@ namespace UsefulZapGun.Scripts.Hazards
         internal void SyncCanShockOnLocalClient(bool sync)
         {
             spikeScript.trapActive = sync;
-            base.GetComponent<Light>().enabled = sync;
+            GetComponent<Light>().enabled = sync;
         }
 
         private IEnumerator WaitAndStopShocking(PatcherTool zapgun)
