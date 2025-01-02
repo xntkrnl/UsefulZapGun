@@ -53,11 +53,13 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
 
         void IShockableWithGun.StopShockingWithGun()
         {
-            throw new NotImplementedException();
+            return;
         }
 
         private IEnumerator WhyDoYouWantToChargeIt(PatcherTool zapgun, PlayerControllerB shockedByPlayer)
         {
+            yield return new WaitForEndOfFrame();
+            yield return new WaitForEndOfFrame();
             zapgun.StopShockingAnomalyOnClient(true);
             yield return new WaitForEndOfFrame();
             shockedByPlayer.DamagePlayer(15, causeOfDeath: CauseOfDeath.Electrocution);

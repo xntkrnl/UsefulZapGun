@@ -54,6 +54,8 @@ namespace UsefulZapGun.Scripts.Items
 
         private IEnumerator WaitFrameAndDamage(PatcherTool zapgun, PlayerControllerB shockedByPlayer)
         {
+            yield return new WaitForEndOfFrame();
+            yield return new WaitForEndOfFrame();
             zapgun.StopShockingAnomalyOnClient(true);
             yield return new WaitForEndOfFrame();
             shockedByPlayer.DamagePlayer(15, causeOfDeath: CauseOfDeath.Electrocution);

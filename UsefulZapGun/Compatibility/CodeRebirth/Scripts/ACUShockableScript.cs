@@ -68,6 +68,7 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
             {
                 NetworkBehaviourReference ACURef = new NetworkBehaviourReference(mainScript);
                 GameNetworkManagerPatch.rebirthNetwork.SyncACURangeServerRpc(ACURef);
+                isStunnedByLocalClient = false;
             }
         }
 

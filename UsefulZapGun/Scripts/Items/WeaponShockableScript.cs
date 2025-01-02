@@ -23,7 +23,7 @@ namespace UsefulZapGun.Scripts.Items
 
         public bool CanBeShocked()
         {
-            return itemScript.playerHeldBy == null && batteryChargeNeedUntilChargedState > 1;
+            return itemScript.playerHeldBy == null && UZGConfig.needForShovelCharge.Value > 1;
         }
 
         public float GetDifficultyMultiplier()
@@ -70,12 +70,14 @@ namespace UsefulZapGun.Scripts.Items
 
         private IEnumerator WaitFrameAndDamage(PatcherTool zapgun, PlayerControllerB shockedByPlayer)
         {
+            yield return new WaitForEndOfFrame();
+            yield return new WaitForEndOfFrame();
             zapgun.StopShockingAnomalyOnClient(true);
             yield return new WaitForEndOfFrame();
             shockedByPlayer.DamagePlayer(15, causeOfDeath: CauseOfDeath.Electrocution);
         }
 
-        private IEnumerator ChargeWeapon(PatcherTool zapgun) //TODO: change it
+        private IEnumerator ChargeWeapon(PatcherTool zapgun)
         {
             float chargeNeeded = zapgun.insertedBattery.charge - batteryChargeNeedUntilChargedState;
 
