@@ -15,7 +15,7 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
         private AirControlUnit mainScript;
         private float initialRange;
         private Coroutine coroutine;
-        private bool localPlayer;
+        private bool isStunnedByLocalClient;
 
         private void Start()
         {
@@ -40,9 +40,7 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
 
         Vector3 IShockableWithGun.GetShockablePosition()
         {
-            var position = mainScript.transform.position;
-            position = new Vector3(position.x, position.y + 2f, position.z);
-            return position;
+            return mainScript.transform.position + new Vector3(0, 2f, 0);
         }
 
         Transform IShockableWithGun.GetShockableTransform()
@@ -57,7 +55,7 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
             PatcherTool zapgun = (PatcherTool)shockedByPlayer.currentlyHeldObjectServer;
             coroutine = StartCoroutine(DecreaseDetectionRangeEverySecond(zapgun));
             mainScript.rotationSpeed /= 3;
-            localPlayer = shockedByPlayer == GameNetworkManager.Instance.localPlayerController;
+            isStunnedByLocalClient = shockedByPlayer == GameNetworkManager.Instance.localPlayerController;
         }
 
         void IShockableWithGun.StopShockingWithGun()
@@ -66,7 +64,7 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
             StopCoroutine(coroutine);
             coroutine = null;
             mainScript.rotationSpeed *= 3;
-            if (localPlayer)
+            if (isStunnedByLocalClient)
             {
                 NetworkBehaviourReference ACURef = new NetworkBehaviourReference(mainScript);
                 GameNetworkManagerPatch.rebirthNetwork.SyncACURangeServerRpc(ACURef);

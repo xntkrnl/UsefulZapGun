@@ -35,10 +35,7 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
 
         Vector3 IShockableWithGun.GetShockablePosition()
         {
-            var position = mainScript.transform.position;
-            position = new Vector3(position.x, position.y + 0.5f, position.z);
-
-            return position;
+            return mainScript.transform.position + new Vector3(0, 0.5f, 0);
         }
 
         Transform IShockableWithGun.GetShockableTransform()
@@ -48,6 +45,8 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
 
         void IShockableWithGun.ShockWithGun(PlayerControllerB shockedByPlayer)
         {
+            if (shockedByPlayer != GameNetworkManager.Instance.localPlayerController) return;
+
             PatcherTool zapgun = (PatcherTool)shockedByPlayer.currentlyHeldObjectServer;
             StartCoroutine(WhyDoYouWantToChargeIt(zapgun, shockedByPlayer));
         }
@@ -62,6 +61,9 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
             zapgun.StopShockingAnomalyOnClient(true);
             yield return new WaitForEndOfFrame();
             shockedByPlayer.DamagePlayer(15, causeOfDeath: CauseOfDeath.Electrocution);
+
+            if (!mainScript.trapCollider.enabled) //im too lazy to search my publicizer
+                mainScript.DoOnCancelReleaseTrapServerRpc();
         }
     }
 }
