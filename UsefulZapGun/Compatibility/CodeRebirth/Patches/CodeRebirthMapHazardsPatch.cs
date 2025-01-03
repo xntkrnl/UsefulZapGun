@@ -25,5 +25,11 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Patches
         {
             __instance.gameObject.AddComponent<FlashShockableScript>();
         }
+
+        [HarmonyPostfix, HarmonyPatch(typeof(IndustrialFan), "Start")]
+        static void FanStartPatch(ref IndustrialFan __instance)
+        {
+            __instance.gameObject.AddComponent<IndustrialFanShockableScript>();
+        }
     }
 }
