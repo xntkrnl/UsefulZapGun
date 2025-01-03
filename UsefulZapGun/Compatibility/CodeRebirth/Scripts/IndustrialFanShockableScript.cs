@@ -1,9 +1,5 @@
 ﻿using CodeRebirth.src.Content.Maps;
 using GameNetcodeStuff;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -12,11 +8,20 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
     internal class IndustrialFanShockableScript : MonoBehaviour, IShockableWithGun
     {
         IndustrialFan mainScript;
+        Animator animator;
+        float defaultSuckForce;
+        float defaultPushForce;
+        float defaultRotationSpeed;
+
         bool isShockedByAnotherClient;
 
         private void Start()
         {
+            animator = GetComponent<Animator>();
             mainScript = GetComponent<IndustrialFan>();
+            defaultSuckForce = mainScript.suctionForce;
+            defaultPushForce = mainScript.pushForce;
+            defaultRotationSpeed = mainScript.rotationSpeed;
         }
 
         bool IShockableWithGun.CanBeShocked()
@@ -48,13 +53,23 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
         {
             if (shockedByPlayer != GameNetworkManager.Instance.localPlayerController)
                 isShockedByAnotherClient = true;
-            mainScript.enabled = false;
+
+            mainScript.windAudioSource.Pause();
+            mainScript.rotationSpeed = 0;
+            mainScript.pushForce = 0;
+            mainScript.suctionForce = 0;
+            animator.enabled = false;
         }
 
         void IShockableWithGun.StopShockingWithGun()
         {
-            mainScript.enabled = true;
             isShockedByAnotherClient = false;
+
+            mainScript.windAudioSource.UnPause();
+            mainScript.rotationSpeed = defaultRotationSpeed;
+            mainScript.pushForce = defaultPushForce;
+            mainScript.suctionForce = defaultSuckForce;
+            animator.enabled = true;
         }
     }
 }
