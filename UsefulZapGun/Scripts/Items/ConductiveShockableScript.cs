@@ -46,6 +46,7 @@ namespace UsefulZapGun.Scripts.Items
         public void ShockWithGun(PlayerControllerB shockedByPlayer)
         {
             Plugin.SpamLog($"Shock conductive item ({itemScript.itemProperties.itemName})", Plugin.spamType.message);
+            if (shockedByPlayer != GameNetworkManager.Instance.localPlayerController) return;
 
             itemScript.grabbable = false;
             PatcherTool zapgun = (PatcherTool)shockedByPlayer.currentlyHeldObjectServer;

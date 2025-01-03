@@ -45,6 +45,7 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
 
         void IShockableWithGun.ShockWithGun(PlayerControllerB shockedByPlayer)
         {
+            Plugin.SpamLog($"Shock bear trap", Plugin.spamType.message);
             if (shockedByPlayer != GameNetworkManager.Instance.localPlayerController) return;
 
             PatcherTool zapgun = (PatcherTool)shockedByPlayer.currentlyHeldObjectServer;
