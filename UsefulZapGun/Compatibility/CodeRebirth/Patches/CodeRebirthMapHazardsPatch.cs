@@ -36,10 +36,17 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Patches
             __instance.gameObject.AddComponent<IndustrialFanShockableScript>();
         }
 
-        [HarmonyPostfix, HarmonyPatch(typeof(IndustrialFan), "OnTriggerEnter")]
+        [HarmonyPrefix, HarmonyPatch(typeof(IndustrialFan), "OnTriggerEnter")]
         static bool FanOnTriggerEnterPatch(ref IndustrialFan __instance)
         {
             return __instance.suctionForce != 0;
+        }
+
+        //LaserTurret
+        [HarmonyPostfix, HarmonyPatch(typeof(LaserTurret), "Start")]
+        static void LaserStartPatch(ref LaserTurret __instance)
+        {
+            __instance.gameObject.AddComponent<LaserShockableScript>();
         }
     }
 }
