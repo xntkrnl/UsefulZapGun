@@ -48,5 +48,12 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Patches
         {
             __instance.gameObject.AddComponent<LaserShockableScript>();
         }
+
+        //Microwave
+        [HarmonyPostfix, HarmonyPatch(typeof(FunctionalMicrowave), "Start")]
+        static void MicrowaveStartPatch(ref FunctionalMicrowave __instance)
+        {
+            __instance.gameObject.AddComponent<MicrowaveShockableScript>();
+        }
     }
 }
