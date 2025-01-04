@@ -72,7 +72,9 @@ namespace UsefulZapGun.Scripts.Hazards
             turretScript.EnterBerserkModeServerRpc((int)player.playerClientId);
             yield return new WaitForSeconds(1.4f + 9f);
 
+            yield return new WaitForEndOfFrame();
             turretScript.turretMode = TurretMode.Detection;
+            yield return new WaitForEndOfFrame();
             turretScript.ToggleTurretServerRpc(false);
         }
     }
