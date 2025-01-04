@@ -13,7 +13,7 @@ using UsefulZapGun.Patches.Items;
 
 namespace UsefulZapGun
 {
-    [BepInDependency("TestAccount666.ShipWindows", BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency("CodeRebirth", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInPlugin(modGUID, modName, modVersion)]
     public class Plugin : BaseUnityPlugin
     {
