@@ -56,17 +56,22 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
 
         IEnumerator Explode(PatcherTool zapgun)
         {
-            yield return new WaitForEndOfFrame();
-            yield return new WaitForEndOfFrame();
-            zapgun.StopShockingAnomalyOnClient();
-            yield return new WaitForEndOfFrame();
-            Landmine.SpawnExplosion(mainScript.transform.position + new Vector3(0, 0.5f, 0), true, 2, 6, 20, 5);
+            yield return new WaitForSeconds(1.5f);
+            if (zapgun.isBeingUsed && zapgun.shockedTargetScript == this)
+            {
+                yield return new WaitForEndOfFrame();
+                yield return new WaitForEndOfFrame();
+                zapgun.StopShockingAnomalyOnClient();
+                yield return new WaitForEndOfFrame();
+                Landmine.SpawnExplosion(mainScript.transform.position + new Vector3(0, 0.5f, 0), true, 2, 6, 20, 5);
 
-            mainScript.impactAudioSource.Stop();
-            mainScript.transform.Find("LaserIdleAudioSource").gameObject.SetActive(false); //i hate this
-            mainScript.transform.Find("LaserTrapArmature").gameObject.SetActive(false);
-            mainScript.transform.Find("Light (4)").gameObject.SetActive(false);
-            mainScript.enabled = false;
+                mainScript.impactAudioSource.Stop();
+                mainScript.transform.Find("LaserIdleAudioSource").gameObject.SetActive(false); //i hate this
+                mainScript.transform.Find("LaserTrapArmature").gameObject.SetActive(false);
+                mainScript.transform.Find("Light (4)").gameObject.SetActive(false);
+                mainScript.enabled = false;
+            }
+
         }
     }
 }
