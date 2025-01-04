@@ -55,5 +55,18 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Patches
         {
             __instance.gameObject.AddComponent<MicrowaveShockableScript>();
         }
+
+        //Tesla
+        [HarmonyPostfix, HarmonyPatch(typeof(TeslaShock), "Start")]
+        static void TeslaStartPatch(ref TeslaShock __instance)
+        {
+            __instance.gameObject.AddComponent<TeslaShockableScript>();
+        }
+
+        [HarmonyPrefix, HarmonyPatch(typeof(TeslaShock), "OnTriggerEnter")]
+        static bool TeslaOnTriggerEnterPatch(ref TeslaShock __instance)
+        {
+            return __instance.enabled;
+        }
     }
 }

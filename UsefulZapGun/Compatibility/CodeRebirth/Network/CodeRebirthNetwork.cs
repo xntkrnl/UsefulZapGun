@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Unity.Netcode;
+using UsefulZapGun.Compatibility.CodeRebirth.Scripts;
 
 namespace UsefulZapGun.Compatibility.CodeRebirth.Network
 {
@@ -42,6 +43,31 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Network
             FlashRef.TryGet(out FlashTurret Flash);
             Plugin.SpamLog($"Sync FlashTurret CD: {Flash.flashCooldown} -> {cooldown}", Plugin.spamType.info);
             Flash.flashCooldown = cooldown;
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        internal void SyncTeslaServerRpc(float charge, NetworkBehaviourReference TeslaRef)
+        {
+            TeslaRef.TryGet(out TeslaShock tesla);
+            var teslaShockable = tesla.GetComponent<TeslaShockableScript>();
+            bool enabled = true;
+
+            if (charge >= teslaShockable.chargeNeeded)
+                enabled = false;
+
+            SyncTeslaClientRpc(charge, TeslaRef, enabled);
+        }
+
+        [ClientRpc]
+        private void SyncTeslaClientRpc(float charge, NetworkBehaviourReference TeslaRef, bool enabled)
+        {
+            TeslaRef.TryGet(out TeslaShock tesla);
+            var teslaShockable = tesla.GetComponent<TeslaShockableScript>();
+
+            if (!enabled)
+                teslaShockable.DisableMainScriptOnLocalClient();
+            else
+                teslaShockable.charge = charge;
         }
     }
 }
