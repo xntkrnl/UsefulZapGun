@@ -12,28 +12,32 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Patches
         [HarmonyPostfix, HarmonyPatch(typeof(AirControlUnit), "Start")]
         static void ACUStartPatch(ref AirControlUnit __instance)
         {
-            __instance.transform.Find("Body").gameObject.AddComponent<ACUShockableScript>();
+            if (CRConfig.enableACUZap.Value)
+                __instance.transform.Find("Body").gameObject.AddComponent<ACUShockableScript>();
         }
 
         //BearTrap
         [HarmonyPostfix, HarmonyPatch(typeof(BearTrap), "Start")]
         static void BearTrapStartPatch(ref BearTrap __instance)
         {
-            __instance.gameObject.AddComponent<BearTrapShockableScript>();
+            if (CRConfig.enableBearTrapZap.Value)
+                __instance.gameObject.AddComponent<BearTrapShockableScript>();
         }
 
         //FlashTurret
         [HarmonyPostfix, HarmonyPatch(typeof(FlashTurret), "Start")]
         static void FlashStartPatch(ref FlashTurret __instance)
         {
-            __instance.gameObject.AddComponent<FlashShockableScript>();
+            if (CRConfig.enableFlashZap.Value)
+                __instance.gameObject.AddComponent<FlashShockableScript>();
         }
 
         //IndustrialFan
         [HarmonyPostfix, HarmonyPatch(typeof(IndustrialFan), "Start")]
         static void FanStartPatch(ref IndustrialFan __instance)
         {
-            __instance.gameObject.AddComponent<IndustrialFanShockableScript>();
+            if (CRConfig.enableFanZap.Value)
+                __instance.gameObject.AddComponent<IndustrialFanShockableScript>();
         }
 
         [HarmonyPrefix, HarmonyPatch(typeof(IndustrialFan), "OnTriggerEnter")]
@@ -46,21 +50,24 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Patches
         [HarmonyPostfix, HarmonyPatch(typeof(LaserTurret), "Start")]
         static void LaserStartPatch(ref LaserTurret __instance)
         {
-            __instance.gameObject.AddComponent<LaserShockableScript>();
+            if (CRConfig.enableLaserZap.Value)
+                __instance.gameObject.AddComponent<LaserShockableScript>();
         }
 
         //Microwave
         [HarmonyPostfix, HarmonyPatch(typeof(FunctionalMicrowave), "Start")]
         static void MicrowaveStartPatch(ref FunctionalMicrowave __instance)
         {
-            __instance.gameObject.AddComponent<MicrowaveShockableScript>();
+            if (CRConfig.enableMicrowaveZap.Value)
+                __instance.gameObject.AddComponent<MicrowaveShockableScript>();
         }
 
         //Tesla
         [HarmonyPostfix, HarmonyPatch(typeof(TeslaShock), "Start")]
         static void TeslaStartPatch(ref TeslaShock __instance)
         {
-            __instance.gameObject.AddComponent<TeslaShockableScript>();
+            if (CRConfig.enableTeslaZap.Value)
+                __instance.gameObject.AddComponent<TeslaShockableScript>();
         }
 
         [HarmonyPrefix, HarmonyPatch(typeof(TeslaShock), "OnTriggerEnter")]

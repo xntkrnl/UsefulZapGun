@@ -5,6 +5,7 @@ using HarmonyLib;
 using System.IO;
 using System.Reflection;
 using UnityEngine;
+using UsefulZapGun.Compatibility.CodeRebirth;
 using UsefulZapGun.Compatibility.CodeRebirth.Patches;
 using UsefulZapGun.Patches;
 using UsefulZapGun.Patches.Enemy;
@@ -29,6 +30,8 @@ namespace UsefulZapGun
 
         private static string sAssemblyLocation;
         internal static AssetBundle mainAssetBundle;
+
+        private static ConfigFile cfg;
 
         internal static bool CREnabled;
 
@@ -62,7 +65,11 @@ namespace UsefulZapGun
 
             CREnabled = BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("CodeRebirth");
 
-            UZGConfig.ConfigSetup();
+            cfg = new ConfigFile(Path.Combine(Paths.ConfigPath, "mborsh.UsefulZapGun.cfg"), true);
+
+            UZGConfig.ConfigSetup(cfg);
+            if (CREnabled)
+                CRConfig.RebirthConfigSetup(cfg);
 
             mls.LogInfo($"{modName} {modVersion} loaded. Patching.");
             PatchAllStuff();

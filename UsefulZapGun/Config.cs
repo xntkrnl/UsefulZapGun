@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using UsefulZapGun.Compatibility.CodeRebirth;
 
 namespace UsefulZapGun
 {
@@ -43,9 +44,9 @@ namespace UsefulZapGun
         internal static ConfigEntry<float> timeNeedForTurretDisable;
         internal static ConfigEntry<int> spiketrapZapNeeded;
 
-        internal static void ConfigSetup()
+        internal static void ConfigSetup(ConfigFile PluginConfig)
         {
-            cfg = new ConfigFile(Path.Combine(Paths.ConfigPath, "mborsh.UsefulZapGun.cfg"), true);
+            cfg = PluginConfig;
 
             enableLogging = cfg.Bind("General", "Enable logging", true);
             zapgunPrice = cfg.Bind("General", "Zap gun price", 400);
@@ -76,14 +77,12 @@ namespace UsefulZapGun
             timeNeedForTurretDisable = cfg.Bind("Hazards", "Time need for turret", 3f);
             spiketrapZapNeeded = cfg.Bind("Hazards", "Zaps before deactivating the spiketrap", 2);
 
-
             CheckConfig();
         }
 
         private static void CheckConfig()
         {
             enemyList.Remove("Bruce");
-            enemyList.Remove("Tornado");
 
             if (zapDamage.Value <= 0)
                 zapDamage.Value = 1;
