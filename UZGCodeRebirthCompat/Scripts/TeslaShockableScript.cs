@@ -20,7 +20,7 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
         private void Start()
         {
             mainScript = GetComponent<TeslaShock>();
-            chargeNeeded = 0.75f;
+            chargeNeeded = 0.4f;
         }
 
         bool IShockableWithGun.CanBeShocked()
