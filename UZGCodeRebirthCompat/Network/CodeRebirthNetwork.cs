@@ -23,7 +23,7 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Network
         private void SyncACURangeClientRpc(NetworkBehaviourReference ACURef, float range)
         {
             ACURef.TryGet(out AirControlUnit ACU);
-            Plugin.SpamLog($"Sync ACU range: {ACU.detectionRange} -> {range}", Plugin.spamType.info);
+            CRPlugin.SpamLog($"Sync ACU range: {ACU.detectionRange} -> {range}", CRPlugin.spamType.info);
             ACU.detectionRange = range;
         }
 
@@ -41,7 +41,7 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Network
         private void SyncFlashCooldownClientRpc(NetworkBehaviourReference FlashRef, float cooldown)
         {
             FlashRef.TryGet(out FlashTurret Flash);
-            Plugin.SpamLog($"Sync FlashTurret CD: {Flash.flashCooldown} -> {cooldown}", Plugin.spamType.info);
+            CRPlugin.SpamLog($"Sync FlashTurret CD: {Flash.flashCooldown} -> {cooldown}", CRPlugin.spamType.info);
             Flash.flashCooldown = cooldown;
         }
 

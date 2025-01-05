@@ -5,8 +5,6 @@ using HarmonyLib;
 using System.IO;
 using System.Reflection;
 using UnityEngine;
-using UsefulZapGun.Compatibility.CodeRebirth;
-using UsefulZapGun.Compatibility.CodeRebirth.Patches;
 using UsefulZapGun.Patches;
 using UsefulZapGun.Patches.Enemy;
 using UsefulZapGun.Patches.Items;
@@ -20,7 +18,7 @@ namespace UsefulZapGun
         // Mod Details
         private const string modGUID = "mborsh.UsefulZapGun";
         private const string modName = "UsefulZapGun";
-        private const string modVersion = "0.4.0";
+        private const string modVersion = "0.4.1";
 
         private readonly Harmony harmony = new Harmony(modGUID);
         private static ManualLogSource mls;
@@ -29,11 +27,9 @@ namespace UsefulZapGun
         internal static bool enemiesAndItemsFound = false;
 
         private static string sAssemblyLocation;
-        internal static AssetBundle mainAssetBundle;
+        public static AssetBundle mainAssetBundle;
 
         private static ConfigFile cfg;
-
-        internal static bool CREnabled;
 
         private static void NetcodePatcher()
         {
@@ -63,15 +59,11 @@ namespace UsefulZapGun
             sAssemblyLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             mainAssetBundle = AssetBundle.LoadFromFile(Path.Combine(sAssemblyLocation, "zapgunnetworkobject"));
 
-            CREnabled = BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("CodeRebirth");
-
             cfg = new ConfigFile(Path.Combine(Paths.ConfigPath, "mborsh.UsefulZapGun.cfg"), true);
-
             UZGConfig.ConfigSetup(cfg);
-            if (CREnabled)
-                CRConfig.RebirthConfigSetup(cfg);
 
             mls.LogInfo($"{modName} {modVersion} loaded. Patching.");
+
             PatchAllStuff();
         }
 
@@ -124,11 +116,7 @@ namespace UsefulZapGun
             harmony.PatchAll(typeof(PatcherToolPatch));
 
             if (UZGConfig.enableZapHazards.Value)
-            {
                 harmony.PatchAll(typeof(MapHazardsPatch));
-                if (CREnabled)
-                    harmony.PatchAll(typeof(CodeRebirthMapHazardsPatch));
-            }
 
             if (UZGConfig.enableWeaponCharging.Value)
                 harmony.PatchAll(typeof(ShovelPatch));

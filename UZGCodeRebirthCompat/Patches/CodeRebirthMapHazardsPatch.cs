@@ -2,7 +2,6 @@
 using HarmonyLib;
 using UnityEngine;
 using UsefulZapGun.Compatibility.CodeRebirth.Scripts;
-using UsefulZapGun.Scripts.Hazards;
 
 namespace UsefulZapGun.Compatibility.CodeRebirth.Patches
 {

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using Unity.Netcode;
 using UnityEngine;
-using UsefulZapGun.Patches;
+using UsefulZapGun.Compatibility.CodeRebirth.Patches;
 
 namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
 {
@@ -50,7 +50,7 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
 
         void IShockableWithGun.ShockWithGun(PlayerControllerB shockedByPlayer)
         {
-            Plugin.SpamLog("Shock ac unit", Plugin.spamType.message);
+            CRPlugin.SpamLog("Shock ac unit", CRPlugin.spamType.message);
 
             PatcherTool zapgun = (PatcherTool)shockedByPlayer.currentlyHeldObjectServer;
             coroutine = StartCoroutine(DecreaseDetectionRangeEverySecond(zapgun));
@@ -60,14 +60,14 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
 
         void IShockableWithGun.StopShockingWithGun()
         {
-            Plugin.SpamLog("Stop zaping ac unit!", Plugin.spamType.debug);
+            CRPlugin.SpamLog("Stop zaping ac unit!", CRPlugin.spamType.debug);
             StopCoroutine(coroutine);
             coroutine = null;
             mainScript.rotationSpeed *= 3;
             if (isStunnedByLocalClient)
             {
                 NetworkBehaviourReference ACURef = new NetworkBehaviourReference(mainScript);
-                GameNetworkManagerPatch.rebirthNetwork.SyncACURangeServerRpc(ACURef);
+                CodeRebirthGameNetworkManagerPatch.rebirthNetwork.SyncACURangeServerRpc(ACURef);
                 isStunnedByLocalClient = false;
             }
         }

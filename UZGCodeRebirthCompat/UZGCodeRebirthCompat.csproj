@@ -5,50 +5,53 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DebugType>embedded</DebugType>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DebugType>embedded</DebugType>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>embedded</DebugType>
-  </PropertyGroup>
-  <Target Name="NetcodePatch" AfterTargets="PostBuildEvent">
-	<Exec Command="netcode-patch &quot;$(TargetPath)&quot; @(ReferencePathWithRefAssemblies->'&quot;%(Identity)&quot;', ' ')" />
-  </Target>
-
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<DebugType>embedded</DebugType>
+	</PropertyGroup>
+	<Target Name="NetcodePatch" AfterTargets="PostBuildEvent">
+		<Exec Command="netcode-patch &quot;$(TargetPath)&quot; @(ReferencePathWithRefAssemblies->'&quot;%(Identity)&quot;', ' ')" />
+	</Target>
 	<ItemGroup>
+	  <ProjectReference Include="..\UsefulZapGun\UsefulZapGun.csproj" />
+	</ItemGroup>
+
+  <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>..\..\WiderShipMod\WiderShipMod\bin\Debug\0Harmony.dll</HintPath>
+      <HintPath>..\UsefulZapGun\bin\Debug\netstandard2.1\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\WiderShipMod\WiderShipMod\bin\Debug\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\UsefulZapGun\bin\Debug\netstandard2.1\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx">
-      <HintPath>..\..\WiderShipMod\WiderShipMod\bin\Debug\BepInEx.dll</HintPath>
+      <HintPath>..\UsefulZapGun\bin\Debug\netstandard2.1\BepInEx.dll</HintPath>
     </Reference>
     <Reference Include="CodeRebirth">
-      <HintPath>bin\Debug\netstandard2.1\CodeRebirth.dll</HintPath>
+      <HintPath>..\UsefulZapGun\bin\Debug\netstandard2.1\CodeRebirth.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Netcode.Runtime">
       <HintPath>..\..\..\..\..\..\Steam\steamapps\common\Lethal Company\Lethal Company_Data\Managed\Unity.Netcode.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\..\..\..\..\..\Steam\steamapps\common\Lethal Company\Lethal Company_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>..\UsefulZapGun\bin\Debug\netstandard2.1\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AnimationModule">
       <HintPath>..\..\..\..\..\..\Steam\steamapps\common\Lethal Company\Lethal Company_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AssetBundleModule">
-      <HintPath>..\..\..\..\..\..\Steam\steamapps\common\Lethal Company\Lethal Company_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
+      <HintPath>..\UsefulZapGun\bin\Debug\netstandard2.1\UnityEngine.AssetBundleModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AudioModule">
       <HintPath>..\..\..\..\..\..\Steam\steamapps\common\Lethal Company\Lethal Company_Data\Managed\UnityEngine.AudioModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\..\..\..\..\..\Steam\steamapps\common\Lethal Company\Lethal Company_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>..\UsefulZapGun\bin\Debug\netstandard2.1\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.PhysicsModule">
-      <HintPath>..\..\..\..\..\..\Steam\steamapps\common\Lethal Company\Lethal Company_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+      <HintPath>..\UsefulZapGun\bin\Debug\netstandard2.1\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.VFXModule">
       <HintPath>..\..\..\..\..\..\Steam\steamapps\common\Lethal Company\Lethal Company_Data\Managed\UnityEngine.VFXModule.dll</HintPath>

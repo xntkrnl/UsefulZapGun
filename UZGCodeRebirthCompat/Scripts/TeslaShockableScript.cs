@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.VFX;
+using UsefulZapGun.Compatibility.CodeRebirth.Patches;
 using UsefulZapGun.Patches;
 
 namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
@@ -75,7 +76,7 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
                 if (charge >= chargeNeeded)
                 {
                     NetworkBehaviourReference TeslaRef = new NetworkBehaviourReference(mainScript);
-                    GameNetworkManagerPatch.rebirthNetwork.SyncTeslaServerRpc(charge, TeslaRef);
+                    CodeRebirthGameNetworkManagerPatch.rebirthNetwork.SyncTeslaServerRpc(charge, TeslaRef);
 
                     zapgun.StopShockingAnomalyOnClient();
                 }

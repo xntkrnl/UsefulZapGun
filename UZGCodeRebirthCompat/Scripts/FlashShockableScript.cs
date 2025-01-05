@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using Unity.Netcode;
 using UnityEngine;
+using UsefulZapGun.Compatibility.CodeRebirth.Patches;
 using UsefulZapGun.Patches;
 
 namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
@@ -53,7 +54,7 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
 
         void IShockableWithGun.ShockWithGun(PlayerControllerB shockedByPlayer)
         {
-            Plugin.SpamLog("Shock flash turret", Plugin.spamType.message);
+            CRPlugin.SpamLog("Shock flash turret", CRPlugin.spamType.message);
 
             PatcherTool zapgun = (PatcherTool)shockedByPlayer.currentlyHeldObjectServer;
             coroutine = StartCoroutine(IncreseCooldown(zapgun));
@@ -64,7 +65,7 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
 
         void IShockableWithGun.StopShockingWithGun()
         {
-            Plugin.SpamLog("Stop zaping flash turret!", Plugin.spamType.debug);
+            CRPlugin.SpamLog("Stop zaping flash turret!", CRPlugin.spamType.debug);
             StopCoroutine(coroutine);
             coroutine = null;
             mainScript.detectionRange /= 5;
@@ -72,7 +73,7 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
             if (isStunnedByLocalClient)
             {
                 NetworkBehaviourReference FlashRef = new NetworkBehaviourReference(mainScript);
-                GameNetworkManagerPatch.rebirthNetwork.SyncFlashCooldownServerRpc(FlashRef);
+                CodeRebirthGameNetworkManagerPatch.rebirthNetwork.SyncFlashCooldownServerRpc(FlashRef);
                 isStunnedByLocalClient = false;
             }
         }
