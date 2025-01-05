@@ -26,7 +26,7 @@ public class CRPlugin : BaseUnityPlugin
 
     private const string modGUID = "mborsh.UsefulZapGun.CRCompat";
     private const string modName = "UsefulZapGun.CRCompat";
-    private const string modVersion = "0.0.0";
+    private const string modVersion = "0.0.1";
 
     private static void NetcodePatcher()
     {
@@ -59,7 +59,7 @@ public class CRPlugin : BaseUnityPlugin
 
         NetcodePatcher();
 
-        cfg = new ConfigFile(Path.Combine(Paths.ConfigPath, "mborsh.UsefulZapGun.cfg"), true);
+        cfg = new ConfigFile(Path.Combine(Paths.ConfigPath, $"{modGUID}.cfg"), true);
         CRConfig.RebirthConfigSetup(cfg);
 
         mls.LogInfo($"{modGUID} loaded. Patching.");
