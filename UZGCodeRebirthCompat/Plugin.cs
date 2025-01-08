@@ -75,6 +75,9 @@ public class CRPlugin : BaseUnityPlugin
 
     internal static void SpamLog(string message, spamType type)
     {
+        if (!UZGConfig.enableLogging.Value)
+            return;
+
         switch (type)
         {
             case spamType.info:
