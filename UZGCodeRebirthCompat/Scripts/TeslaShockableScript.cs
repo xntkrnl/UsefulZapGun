@@ -50,6 +50,8 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
 
         void IShockableWithGun.ShockWithGun(PlayerControllerB shockedByPlayer)
         {
+            CRPlugin.SpamLog($"Shock tesla", CRPlugin.spamType.message);
+
             if (shockedByPlayer == GameNetworkManager.Instance.localPlayerController)
             {
                 PatcherTool zapgun = (PatcherTool)shockedByPlayer.currentlyHeldObjectServer;
@@ -60,6 +62,8 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
 
         void IShockableWithGun.StopShockingWithGun()
         {
+            CRPlugin.SpamLog("Stop zaping tesla!", CRPlugin.spamType.debug);
+
             if (coroutine != null)
             {
                 StopCoroutine(coroutine);

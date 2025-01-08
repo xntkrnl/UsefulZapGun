@@ -44,6 +44,8 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
 
         void IShockableWithGun.ShockWithGun(PlayerControllerB shockedByPlayer)
         {
+            CRPlugin.SpamLog($"Shock laser", CRPlugin.spamType.message);
+
             PatcherTool zapgun = (PatcherTool)shockedByPlayer.currentlyHeldObjectServer;
             isExploded = true;
             StartCoroutine(Explode(zapgun));
@@ -51,6 +53,7 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
 
         void IShockableWithGun.StopShockingWithGun()
         {
+            CRPlugin.SpamLog("Stop zaping lazer!", CRPlugin.spamType.debug);
             return;
         }
 

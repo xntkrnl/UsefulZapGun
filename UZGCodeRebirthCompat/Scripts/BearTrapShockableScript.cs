@@ -54,6 +54,7 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
 
         void IShockableWithGun.StopShockingWithGun()
         {
+            CRPlugin.SpamLog("Stop zaping bear trap!", CRPlugin.spamType.debug);
             return;
         }
 

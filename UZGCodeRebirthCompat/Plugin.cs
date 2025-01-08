@@ -57,6 +57,12 @@ public class CRPlugin : BaseUnityPlugin
             return;
         }
 
+        if (UZGConfig.enableZapHazards.Value)
+        {
+            mls.LogInfo("enableZapHazards is not True, skipping!");
+            return;
+        }
+
         NetcodePatcher();
 
         cfg = new ConfigFile(Path.Combine(Paths.ConfigPath, $"{modGUID}.cfg"), true);

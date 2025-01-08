@@ -7,41 +7,41 @@ using System.Linq;
 
 namespace UsefulZapGun
 {
-    internal class UZGConfig
+    public class UZGConfig
     {
         private static ConfigFile cfg;
 
-        internal static ConfigEntry<bool> enableLogging;
-        internal static ConfigEntry<int> zapgunPrice;
-        internal static ConfigEntry<bool> enableDifficultyMultiplierPatch;
-        internal static ConfigEntry<float> distanceDivider;
+        public static ConfigEntry<bool> enableLogging;
+        public static ConfigEntry<int> zapgunPrice;
+        public static ConfigEntry<bool> enableDifficultyMultiplierPatch;
+        public static ConfigEntry<float> distanceDivider;
 
-        internal static ConfigEntry<string> enemyListString;
-        internal static Dictionary<Item, ConfigEntry<float>> multiplayerDict = new Dictionary<Item, ConfigEntry<float>>();
+        public static ConfigEntry<string> enemyListString;
+        public static Dictionary<Item, ConfigEntry<float>> multiplayerDict = new Dictionary<Item, ConfigEntry<float>>();
 
-        internal static List<string> enemyList;
-        internal static Dictionary<EnemyType, ConfigEntry<float>> timeDict = new Dictionary<EnemyType, ConfigEntry<float>>();
-        internal static ConfigEntry<bool> enableExplosion;
-        internal static ConfigEntry<bool> setForestGiantsOnFire;
-        internal static ConfigEntry<float> timeToStartAFire;
-        internal static ConfigEntry<bool> evaporateBlob;
-        internal static ConfigEntry<float> timeToEvaporate;
+        public static List<string> enemyList;
+        public static Dictionary<EnemyType, ConfigEntry<float>> timeDict = new Dictionary<EnemyType, ConfigEntry<float>>();
+        public static ConfigEntry<bool> enableExplosion;
+        public static ConfigEntry<bool> setForestGiantsOnFire;
+        public static ConfigEntry<float> timeToStartAFire;
+        public static ConfigEntry<bool> evaporateBlob;
+        public static ConfigEntry<float> timeToEvaporate;
 
-        internal static ConfigEntry<bool> enableDOTEnemy;
-        internal static ConfigEntry<bool> enableDOTPlayers;
-        internal static ConfigEntry<int> zapDamage;
-        internal static ConfigEntry<int> zapDamageToPlayer;
-        internal static ConfigEntry<float> zapTimeToDamage;
+        public static ConfigEntry<bool> enableDOTEnemy;
+        public static ConfigEntry<bool> enableDOTPlayers;
+        public static ConfigEntry<int> zapDamage;
+        public static ConfigEntry<int> zapDamageToPlayer;
+        public static ConfigEntry<float> zapTimeToDamage;
 
-        internal static ConfigEntry<bool> enableItemCharging;
+        public static ConfigEntry<bool> enableItemCharging;
 
-        internal static ConfigEntry<float> chargeLifeTime;
-        internal static ConfigEntry<bool> enableWeaponCharging;
-        internal static ConfigEntry<float> needForShovelCharge;
+        public static ConfigEntry<float> chargeLifeTime;
+        public static ConfigEntry<bool> enableWeaponCharging;
+        public static ConfigEntry<float> needForShovelCharge;
 
-        internal static ConfigEntry<bool> enableZapHazards;
-        internal static ConfigEntry<float> timeNeedForTurretDisable;
-        internal static ConfigEntry<int> spiketrapZapNeeded;
+        public static ConfigEntry<bool> enableZapHazards;
+        public static ConfigEntry<float> timeNeedForTurretDisable;
+        public static ConfigEntry<int> spiketrapZapNeeded;
 
         internal static void ConfigSetup(ConfigFile PluginConfig)
         {

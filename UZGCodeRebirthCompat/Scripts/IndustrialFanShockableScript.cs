@@ -51,6 +51,8 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
 
         void IShockableWithGun.ShockWithGun(PlayerControllerB shockedByPlayer)
         {
+            CRPlugin.SpamLog($"Shock fan", CRPlugin.spamType.message);
+
             if (shockedByPlayer != GameNetworkManager.Instance.localPlayerController)
                 isShockedByAnotherClient = true;
 
@@ -63,6 +65,7 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
 
         void IShockableWithGun.StopShockingWithGun()
         {
+            CRPlugin.SpamLog("Stop zaping fan!", CRPlugin.spamType.debug);
             isShockedByAnotherClient = false;
 
             mainScript.windAudioSource.UnPause();

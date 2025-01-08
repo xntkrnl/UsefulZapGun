@@ -48,6 +48,8 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
 
         void IShockableWithGun.ShockWithGun(PlayerControllerB shockedByPlayer)
         {
+            CRPlugin.SpamLog($"Shock microwave", CRPlugin.spamType.message);
+
             //as i said somewhere, too lazy to publicize
             if (shockedByPlayer != GameNetworkManager.Instance.localPlayerController)
                 isShockedByAnotherClient = true;
@@ -59,6 +61,7 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
 
         void IShockableWithGun.StopShockingWithGun()
         {
+            CRPlugin.SpamLog("Stop zaping microwave!", CRPlugin.spamType.debug);
             return;
         }
 
