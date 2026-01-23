@@ -56,7 +56,7 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
             if (shockedByPlayer != GameNetworkManager.Instance.localPlayerController)
                 isShockedByAnotherClient = true;
 
-            mainScript.windAudioSource.Pause();
+            mainScript.cutAudioSource.Pause();
             mainScript.rotationSpeed = 0;
             mainScript.pushForce = 0;
             mainScript.suctionForce = 0;
@@ -68,7 +68,7 @@ namespace UsefulZapGun.Compatibility.CodeRebirth.Scripts
             CRPlugin.SpamLog("Stop zaping fan!", CRPlugin.spamType.debug);
             isShockedByAnotherClient = false;
 
-            mainScript.windAudioSource.UnPause();
+            mainScript.cutAudioSource.UnPause();
             mainScript.rotationSpeed = defaultRotationSpeed;
             mainScript.pushForce = defaultPushForce;
             mainScript.suctionForce = defaultSuckForce;
