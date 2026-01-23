@@ -361,3 +361,16 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+UsefulZapGun/lib/0Harmony.dll
+UsefulZapGun/lib/Assembly-CSharp.dll
+UsefulZapGun/lib/BepInEx.dll
+UsefulZapGun/lib/CodeRebirth.dll
+UsefulZapGun/lib/Unity.Netcode.Runtime.dll
+UsefulZapGun/lib/UnityEngine.AnimationModule.dll
+UsefulZapGun/lib/UnityEngine.AssetBundleModule.dll
+UsefulZapGun/lib/UnityEngine.AudioModule.dll
+UsefulZapGun/lib/UnityEngine.CoreModule.dll
+UsefulZapGun/lib/UnityEngine.dll
+UsefulZapGun/lib/UnityEngine.PhysicsModule.dll
+UsefulZapGun/lib/UnityEngine.VFXModule.dll
+/UZGCodeRebirthCompat/lib
